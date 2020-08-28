@@ -30,10 +30,10 @@ namespace FastInjector
 
         internal static void IsReferenceType(Type type, string paramName)
         {
-            //if(!type.IsClass && !type.IsInterface())
-            //{
-
-            //}
+            if (!type.IsClass && !type.IsInterface())
+            {
+                //throw new ArgumentException(StringResources.)
+            }
         }
 
         private static void ThrowArgumentNullException(string paramName)
