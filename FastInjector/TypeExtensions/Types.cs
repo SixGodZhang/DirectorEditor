@@ -19,6 +19,7 @@ namespace FastInjector
         private static readonly Func<Type[], string> SimpleNameArgumentsFormatter =
             args => string.Join(", ", args.Select(a => a.ToFriendlyName(fullQualifiedName: false)).ToArray());
 
+        // 简写限定名拼接
         private static readonly Func<Type[], string> CSharpFriendlyNameArgumentFormatter =
             args => string.Join(",", args.Select(argument => string.Empty).ToArray());
 
@@ -114,6 +115,132 @@ namespace FastInjector
                 fullQualifiedName,
                 fullQualifiedName ? FullyQualifiedNameArgumentsFormatter : SimpleNameArgumentsFormatter);
         }
+
+        // 判断一个类型是否是具体类型
+        internal static bool IsConcreteType(Type serviceType) =>
+            !serviceType.IsAbstract() && !serviceType.IsArray && serviceType != typeof(object) &&
+            !typeof(Delegate).IsAssignableFrom(serviceType);
+
+        // 是否是 具体&&可构造的类型
+        internal static bool IsConcreteConstructableType(Type serviceType) =>
+            !serviceType.ContainsGenericParameters() && IsConcreteType(serviceType);
+
+        //internal static bool IsComposite(Type serviceType, ConstructorInfo implementationConstructor) =>
+        //    CompositeHelpers.ComposesServiceType(serviceType, implementationConstructor);
+
+        // 是否是泛型集合类型
+        internal static bool IsGenericCollectionType(Type serviceType)
+        {
+            if (!serviceType.IsGenericType())
+            {
+                return false;
+            }
+
+            Type serviceTypeDefinition = serviceType.GetGenericTypeDefinition();
+            return serviceTypeDefinition == typeof(IReadOnlyList<>) ||
+                serviceTypeDefinition == typeof(IReadOnlyCollection<>) ||
+                serviceTypeDefinition == typeof(IEnumerable<>) ||
+                serviceTypeDefinition == typeof(ICollection<>) ||
+                serviceTypeDefinition == typeof(IList<>);
+        }
+
+        // 获取一个类型的继承的所有类和实现的所有接口
+        internal static ICollection<Type> GetTypeHierarchyFor(Type type)
+        {
+            var types = new List<Type>(4);
+            types.Add(type);
+
+            //types.AddRange(GetBaseTypes(type));
+            //types.AddRange(type.GetInterfaces());
+            types.AddRange(type.GetBaseTypesAndInterfaces());
+
+            return types;
+        }
+
+        // 获取一个类型 继承链 上的所有基类型
+        private static IEnumerable<Type> GetBaseTypes(this Type type)
+        {
+            Type baseType = type.BaseType() ?? (type != typeof(object) ? typeof(object) : null);
+            while (baseType != null)
+            {
+                yield return baseType;
+                baseType = baseType.BaseType();
+            }
+        }
+
+        // 获取继承链上的所有类型和接口
+        internal static IEnumerable<Type> GetBaseTypesAndInterfaces(this Type type) =>
+            type.GetInterfaces().Concat(type.GetBaseTypes());
+
+        // 判断serviceType 是否在 implementationType 继承链上的所有类型集合中
+        internal static IEnumerable<Type> GetBaseTypeCandidates(Type serviceType, Type implementationType) =>
+            from baseType in implementationType.GetBaseTypesAndInterfaces()
+            where baseType == serviceType || (
+            baseType.IsGenericType() && serviceType.IsGenericType() &&
+            baseType.GetGenericTypeDefinition() == serviceType.GetGenericTypeDefinition())
+            select baseType;
+
+
+        //type 是否 是 otherType的变体(仅适用于泛型)
+        private static bool IsVariantVersionOf(this Type type, Type otherType) =>
+            type.IsGenericType()
+            && otherType.IsGenericType()
+            && type.GetGenericTypeDefinition() == otherType.GetGenericTypeDefinition()
+            && type.IsAssignableFrom(otherType);
+
+        // type 是否是serviceType的具体实现，或者type和serviceType的类型相同
+        private static bool IsGenericImplementationOf(Type type, Type serviceType) =>
+            type == serviceType
+            || serviceType.IsVariantVersionOf(type)
+            || (type.IsGenericType() && type.GetGenericTypeDefinition() == serviceType);
+
+        // service 是否 是implemantation 的实现
+        internal static bool ServiceIsAssignableFromImplementation(Type service, Type implementation)
+        {
+            // 1. 处理service不是泛型的情况
+            if (!service.IsGenericType())
+            {
+                // 直接判断service是否可以从implementation构造
+                return service.IsAssignableFrom(implementation);
+            }
+
+            // 2. 如果service是泛型, implemantation是泛型, 且 implementation 的泛型具体的类型是service
+            // service --> ITestA<int> , implementation --> TestB<T> where T: ITestA<int>
+            if (implementation.IsGenericType() && implementation.GetGenericTypeDefinition() == service)
+            {
+                return true;
+            }
+
+            // 下面这是处理 service是泛型, implementation不是泛型的情况
+
+            // 这里不使用LINQ是为了避免一些不必要的内存分配
+            // 不幸的是, 我们在调用GetInterfaces()的时候避免不了这个问题的
+            // implementation实现的所有接口中, 是否有一个接口是等于service或者继承了service
+            foreach (Type interfaceType in implementation.GetInterfaces())
+            {
+                if(IsGenericImplementationOf(interfaceType,service))
+                {
+                    return true;
+                }
+            }
+
+            //implementation 的基类型中, 是否有对service的实现
+            Type baseType = implementation.BaseType() ?? (implementation != typeof(object) ? typeof(object) : null);
+
+            while(baseType != null)
+            {
+                if (IsGenericImplementationOf(baseType, service))
+                {
+                    return true;
+                }
+
+                baseType = baseType.BaseType();
+            }
+
+            return false;
+
+        }
+
 
 
     }

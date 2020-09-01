@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DirectorEditor.Views;
+using MVPFramework;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,11 +12,18 @@ using System.Windows.Forms;
 
 namespace DirectorEditor
 {
-    public partial class Form1 : Form
+    public partial class MainView : MVPForm,IMainView
     {
-        public Form1()
+        public MainView()
         {
             InitializeComponent();
+        }
+
+        public event EventHandler LoadMainFormEvent;
+
+        public void LoadMainForm(Type formType)
+        {
+            
         }
     }
 }
