@@ -28,12 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.desc = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // desc
+            // 
+            this.desc.Location = new System.Drawing.Point(34, 21);
+            this.desc.Name = "desc";
+            this.desc.Size = new System.Drawing.Size(333, 247);
+            this.desc.TabIndex = 0;
+            this.desc.Text = "xxxxxxx";
+            // 
+            // HelperView
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(400, 300);
+            this.Controls.Add(this.desc);
+            this.Name = "HelperView";
             this.Text = "帮助";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Label desc;
     }
 }

@@ -46,6 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\HelperModel.cs" />
+    <Compile Include="Presenters\HelperPresenter.cs" />
+    <Compile Include="UIComponents\HelperView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UIComponents\HelperView.Designer.cs">
+      <DependentUpon>HelperView.cs</DependentUpon>
+    </Compile>
     <Compile Include="UIComponents\MainView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -55,6 +63,7 @@
     <Compile Include="Presenters\MainPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\IHelperView.cs" />
     <Compile Include="Views\IMainView.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -65,6 +74,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UIComponents\HelperView.resx">
+      <DependentUpon>HelperView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIComponents\MainView.resx">
+      <DependentUpon>MainView.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

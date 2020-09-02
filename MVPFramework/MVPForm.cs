@@ -31,8 +31,11 @@ namespace MVPFramework
         {
             // e.Presenter 就是与此View绑定的Presenter
             //MessageBox.Show("PresenterCreated之后的回调...");
+            Presenter = e.Presenter;
+            Presenter.PresenterStatus = PresenterStatus.Inited;
         }
 
+        public IPresenter Presenter { get; set; }//绑定到View上的Presenter
         public bool ThrowExceptionIfNoPresenterBound { get; set; }
     }
 }

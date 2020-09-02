@@ -61,12 +61,10 @@
     <Compile Include="Binder\PresenterDiscoveryResult.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Binder\ConventionBasedPresenterDiscoveryStrategy.cs" />
-    <Compile Include="IPresenter.cs" />
-    <Compile Include="IView.cs" />
+    <Compile Include="Core\IModel.cs" />
+    <Compile Include="Core\IPresenter.cs" />
+    <Compile Include="Core\IView.cs" />
     <Compile Include="MVPForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MVPForm`.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

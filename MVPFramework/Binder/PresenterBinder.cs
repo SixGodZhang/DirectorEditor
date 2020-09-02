@@ -72,11 +72,10 @@ namespace MVPFramework.Binder
         {
             try
             {
-                PerformBinding(
-                    viewInstance, DiscoveryStrategy,
-                    p => OnPresenterCreated(new PresenterCreatedEventArgs(p)),
-                    Factory);
-            }catch(Exception e)
+                IPresenter presenter = PerformBinding(viewInstance, DiscoveryStrategy,Factory);
+                OnPresenterCreated(new PresenterCreatedEventArgs(presenter));// Presenter创建完成
+            }
+            catch(Exception e)
             {
                 // 这里的异常只捕获， 不处理
             }
@@ -105,7 +104,6 @@ namespace MVPFramework.Binder
         private static IPresenter PerformBinding(
             IView candidate,
             IPresenterDiscoveryStrategy presenterDiscoveryStrategy,
-            Action<IPresenter> presenterCreatedCallback,
             IPresenterFactory presenterFactory)
         {
             // 获取candidate所有的绑定信息
@@ -116,7 +114,6 @@ namespace MVPFramework.Binder
 
             // 创建一个Presenter
             IPresenter newPresenter = BuildPresenterInternal(
-                presenterCreatedCallback,
                 presenterFactory,
                 presenterBinding);
 
@@ -138,7 +135,7 @@ namespace MVPFramework.Binder
             IEnumerable<PresenterBinding> bindings)// 找到的PresenterBinding集合, 一般来说只有一个
         {
             return bindings.Select(binding =>
-                    BuildPresenterInternal(presenterCreatedCallback,presenterFactory,binding))
+                    BuildPresenterInternal(presenterFactory,binding))
                     .ToList().First();
         }
 
@@ -150,20 +147,11 @@ namespace MVPFramework.Binder
         /// <param name="binding"></param>
         /// <returns></returns>
         private static IPresenter BuildPresenterInternal(
-           Action<IPresenter> presenterCreatedCallback,// 创建Presenter成功之后的回调函数
            IPresenterFactory presenterFactory,// 创建Presenter的工厂, 会在匹配的Presenter类中找到一个和绑定View相同的接口的参数
            PresenterBinding binding)// View 和 PresenterBinding 的对应关系
         {
-            // 获取View的实例
-            IView viewToCreateFor = binding.ViewInstance;
             // 获取Presenter的实例
-            var presenter = presenterFactory.Create(binding.PresenterType, binding.ViewType, viewToCreateFor);
-            // 处理回调函数
-            if (presenterCreatedCallback != null)
-            {
-                presenterCreatedCallback(presenter);
-            }
-            return presenter;
+            return presenterFactory.Create(binding.PresenterType, binding.ViewType, binding.ViewInstance);
         }
 
         /// <summary>
