@@ -6,10 +6,23 @@ using System.Threading.Tasks;
 
 namespace MVPFramework
 {
+    /// <summary>
+    /// 纯View
+    /// </summary>
     public interface IView
     {
-        bool ThrowExceptionIfNoPresenterBound { get; }
+        /// <summary>
+        /// true: 如果此View没有绑定的Presenter， 则会在获取绑定的过程中抛出异常
+        /// </summary>
+        bool ThrowExceptionIfNoPresenterBound { get; set; }
+    }
 
-        event EventHandler Load;
+    /// <summary>
+    /// View与Model绑定
+    /// </summary>
+    /// <typeparam name="TModel"></typeparam>
+    public interface IView<TModel>:IView
+    {
+        TModel Model { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MVPFramework.Binder;
+using MVPFramework.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

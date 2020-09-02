@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MVPFramework.Binder
+namespace MVPFramework.Extensions
 {
     public static class AssemblyExtensions
     {

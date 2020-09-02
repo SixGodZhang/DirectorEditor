@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace DirectorEditor.Presenters
 {
-    public class MainPresenter: Presenter<IMainView>
+    public class HelperPresenter:Presenter<IHelperView>
     {
-        public MainPresenter(IMainView view):base(view)
+        public HelperPresenter(IHelperView view):base(view)
         {
-            view.ShowMainForm();
+
         }
     }
 }

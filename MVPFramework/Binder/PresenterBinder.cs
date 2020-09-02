@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVPFramework.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,7 +11,9 @@ namespace MVPFramework.Binder
     public sealed class PresenterBinder
     {
         private static IPresenterFactory factory;
-
+        /// <summary>
+        /// Presenter 生成类
+        /// </summary>
         public static IPresenterFactory Factory
         {
             get
@@ -61,6 +64,10 @@ namespace MVPFramework.Binder
 
         }
 
+        /// <summary>
+        /// 绑定ViewInstance
+        /// </summary>
+        /// <param name="viewInstance"></param>
         public void PerformBinding(IView viewInstance)
         {
             try
@@ -71,7 +78,7 @@ namespace MVPFramework.Binder
                     Factory);
             }catch(Exception e)
             {
-
+                // 这里的异常只捕获， 不处理
             }
         }
 
@@ -168,7 +175,7 @@ namespace MVPFramework.Binder
         private static PresenterBinding GetBinding(IView candidate,
             IPresenterDiscoveryStrategy presenterDiscoveryStrategy)
         {
-            var result = presenterDiscoveryStrategy.GetBinding(candidate);
+            PresenterDiscoveryResult result = presenterDiscoveryStrategy.GetBinding(candidate);
             ThrowExceptionsForViewsWithNoPresenterBound(result);
 
             return result.Bindings.Single();
