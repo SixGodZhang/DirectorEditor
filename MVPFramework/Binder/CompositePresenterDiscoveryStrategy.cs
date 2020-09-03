@@ -47,14 +47,14 @@ namespace MVPFramework.Binder
 
             // 根据ViewInstances进行分组， 其实就只有一组
             // 返回第一个
-            return results.GroupBy(r => r.ViewInstances).Select(r => BuildMergedResult(r.Key, r)).First();
+            return results.GroupBy(r => r.ViewInstance).Select(r => BuildMergedResult(r.Key, r)).First();
         }
 
-        static PresenterDiscoveryResult BuildMergedResult(IEnumerable<IView> viewInstances, IEnumerable<PresenterDiscoveryResult> results)
+        static PresenterDiscoveryResult BuildMergedResult(IView viewInstance, IEnumerable<PresenterDiscoveryResult> results)
         {
             return new PresenterDiscoveryResult
             (
-                viewInstances,
+                viewInstance,
                 string.Format(
                     CultureInfo.InvariantCulture,
                     "CompositePresenterDiscoveryStrategy:\r\n\r\n{0}",

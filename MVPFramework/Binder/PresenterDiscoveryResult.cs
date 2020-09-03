@@ -9,18 +9,18 @@ namespace MVPFramework.Binder
 {
     public class PresenterDiscoveryResult
     {
-        readonly IEnumerable<IView> viewInstances;
+        readonly IView viewInstance;
         readonly string message;
         readonly IEnumerable<PresenterBinding> bindings;
 
-        public PresenterDiscoveryResult(IEnumerable<IView> viewInstances, string message, IEnumerable<PresenterBinding> bindings)
+        public PresenterDiscoveryResult(IView viewInstance, string message, IEnumerable<PresenterBinding> bindings)
         {
-            this.viewInstances = viewInstances;
+            this.viewInstance = viewInstance;
             this.message = message;
             this.bindings = bindings;
         }
 
-        public IEnumerable<IView> ViewInstances { get { return viewInstances; } }
+        public IView ViewInstance { get { return viewInstance; } }
 
         public string Message { get { return message; } }
 
@@ -32,7 +32,7 @@ namespace MVPFramework.Binder
             if (target == null) return false;
 
             return
-                ViewInstances.SetEqual(target.ViewInstances) &&
+               viewInstance.Equals(target.viewInstance) &&
                 Message.Equals(target.Message, StringComparison.OrdinalIgnoreCase) &&
                 Bindings.SetEqual(target.Bindings);
         }
@@ -40,7 +40,7 @@ namespace MVPFramework.Binder
         public override int GetHashCode()
         {
             return
-                ViewInstances.GetHashCode() |
+                viewInstance.GetHashCode() |
                 Message.GetHashCode() |
                 Bindings.GetHashCode();
         }

@@ -48,7 +48,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attribute\CustomLogic.cs" />
+    <Compile Include="Core\EventArgs\PresenterDestoryEventArgs.cs" />
+    <Compile Include="Core\EventArgs\PresenterSingleViewBindingEventArgs.cs" />
+    <Compile Include="Core\EventArgs\PresenterCancelAllViewEventArgs.cs" />
+    <Compile Include="Core\EventArgs\PresenterCancelMultiViewEventArgs.cs" />
+    <Compile Include="Core\EventArgs\PresenterCancelSingleViewEventArgs.cs" />
+    <Compile Include="Core\EventArgs\PresenterInitEventArgs.cs" />
+    <Compile Include="Core\EventArgs\PresenterCreateEventArgs.cs" />
     <Compile Include="Core\PresenterStub.cs" />
+    <Compile Include="Core\ViewLogic.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Binder\AttributeBasePresenterDiscoveryStrategy.cs" />
     <Compile Include="Binder\CompositePresenterDiscoveryStrategy.cs" />

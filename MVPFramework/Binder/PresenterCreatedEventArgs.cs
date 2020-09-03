@@ -8,16 +8,16 @@ namespace MVPFramework.Binder
 {
     public class PresenterCreatedEventArgs:EventArgs
     {
-        readonly IPresenter presenter;
+        readonly IEnumerable<IPresenter> presenters;
 
-        public PresenterCreatedEventArgs(IPresenter presenter)
+        public PresenterCreatedEventArgs(IEnumerable<IPresenter> presenters)
         {
-            this.presenter = presenter;
+            this.presenters = presenters;
         }
 
-        public IPresenter Presenter
+        public IEnumerable<IPresenter> Presenters
         {
-            get { return presenter; }
+            get { return presenters; }
         }
     }
 }

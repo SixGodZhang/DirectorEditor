@@ -16,5 +16,21 @@ namespace MVPFramework
         /// true: 如果此View没有绑定的Presenter， 则会在获取绑定的过程中抛出异常
         /// </summary>
         bool ThrowExceptionIfNoPresenterBound { get; set; }
+
+        /// <summary>
+        /// 显示窗口
+        /// </summary>
+        void Show();
+
+        /// <summary>
+        /// 关闭窗口
+        /// </summary>
+        void Close();
+
+        /// <summary>
+        /// 激活窗口
+        /// </summary>
+        void Activate();
+
     }
 }

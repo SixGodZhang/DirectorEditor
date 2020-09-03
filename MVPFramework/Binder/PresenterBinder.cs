@@ -39,8 +39,8 @@ namespace MVPFramework.Binder
         /// <summary>
         /// 检索Presenter的策略
         /// </summary>
-        private static IPresenterDiscoveryStrategy discoveryStrategy;
-        public static IPresenterDiscoveryStrategy DiscoveryStrategy
+        private IPresenterDiscoveryStrategy discoveryStrategy;
+        public IPresenterDiscoveryStrategy DiscoveryStrategy
         {
             get
             {
@@ -61,9 +61,14 @@ namespace MVPFramework.Binder
         /// </summary>
         public event EventHandler<PresenterCreatedEventArgs> PresenterCreated;
 
-        public PresenterBinder()
+        /// <summary>
+        /// 可以指定固定的检索策略来初始化Presenter
+        /// 目的: 加快检索速度, 灵活配置检索方案
+        /// </summary>
+        /// <param name="strategy"></param>
+        public PresenterBinder(IPresenterDiscoveryStrategy strategy = null)
         {
-
+            this.discoveryStrategy = strategy;
         }
 
         /// <summary>
@@ -74,8 +79,8 @@ namespace MVPFramework.Binder
         {
             try
             {
-                IPresenter presenter = PerformBinding(viewInstance, DiscoveryStrategy,Factory);
-                OnPresenterCreated(new PresenterCreatedEventArgs(presenter));// Presenter创建完成
+                IEnumerable<IPresenter> presenters = PerformBinding(viewInstance, DiscoveryStrategy,Factory);
+                OnPresenterCreated(new PresenterCreatedEventArgs(presenters));// Presenter初始化
             }
             catch(Exception e)
             {
@@ -103,62 +108,120 @@ namespace MVPFramework.Binder
         /// <param name="presenterCreatedCallback"></param>
         /// <param name="presenterFactory"></param>
         /// <returns></returns>
-        private static IPresenter PerformBinding(
+        private static IEnumerable<IPresenter> PerformBinding(
             IView candidate,
             IPresenterDiscoveryStrategy presenterDiscoveryStrategy,
             IPresenterFactory presenterFactory)
         {
             // 获取candidate所有的绑定信息
             // 绑定信息包含View和Predicate
-            PresenterBinding presenterBinding = GetBinding(candidate,presenterDiscoveryStrategy);
+            // 根据策略找到所有
+            IEnumerable<PresenterBinding> presenterBindings = GetBinding(candidate,presenterDiscoveryStrategy);
 
-            IPresenter newPresenter = null;
-            bool canFindFromCacheStub = false;// 是否可以从缓存中找到对应实例
+            List<IPresenter> newPresenters = null;
+            List<Type> failedPresenterTypes = null;
 
-            // 这里现在PresenterStub中查找， 看是否可以找到实例, 如果可以找到, 则就不需要实例化了
-            newPresenter = PresenterStub.Get(presenterBinding.PresenterType);
-            // 如果在缓存中找到了此类型的Presenter， 清理掉它与View建立的连接
-            if (newPresenter!= null && newPresenter.PresenterType == PresenterType.ModelView 
-                && (newPresenter.PresenterStatus == PresenterStatus.Inited || newPresenter.PresenterStatus == PresenterStatus.OnlyDataAfterClear))
+            // 这里现在PresenterStub中查找， 看是否可以找到实例
+            // 可以找到的实例保存在newPresenters中, 在cache中找不到的实例输出到failedPresenterTypes中
+            newPresenters = PresenterStub.Gets(presenterBindings.Select(p => p.PresenterType), out failedPresenterTypes);
+
+            if(newPresenters!=null && newPresenters.Count() > 0)
             {
-                try
+                // 调用缓存中的Presenter初始化失败的Presenter
+                List<IPresenter> failedPresenterFromCache = new List<IPresenter>();
+
+                // 遍历所有可以找到的、符合要求的Presenter
+                for (int i = 0;i<newPresenters.Count(); i++)
                 {
-                    // call ClearViewPart
-                    MethodInfo mi = newPresenter.GetType().GetMethod("ClearViewPart");
-                    if (mi != null)
+                    IPresenter newPresenter = newPresenters.ElementAt(i);
+                    switch(newPresenter.PresenterType)
                     {
-                        mi.Invoke(newPresenter, null);
+                        case PresenterType.ModelView:
+                            if (newPresenter.PresenterStatus == PresenterStatus.Inited || newPresenter.PresenterStatus == PresenterStatus.OnlyDataAfterClear)
+                            {
+                                try
+                                {
+                                    // call ClearViewPart
+                                    MethodInfo mi = newPresenter.GetType().GetMethod("ClearViewPart");
+                                    if (mi != null)
+                                    {
+                                        mi.Invoke(newPresenter, null);
+                                    }
+                                    // set View Property
+                                    PropertyInfo viewPropertyInfo = newPresenter.GetType().GetProperty("View");
+                                    if (viewPropertyInfo != null && viewPropertyInfo.CanWrite)
+                                    {
+                                        viewPropertyInfo.SetValue(newPresenter, candidate);
+                                    }
+                                    // set PresenterStatus Property
+                                    PropertyInfo statusPropertyInfo = newPresenter.GetType().GetProperty("PresenterStatus");
+                                    if (statusPropertyInfo != null && viewPropertyInfo.CanWrite)
+                                    {
+                                        statusPropertyInfo.SetValue(newPresenter, PresenterStatus.Initing);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    failedPresenterFromCache.Add(newPresenter);
+                                }
+                            }
+                            else
+                            {//如果newPresenter 状态不对, 则认为其初始化失败, 准备重新初始化
+                                failedPresenterFromCache.Add(newPresenter);
+                            }
+                            break;
+                        case PresenterType.ModelViewNN:
+                            if (newPresenter.PresenterStatus == PresenterStatus.Inited)
+                            {
+                                try
+                                {
+                                    MethodInfo mi = newPresenter.GetType().GetMethod("AddView");
+                                    if (mi != null)
+                                    {
+                                        mi.Invoke(newPresenter, new object[] { candidate });
+                                    }
+                                }catch(Exception ex)
+                                {
+                                    failedPresenterFromCache.Add(newPresenter);
+                                }
+                            }
+                            else
+                            {
+                                failedPresenterFromCache.Add(newPresenter);
+                            }
+                            break;
+                        case PresenterType.View:
+                            break;
+                        default:
+                            break;
                     }
-                    // set View Property
-                    PropertyInfo viewPropertyInfo = newPresenter.GetType().GetProperty("View");
-                    if (viewPropertyInfo != null && viewPropertyInfo.CanWrite)
-                    {
-                        viewPropertyInfo.SetValue(newPresenter, presenterBinding.ViewInstance);
-                    }
-                    // set PresenterStatus Property
-                    PropertyInfo statusPropertyInfo = newPresenter.GetType().GetProperty("PresenterStatus");
-                    if (statusPropertyInfo != null && viewPropertyInfo.CanWrite)
-                    {
-                        statusPropertyInfo.SetValue(newPresenter, PresenterStatus.Initing);
-                    }
-                    canFindFromCacheStub = true;
-                }
-                catch(Exception ex)
-                {
-                    canFindFromCacheStub = false;
                 }
 
+                
+                if (failedPresenterFromCache.Count() > 0)
+                {
+                    // 从newPresenter中排除那些创建失败的
+                    newPresenters = newPresenters.Where(p => !failedPresenterFromCache.Contains(p)) as List<IPresenter>;
+
+                    //遍历所有失败的Presenter， 然后重新创建
+                    foreach (var failedPresenter in failedPresenterFromCache)
+                    {
+                        IPresenter presenter = BuildPresenterInternal(presenterFactory, failedPresenter.GetType(), candidate.GetType(), candidate);
+                        newPresenters.Add(presenter);
+                        PresenterStub.Add(presenter);// 添加到缓存中, 会将直接错误的进行覆盖
+                    }
+                } 
             }
 
-            if(!canFindFromCacheStub)// 如果在缓存中找不到此类型的Presenter, 则重新创建一个
+            // 创建不存在缓存中的实例
+            foreach (var presenterType in failedPresenterTypes)
             {
-                newPresenter = BuildPresenterInternal(
-                    presenterFactory,
-                    presenterBinding);
-
-                PresenterStub.Add(newPresenter);// 添加Presenter到Stub中去, 如果已存在, 则覆盖
+                IPresenter presenterInstance = BuildPresenterInternal(presenterFactory, presenterType, candidate.GetType(), candidate);
+                newPresenters.Add(presenterInstance);// 添加到结果中
+                PresenterStub.Add(presenterInstance);// 添加到缓存中
             }
-            return newPresenter;
+
+            return newPresenters;
         }
 
         [Obsolete("暂时用不到【IEnumerable<PresenterBinding>】这种情况, 所以将其标记为过时")]
@@ -180,7 +243,7 @@ namespace MVPFramework.Binder
         }
 
         /// <summary>
-        /// 创建Presenter方法
+        /// 创建Presenter方法(通过PresenterBinding创建的方法)
         /// </summary>
         /// <param name="presenterCreatedCallback"></param>
         /// <param name="presenterFactory"></param>
@@ -191,7 +254,24 @@ namespace MVPFramework.Binder
            PresenterBinding binding)// View 和 PresenterBinding 的对应关系
         {
             // 获取Presenter的实例
-            return presenterFactory.Create(binding.PresenterType, binding.ViewType, binding.ViewInstance);
+            return presenterFactory.Create(binding.PresenterType, binding.ViewLogicType, binding.ViewInstance);
+        }
+
+        /// <summary>
+        /// 创建Presenter方法
+        /// </summary>
+        /// <param name="presenterFactory"></param>
+        /// <param name="presenterType"></param>
+        /// <param name="viewType"></param>
+        /// <param name="viewInstnace"></param>
+        /// <returns></returns>
+        private static IPresenter BuildPresenterInternal(
+            IPresenterFactory presenterFactory,
+            Type presenterType,
+            Type viewType,
+            IView viewInstnace)
+        {
+            return presenterFactory.Create(presenterType, viewType, viewInstnace);
         }
 
         /// <summary>
@@ -200,13 +280,13 @@ namespace MVPFramework.Binder
         /// <param name="candidate"></param>
         /// <param name="presenterDiscoveryStrategy"></param>
         /// <returns></returns>
-        private static PresenterBinding GetBinding(IView candidate,
-            IPresenterDiscoveryStrategy presenterDiscoveryStrategy)
+        private static IEnumerable<PresenterBinding> GetBinding(IView viewInstance,IPresenterDiscoveryStrategy presenterDiscoveryStrategy)
         {
-            PresenterDiscoveryResult result = presenterDiscoveryStrategy.GetBinding(candidate);
+            // 查找所有与View关联的Presenter数据
+            PresenterDiscoveryResult result = presenterDiscoveryStrategy.GetBinding(viewInstance);
             ThrowExceptionsForViewsWithNoPresenterBound(result);
 
-            return result.Bindings.Single();
+            return result.Bindings;
         }
 
         /// <summary>
@@ -215,12 +295,12 @@ namespace MVPFramework.Binder
         /// <param name="result"></param>
         private static void ThrowExceptionsForViewsWithNoPresenterBound(PresenterDiscoveryResult result)
         {
-            if (result.Bindings.Empty() && result.ViewInstances.Where(v => v.ThrowExceptionIfNoPresenterBound).Any())
+            if (result.Bindings.Empty() && result.ViewInstance.ThrowExceptionIfNoPresenterBound)
 
                 throw new InvalidOperationException(string.Format(
                     CultureInfo.InvariantCulture,
                     @"Failed to find presenter for view instance of {0}.{1} If you do not want this exception to be thrown, set ThrowExceptionIfNoPresenterBound to false on your view.",
-                    result.ViewInstances.Where(v => v.ThrowExceptionIfNoPresenterBound).Single().GetType().FullName,
+                    result.ViewInstance.GetType().FullName,
                     result.Message
                     ));
         }

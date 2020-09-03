@@ -45,6 +45,33 @@ namespace MVPFramework.Core
         }
 
         /// <summary>
+        /// 批量查找Presenter缓存的实例。
+        /// 返回结果 是可以查找到的 Presenter实例
+        /// failedPresenters 是未查找到的类型
+        /// </summary>
+        /// <param name="persenterTypes"></param>
+        /// <param name="failedPresenters"></param>
+        /// <returns></returns>
+        public static List<IPresenter> Gets(IEnumerable<Type> persenterTypes,out List<Type> failedPresenters)
+        {
+            List<IPresenter> result = new List<IPresenter>();
+            failedPresenters = new List<Type>();
+            foreach (var persenterType in persenterTypes)
+            {
+                if (cachePresenters.ContainsKey(persenterType))
+                {
+                    result.Add(cachePresenters[persenterType]);
+                }
+                else
+                {
+                    failedPresenters.Add(persenterType);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// 销毁指定的Presenter
         /// </summary>
         /// <param name="persenterFullName"></param>

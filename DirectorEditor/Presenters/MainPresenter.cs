@@ -12,7 +12,8 @@ namespace DirectorEditor.Presenters
     {
         public MainPresenter(IMainView view):base(view)
         {
-            view.ShowMainForm();
+            //view.ShowMainForm();
+            View = view;
         }
     }
 }

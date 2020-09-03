@@ -13,13 +13,11 @@ namespace DirectorEditor.Presenters
         public HelperPresenter(IHelperView view):base(view)
         {
             // 这里直接处理View中的Model的初始化
-            var model = new HelperModel();
-            model.EditorDesc = "这里显示的是帮助信息";
-
-            SetHelperInfo(model);
+            //var model = new HelperModel();
+            //model.EditorDesc = "这里显示的是帮助信息";
+            //SetHelperInfo(model);
+            View = view;
         }
-
-
 
         /// <summary>
         /// 设置帮助信息(这里函数需要在Presenter初始化完成之后调用)
@@ -37,8 +35,27 @@ namespace DirectorEditor.Presenters
             if (modelInfo!= null)
             {
                 Model = modelInfo;// 重新拉取数据
-                View.LayoutView();// 刷新界面
+                View.LayoutView(modelInfo);// 刷新界面
             }
         }
+
+        /// <summary>
+        ///  显示界面
+        /// </summary>
+        public void Show()
+        {
+            View.Show();
+        }
+
+        /// <summary>
+        ///  界面获取焦点
+        /// </summary>
+        public void Activate()
+        {
+            View.Activate();
+        }
+
+
+
     }
 }

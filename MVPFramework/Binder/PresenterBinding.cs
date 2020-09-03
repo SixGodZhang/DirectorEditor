@@ -9,13 +9,13 @@ namespace MVPFramework.Binder
     public class PresenterBinding
     {
         readonly Type presenterType;
-        readonly Type viewType;
+        readonly Type viewLogicType;
         readonly IView viewInstance;
 
-        public PresenterBinding(Type presenterType, Type viewType, IView viewInstance)
+        public PresenterBinding(Type presenterType, Type viewLogicType, IView viewInstance)
         {
             this.presenterType = presenterType;
-            this.viewType = viewType;
+            this.viewLogicType = viewLogicType;
             this.viewInstance = viewInstance;
         }
 
@@ -24,9 +24,9 @@ namespace MVPFramework.Binder
             get { return presenterType; }
         }
 
-        public Type ViewType
+        public Type ViewLogicType
         {
-            get { return viewType; }
+            get { return viewLogicType; }
         }
 
         public IView ViewInstance
@@ -41,7 +41,7 @@ namespace MVPFramework.Binder
 
             return
                 PresenterType == target.PresenterType &&
-                ViewType == target.ViewType &&
+                ViewLogicType == target.ViewLogicType &&
                 ViewInstance.Equals(target.ViewInstance);
         }
 
@@ -49,7 +49,7 @@ namespace MVPFramework.Binder
         {
             return
                 PresenterType.GetHashCode() |
-                ViewType.GetHashCode() |
+                ViewLogicType.GetHashCode() |
                 ViewInstance.GetHashCode();
         }
     }

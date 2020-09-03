@@ -44,9 +44,7 @@ namespace MVPFramework.Binder
         static readonly IEnumerable<string> defaultCandidatePresenterTypeFullNameFormats =
             new[]
             {
-                "{namespace}.Logic.Presenters.{presenter}",
                 "{namespace}.Presenters.{presenter}",
-                "{namespace}.Logic.{presenter}",
                 "{namespace}.{presenter}"
             };
 
@@ -58,47 +56,46 @@ namespace MVPFramework.Binder
             get { return defaultCandidatePresenterTypeFullNameFormats; }
         }
 
-
         static readonly IDictionary<RuntimeTypeHandle, ConventionSearchResult> viewTypeToPresenterTypeCache = new Dictionary<RuntimeTypeHandle, ConventionSearchResult>();
         internal static PresenterDiscoveryResult GetBinding(IView viewInstance, IEnumerable<string> viewInstanceSuffixes, IEnumerable<string> presenterTypeFullNameFormats)
         {
-            var viewType = viewInstance.GetType();
-            ConventionSearchResult searchResult = viewTypeToPresenterTypeCache.GetOrCreateValue(viewType.TypeHandle, () =>
+            var viewLogicType = viewInstance.GetType();
+            ConventionSearchResult searchResult = viewTypeToPresenterTypeCache.GetOrCreateValue(viewLogicType.TypeHandle, () =>
             PerformSearch(viewInstance, viewInstanceSuffixes, presenterTypeFullNameFormats));
 
             return new PresenterDiscoveryResult(
-                new[] { viewInstance },
+                viewInstance,
                 searchResult.Message,
                 searchResult.PresentType == null
                 ? new PresenterBinding[0]
-                : new[] { new PresenterBinding(searchResult.PresentType, viewType, viewInstance) });
+                : new[] { new PresenterBinding(searchResult.PresentType, viewLogicType, viewInstance) });
         }
 
         static ConventionSearchResult PerformSearch(IView viewInstance, IEnumerable<string> viewInstanceSuffixes, 
             IEnumerable<string> presenterTypeFullNameFormats)
         {
-            var viewType = viewInstance.GetType();
+            var viewLogicType = viewInstance.GetType();
             var presenterType = default(Type);
 
-            //根据viewType查找所有符合要求的presenterTypeName
+            //根据viewLogicType查找所有符合要求的presenterTypeName
             // 这里的意思就是
-            // View的命名都以ViewInstanceSuffixes中的suffix结尾
+            // ViewLogic的命名都以ViewInstanceSuffixes中的suffix结尾
             // Presenter都以Presenter结尾
-            var presenterTypeName = new List<string> { GetPresenterTypeNameFromViewTypeName(viewType, viewInstanceSuffixes) };
+            var presenterTypeName = GetPresenterTypeNameFromViewLogicTypeName(viewLogicType, viewInstanceSuffixes);
 
-            // 获取View实现的所有接口
-            presenterTypeName.AddRange(GetPresenterTypeNamesFromViewInterfaceTypeNames(viewType.GetViewInterfaces()));
+            // 获取View逻辑层实现的所有接口 --> 放弃接口的实现方式
+            // presenterTypeName.AddRange(GetPresenterTypeNamesFromViewInterfaceTypeNames(viewLogicType.GetViewInterfaces()));
 
             // 获取候选Presenter的类型完全限定名
-            var candidatePresenterTypeFullNames = GenerateCandidatePresenterTypeFullNames(viewType, presenterTypeName, presenterTypeFullNameFormats);
+            // presenterTypeFullNameFormats -> presenterType FullName 格式
+            var candidatePresenterTypeFullNames = GenerateCandidatePresenterTypeFullNames(viewLogicType, presenterTypeName, presenterTypeFullNameFormats);
 
             var messages = new List<string>();
-
             // 找到一个就短路
             foreach (var typeFullName in candidatePresenterTypeFullNames.Distinct())
             {
                 // 在ViewType所在的Assembly中寻找此类型
-                presenterType = viewType.Assembly.GetType(typeFullName);
+                presenterType = viewLogicType.Assembly.GetType(typeFullName);
 
                 if (presenterType == null)
                 {
@@ -139,23 +136,19 @@ namespace MVPFramework.Binder
         /// <summary>
         /// 生成候选的Presenter类型
         /// </summary>
-        /// <param name="viewType"></param>
-        /// <param name="presenterTypeNames"></param>
+        /// <param name="viewLogicType"></param>
+        /// <param name="presenterTypeNames">presenter可能的类型名称</param>
         /// <param name="presenterTypeFullNameFormats"></param>
         /// <returns></returns>
-        static IEnumerable<string> GenerateCandidatePresenterTypeFullNames(Type viewType, IEnumerable<string> presenterTypeNames, IEnumerable<string> presenterTypeFullNameFormats)
+        static IEnumerable<string> GenerateCandidatePresenterTypeFullNames(Type viewLogicType, string presenterTypeName, IEnumerable<string> presenterTypeFullNameFormats)
         {
-            var assemblyName = viewType.Assembly.GetNameSafe();
+            yield return viewLogicType.Namespace + "." + presenterTypeName;// 先范湖
 
-            foreach (var presenterTypeName in presenterTypeNames)// 候选的类型名
+            var assemblyName = viewLogicType.Assembly.GetNameSafe();
+            foreach (var typeNameFormat in presenterTypeFullNameFormats)//定义的presenter类型名称格式
             {
-                yield return viewType.Namespace + "." + presenterTypeName;
-
-                foreach (var typeNameFormat in presenterTypeFullNameFormats)//定义的presenter类型名称格式
-                {
-                    yield return typeNameFormat.Replace("{namespace}", assemblyName)
-                                               .Replace("{presenter}", presenterTypeName);
-                }
+                yield return typeNameFormat.Replace("{namespace}", assemblyName)
+                                           .Replace("{presenter}", presenterTypeName);
             }
         }
 
@@ -176,16 +169,16 @@ namespace MVPFramework.Binder
         /// <summary>
         /// 根据ViewType类型名字获取Presenter类型名字
         /// </summary>
-        /// <param name="viewType"></param>
+        /// <param name="viewLogicType"></param>
         /// <param name="viewInstanceSuffixes"></param>
         /// <returns></returns>
-        internal static string GetPresenterTypeNameFromViewTypeName(Type viewType, IEnumerable<string> viewInstanceSuffixes)
+        internal static string GetPresenterTypeNameFromViewLogicTypeName(Type viewLogicType, IEnumerable<string> viewInstanceSuffixes)
         {
             var presenterTypeName = (from suffix in viewInstanceSuffixes
-                                     where viewType.Name.EndsWith(suffix, StringComparison.OrdinalIgnoreCase)
-                                     select viewType.Name.TrimFromEnd(suffix))
+                                     where viewLogicType.Name.EndsWith(string.Format("{0}Logic",suffix), StringComparison.OrdinalIgnoreCase)
+                                     select viewLogicType.Name.TrimFromEnd(string.Format("{0}Logic", suffix)))
                                      .FirstOrDefault();
-            return (string.IsNullOrEmpty(presenterTypeName) ? viewType.Name : presenterTypeName) + "Presenter";
+            return (string.IsNullOrEmpty(presenterTypeName) ? viewLogicType.Name : presenterTypeName) + "Presenter";
         }
 
         class ConventionSearchResult

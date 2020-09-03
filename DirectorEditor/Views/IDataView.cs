@@ -1,5 +1,4 @@
-﻿using DirectorEditor.Models;
-using MVPFramework;
+﻿using MVPFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace DirectorEditor.Views
 {
-    public interface IHelperView:IView
+    public interface IDataView:IView
     {
-        void LayoutView(HelperModel modelInfo);// 刷新主界面UI
+
     }
 }
