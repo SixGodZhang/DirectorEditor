@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\PresenterStub.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Binder\AttributeBasePresenterDiscoveryStrategy.cs" />
     <Compile Include="Binder\CompositePresenterDiscoveryStrategy.cs" />

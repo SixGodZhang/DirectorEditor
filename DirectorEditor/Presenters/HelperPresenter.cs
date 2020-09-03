@@ -19,6 +19,8 @@ namespace DirectorEditor.Presenters
             SetHelperInfo(model);
         }
 
+
+
         /// <summary>
         /// 设置帮助信息(这里函数需要在Presenter初始化完成之后调用)
         /// </summary>

@@ -2,20 +2,22 @@
 using DirectorEditor.Presenters;
 using DirectorEditor.Views;
 using MVPFramework;
+using MVPFramework.Binder;
 
 namespace DirectorEditor.UIComponents
 {
     /// <summary>
     /// 帮助界面
     /// </summary>
+    //[PresenterBinding(typeof(HelperPresenter))]
     public partial class HelperView : MVPForm, IHelperView
     {
-        public HelperView():base()
+        public HelperView()
         {
             InitializeComponent();
 
             // 如果界面初始化完成, 则处理缓存的数据调用
-            if (Presenter.PresenterType == PresenterType.ModelView)
+            if (Presenter.PresenterType == PresenterType.ModelView && (Presenter as HelperPresenter).cacheMethodCallAction!=null)
             {
                 (Presenter as HelperPresenter).cacheMethodCallAction();
             }

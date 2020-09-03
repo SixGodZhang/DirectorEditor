@@ -23,6 +23,25 @@ namespace MVPFramework
         }
 
         /// <summary>
+        /// 窗口显示时触发
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+        }
+
+        /// <summary>
+        /// 窗口关闭时触发
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+        }
+
+
+        /// <summary>
         /// Presenter 创建之后的回调函数
         /// </summary>
         /// <param name="sender">typeof(sender) == PresenterBinder</param>

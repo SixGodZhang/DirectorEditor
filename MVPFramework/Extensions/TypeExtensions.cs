@@ -20,5 +20,16 @@ namespace MVPFramework.Extensions
              .ToArray()
             );
         }
+
+        /// <summary>
+        /// 类型是否包含某个方法
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="methodName"></param>
+        /// <returns></returns>
+        public static bool HasMethod(this Type type,string methodName)
+        {
+            return type.GetMethods().Where(m => m.Name == methodName).Count() > 0;
+        }
     }
 }

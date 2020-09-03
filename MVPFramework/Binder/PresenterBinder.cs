@@ -1,8 +1,10 @@
-﻿using MVPFramework.Extensions;
+﻿using MVPFramework.Core;
+using MVPFramework.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -108,18 +110,56 @@ namespace MVPFramework.Binder
         {
             // 获取candidate所有的绑定信息
             // 绑定信息包含View和Predicate
-            PresenterBinding presenterBinding = GetBinding(
-                candidate,
-                presenterDiscoveryStrategy);
+            PresenterBinding presenterBinding = GetBinding(candidate,presenterDiscoveryStrategy);
 
-            // 创建一个Presenter
-            IPresenter newPresenter = BuildPresenterInternal(
-                presenterFactory,
-                presenterBinding);
+            IPresenter newPresenter = null;
+            bool canFindFromCacheStub = false;// 是否可以从缓存中找到对应实例
 
+            // 这里现在PresenterStub中查找， 看是否可以找到实例, 如果可以找到, 则就不需要实例化了
+            newPresenter = PresenterStub.Get(presenterBinding.PresenterType);
+            // 如果在缓存中找到了此类型的Presenter， 清理掉它与View建立的连接
+            if (newPresenter!= null && newPresenter.PresenterType == PresenterType.ModelView 
+                && (newPresenter.PresenterStatus == PresenterStatus.Inited || newPresenter.PresenterStatus == PresenterStatus.OnlyDataAfterClear))
+            {
+                try
+                {
+                    // call ClearViewPart
+                    MethodInfo mi = newPresenter.GetType().GetMethod("ClearViewPart");
+                    if (mi != null)
+                    {
+                        mi.Invoke(newPresenter, null);
+                    }
+                    // set View Property
+                    PropertyInfo viewPropertyInfo = newPresenter.GetType().GetProperty("View");
+                    if (viewPropertyInfo != null && viewPropertyInfo.CanWrite)
+                    {
+                        viewPropertyInfo.SetValue(newPresenter, presenterBinding.ViewInstance);
+                    }
+                    // set PresenterStatus Property
+                    PropertyInfo statusPropertyInfo = newPresenter.GetType().GetProperty("PresenterStatus");
+                    if (statusPropertyInfo != null && viewPropertyInfo.CanWrite)
+                    {
+                        statusPropertyInfo.SetValue(newPresenter, PresenterStatus.Initing);
+                    }
+                    canFindFromCacheStub = true;
+                }
+                catch(Exception ex)
+                {
+                    canFindFromCacheStub = false;
+                }
+
+            }
+
+            if(!canFindFromCacheStub)// 如果在缓存中找不到此类型的Presenter, 则重新创建一个
+            {
+                newPresenter = BuildPresenterInternal(
+                    presenterFactory,
+                    presenterBinding);
+
+                PresenterStub.Add(newPresenter);// 添加Presenter到Stub中去, 如果已存在, 则覆盖
+            }
             return newPresenter;
         }
-
 
         [Obsolete("暂时用不到【IEnumerable<PresenterBinding>】这种情况, 所以将其标记为过时")]
         /// <summary>
