@@ -18,7 +18,7 @@ namespace DirectorEditor.UIComponents
     /// </summary>
     [PresenterBinding(typeof(DataPart1View))]
     [PresenterBinding(typeof(DataPart2View))]
-    public partial class DataPart1View : MVPForm,IDataView
+    public partial class DataPart1View : Form
     {
         public DataPart1View()
         {

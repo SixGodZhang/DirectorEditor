@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,8 +21,6 @@ namespace MVPFramework.Core
         where T1:Control
         where T2:class, IView
     {
-        //private static T2 _instance = null;
-        //public static T2 Instance {get=> _instance; set => _instance = value; }
         private ViewType _viewType = ViewType.None;
         public ViewType ViewType { get => _viewType; set => _viewType = value; }
 
@@ -30,25 +29,36 @@ namespace MVPFramework.Core
         public IEnumerable<IPresenter> Presenters { get; set; }
 
         public bool ThrowExceptionIfNoPresenterBound { get; set; }
+        public Action InitViewLogic;// 在View初始化完成时候调用
         public Action DestroyViewLogic;// 销毁viewlogic
 
         protected ViewLogic(ViewType type = ViewType.Single)
         {
-            // 获取Logic绑定的UI 类型
-            //Type uiType = this.GetType().GetCustomAttributes(typeof(CustomLogicAttribute), false)
-            //    .OfType<CustomLogicAttribute>()
-            //    .Select(p => p.uiType).Single();
             this._viewType = type;
             target = this.GetType().Assembly.CreateInstance(typeof(T1).FullName) as T1;
             // TODO： 在此注册一些事件
             target.HandleDestroyed += ViewLogic_ControlDestroyed;
-            //if (_viewType == ViewType.Single)
-            //{
-            //    _instance = this as T2;
-            //}
-            
+            EventInfo loadEvent = target.GetType().GetEvent("Load");
+            if (loadEvent != null)
+            {
+                loadEvent.AddEventHandler(target, new EventHandler(ViewLogic_ControlLoad));
+            }
+           
             presenterBinder.PresenterCreated += ViewLogic_PresenterCreated;
             presenterBinder.PerformBinding(this as T2);
+        }
+
+        /// <summary>
+        /// 控件具有Load事件时的注册函数
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ViewLogic_ControlLoad(object sender, EventArgs e)
+        {
+            if (this.InitViewLogic!= null)
+            {
+                InitViewLogic();
+            }
         }
 
         /// <summary>
@@ -65,7 +75,10 @@ namespace MVPFramework.Core
             }
 
             // 销毁全局引用
-            DestroyViewLogic();
+            if (this.DestroyViewLogic!= null)
+            {
+                DestroyViewLogic();
+            }
 
         }
 
