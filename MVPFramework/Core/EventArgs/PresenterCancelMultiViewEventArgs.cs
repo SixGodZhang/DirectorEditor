@@ -2,7 +2,7 @@
 
 namespace MVPFramework.Core
 {
-    public class PresenterCancelMultiViewEventArgs : EventArgs
+    public class PresenterCancelMultiViewLogicEventArgs : EventArgs
     {
 
     }

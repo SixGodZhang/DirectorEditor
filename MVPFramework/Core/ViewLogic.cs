@@ -1,15 +1,12 @@
 ﻿using MVPFramework.Binder;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MVPFramework.Core
 {
+    [Obsolete("暂时还没考虑好怎么使用")]
     public enum ViewType
     {
         None,
@@ -17,39 +14,61 @@ namespace MVPFramework.Core
         Multi//可以允许创建多个
     }
 
+    /// <summary>
+    /// 实现IViewLogic中的部分逻辑
+    /// </summary>
+    /// <typeparam name="T1">ViewLogic layer 绑定的控件</typeparam>
+    /// <typeparam name="T2">ViewLogic 实现类</typeparam>
     public abstract class ViewLogic<T1,T2> 
         where T1:Control
-        where T2:class, IView
+        where T2:class, IViewLogic
     {
+        [Obsolete("还没考虑好怎么用")]
         private ViewType _viewType = ViewType.None;
+        [Obsolete("还没考虑好怎么用")]
         public ViewType ViewType { get => _viewType; set => _viewType = value; }
 
+        /// <summary>
+        /// 控件实例
+        /// </summary>
         public T1 target;
+        /// <summary>
+        /// Presenter绑定器--> 处理ViewLogic和Presenter具体的绑定过程
+        /// </summary>
         private readonly PresenterBinder presenterBinder;
+        /// <summary>
+        /// ViewLogic 关联的所有Presenters
+        /// </summary>
         public IEnumerable<IPresenter> Presenters { get; set; }
 
         public bool ThrowExceptionIfNoPresenterBound { get; set; }
-        public Action InitViewLogic;// 在View初始化完成时候调用
-        public Action DestroyViewLogic;// 销毁viewlogic
+        /// <summary>
+        /// View初始化回调
+        /// </summary>
+        public Action InitViewLogic;
+        /// <summary>
+        /// ViewLogic销毁时回调
+        /// </summary>
+        public Action DestroyViewLogic;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="type">type暂时没用了， 还是保留， 考虑到后面的设计会用到</param>
         /// <param name="strategy">将ViewLogic和Presenter绑定起来的寻址策略</param>
-        protected ViewLogic(ViewType type = ViewType.Single, PresenterAddressingType addressingType = PresenterAddressingType.Composite)
+        protected ViewLogic( PresenterAddressingType addressingType = PresenterAddressingType.Composite)
         {
-            this._viewType = type;
+            //this._viewType = type;
             presenterBinder = new PresenterBinder(addressingType: addressingType);
             target = this.GetType().Assembly.CreateInstance(typeof(T1).FullName) as T1;
-            // TODO： 在此注册一些事件
+            // 特殊事件注册
             target.HandleDestroyed += ViewLogic_ControlDestroyed;
             EventInfo loadEvent = target.GetType().GetEvent("Load");
             if (loadEvent != null)
             {
                 loadEvent.AddEventHandler(target, new EventHandler(ViewLogic_ControlLoad));
             }
-           
+            //
             presenterBinder.PresenterCreated += ViewLogic_PresenterCreated;
             presenterBinder.PerformBinding(this as T2);
         }
@@ -77,7 +96,7 @@ namespace MVPFramework.Core
             // 在Presenter上销毁View
             foreach (var presenter in Presenters)
             {
-                presenter.DestroyView(new List<IView>() { this as T2 });
+                presenter.DestroyView(new List<IViewLogic>() { this as T2 });
             }
 
             // 销毁全局引用

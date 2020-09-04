@@ -1,5 +1,6 @@
 ﻿using MVPFramework.Binder;
 using MVPFramework.Extensions;
+using MVPFramework.Resources;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -19,28 +20,41 @@ namespace MVPFramework.Binder
 
         }
 
-        public PresenterDiscoveryResult GetBinding(IView viewInstance)
+        /// <summary>
+        /// 查找ViewLogic绑定的Presenter
+        /// </summary>
+        /// <param name="viewLogicInstance"></param>
+        /// <returns></returns>
+        public PresenterDiscoveryResult GetBinding(IViewLogic viewLogicInstance)
         {
-            if (viewInstance == null)
-                throw new ArgumentNullException("viewInstance");
+            if (viewLogicInstance == null)
+                throw new ArgumentNullException(StringResources.ParamIsNull("viewInstance"));
 
-            return GetBinding(viewInstance, ViewInstanceSuffixes, CandidatePresenterTypeFullNameFormats);
+            return GetBinding(viewLogicInstance, ViewLogicSuffixes, CandidatePresenterTypeFullNameFormats);
         }
 
-        static readonly IEnumerable<string> defaultViewInstanceSuffixes =
+        /// <summary>
+        /// 默认 ViewLogic 类名命名规范
+        /// </summary>
+        static readonly IEnumerable<string> defaultViewLogicSuffixes =
             new[]
             {
-                "UserControl",
-                "Control",
-                "View",
-                "Form",
+                "ControlLogic",
+                "ViewLogic",
+                "FormLogic",
             };
 
-        protected virtual IEnumerable<string> ViewInstanceSuffixes
+        /// <summary>
+        /// ViewLogic 类名命名规范
+        /// </summary>
+        protected virtual IEnumerable<string> ViewLogicSuffixes
         {
-            get { return defaultViewInstanceSuffixes; }
+            get { return defaultViewLogicSuffixes; }
         }
 
+        /// <summary>
+        /// 默认Presenters的FullName
+        /// </summary>
         static readonly IEnumerable<string> defaultCandidatePresenterTypeFullNameFormats =
             new[]
             {
@@ -56,32 +70,44 @@ namespace MVPFramework.Binder
             get { return defaultCandidatePresenterTypeFullNameFormats; }
         }
 
-        static readonly IDictionary<RuntimeTypeHandle, ConventionSearchResult> viewTypeToPresenterTypeCache = new Dictionary<RuntimeTypeHandle, ConventionSearchResult>();
-        internal static PresenterDiscoveryResult GetBinding(IView viewInstance, IEnumerable<string> viewInstanceSuffixes, IEnumerable<string> presenterTypeFullNameFormats)
+        /// <summary>
+        /// 缓存根据命名规则查找的Presenter缓存
+        /// </summary>
+        static readonly IDictionary<RuntimeTypeHandle, ConventionSearchResult> viewLogicTypeToPresenterTypeCache = new Dictionary<RuntimeTypeHandle, ConventionSearchResult>();
+        internal static PresenterDiscoveryResult GetBinding(IViewLogic viewLogicInstance, IEnumerable<string> viewLogicSuffixes, IEnumerable<string> presenterTypeFullNameFormats)
         {
-            var viewLogicType = viewInstance.GetType();
-            ConventionSearchResult searchResult = viewTypeToPresenterTypeCache.GetOrCreateValue(viewLogicType.TypeHandle, () =>
-            PerformSearch(viewInstance, viewInstanceSuffixes, presenterTypeFullNameFormats));
+            var viewLogicType = viewLogicInstance.GetType();
+            // 查找
+            ConventionSearchResult searchResult = viewLogicTypeToPresenterTypeCache.GetOrCreateValue(viewLogicType.TypeHandle, () =>
+            PerformSearch(viewLogicInstance, viewLogicSuffixes, presenterTypeFullNameFormats));
 
+            //TODO : 这里需要实现n:n的关系
             return new PresenterDiscoveryResult(
-                viewInstance,
+                viewLogicInstance,
                 searchResult.Message,
                 searchResult.PresentType == null
                 ? new PresenterBinding[0]
-                : new[] { new PresenterBinding(searchResult.PresentType, viewLogicType, viewInstance) });
+                : new[] { new PresenterBinding(searchResult.PresentType, viewLogicType, viewLogicInstance) });
         }
 
-        static ConventionSearchResult PerformSearch(IView viewInstance, IEnumerable<string> viewInstanceSuffixes, 
+        /// <summary>
+        /// 查找
+        /// </summary>
+        /// <param name="viewLogicInstance">viewLogic 实例</param>
+        /// <param name="viewLogicSuffixes"></param>
+        /// <param name="presenterTypeFullNameFormats"></param>
+        /// <returns></returns>
+        static ConventionSearchResult PerformSearch(IViewLogic viewLogicInstance, IEnumerable<string> viewLogicSuffixes, 
             IEnumerable<string> presenterTypeFullNameFormats)
         {
-            var viewLogicType = viewInstance.GetType();
+            var viewLogicType = viewLogicInstance.GetType();
             var presenterType = default(Type);
 
             //根据viewLogicType查找所有符合要求的presenterTypeName
             // 这里的意思就是
             // ViewLogic的命名都以ViewInstanceSuffixes中的suffix结尾
             // Presenter都以Presenter结尾
-            var presenterTypeName = GetPresenterTypeNameFromViewLogicTypeName(viewLogicType, viewInstanceSuffixes);
+            var presenterTypeName = GetPresenterTypeNameFromViewLogicTypeName(viewLogicType, viewLogicSuffixes);
 
             // 获取View逻辑层实现的所有接口 --> 放弃接口的实现方式
             // presenterTypeName.AddRange(GetPresenterTypeNamesFromViewInterfaceTypeNames(viewLogicType.GetViewInterfaces()));
@@ -99,30 +125,18 @@ namespace MVPFramework.Binder
 
                 if (presenterType == null)
                 {
-                    messages.Add(string.Format(
-                        CultureInfo.InvariantCulture,
-                        "could not find a presenter with type name {0}",
-                        typeFullName
-                    ));
+                    messages.Add(StringResources.NotFoundPresenterByType(typeFullName));
                     continue;
                 }
 
                 if (!typeof(IPresenter).IsAssignableFrom(presenterType))
                 {
-                    messages.Add(string.Format(
-                        CultureInfo.InvariantCulture,
-                        "found, but ignored, potential presenter with type name {0} because it does not implement IPresenter",
-                        typeFullName
-                    ));
+                    messages.Add(StringResources.NotImplementIPresenter(typeFullName));
                     presenterType = null;
                     continue;
                 }
 
-                messages.Add(string.Format(
-                    CultureInfo.InvariantCulture,
-                    "found presenter with type name {0}",
-                    typeFullName
-                ));
+                messages.Add(StringResources.FoundPresenter(typeFullName));
                 break;
             }
 
@@ -142,7 +156,7 @@ namespace MVPFramework.Binder
         /// <returns></returns>
         static IEnumerable<string> GenerateCandidatePresenterTypeFullNames(Type viewLogicType, string presenterTypeName, IEnumerable<string> presenterTypeFullNameFormats)
         {
-            yield return viewLogicType.Namespace + "." + presenterTypeName;// 先范湖
+            yield return viewLogicType.Namespace + "." + presenterTypeName;
 
             var assemblyName = viewLogicType.Assembly.GetNameSafe();
             foreach (var typeNameFormat in presenterTypeFullNameFormats)//定义的presenter类型名称格式
@@ -159,6 +173,7 @@ namespace MVPFramework.Binder
         /// </summary>
         /// <param name="viewInterfaces"></param>
         /// <returns></returns>
+        [Obsolete(" 已过时。")]
         internal static IEnumerable<string> GetPresenterTypeNamesFromViewInterfaceTypeNames(IEnumerable<Type> viewInterfaces)
         {
             return viewInterfaces
@@ -175,8 +190,8 @@ namespace MVPFramework.Binder
         internal static string GetPresenterTypeNameFromViewLogicTypeName(Type viewLogicType, IEnumerable<string> viewInstanceSuffixes)
         {
             var presenterTypeName = (from suffix in viewInstanceSuffixes
-                                     where viewLogicType.Name.EndsWith(string.Format("{0}Logic",suffix), StringComparison.OrdinalIgnoreCase)
-                                     select viewLogicType.Name.TrimFromEnd(string.Format("{0}Logic", suffix)))
+                                     where viewLogicType.Name.EndsWith(string.Format("{0}",suffix), StringComparison.OrdinalIgnoreCase)
+                                     select viewLogicType.Name.TrimFromEnd(string.Format("{0}", suffix)))
                                      .FirstOrDefault();
             return (string.IsNullOrEmpty(presenterTypeName) ? viewLogicType.Name : presenterTypeName) + "Presenter";
         }

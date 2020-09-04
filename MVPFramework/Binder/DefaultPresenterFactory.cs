@@ -1,12 +1,9 @@
 ﻿using MVPFramework.Extensions;
+using MVPFramework.Resources;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MVPFramework.Binder
 {
@@ -16,21 +13,20 @@ namespace MVPFramework.Binder
     /// </summary>
     public class DefaultPresenterFactory : IPresenterFactory
     {
-        public IPresenter Create(Type presenterType, Type viewType, IView viewInstance)
+        public IPresenter Create(Type presenterType, Type viewLogicType, IViewLogic viewLogicInstance)
         {
             if (presenterType == null)
-                throw new ArgumentNullException("presenterType");
-            if (viewType == null)
-                throw new ArgumentNullException("viewType");
-            if (viewInstance == null)
-                throw new ArgumentNullException("viewInstance");
+                throw new ArgumentNullException(StringResources.ParamIsNull("presenterType"));
+            if (viewLogicType == null)
+                throw new ArgumentNullException(StringResources.ParamIsNull("viewLogicType"));
+            if (viewLogicInstance == null)
+                throw new ArgumentNullException(StringResources.ParamIsNull("viewLogicInstance"));
 
-            var buildMethod = GetBuildMethod(presenterType, viewType);// 获取构造函数
-
+            var buildMethod = GetBuildMethod(presenterType, viewLogicType);// 获取构造函数
             try
             {
                 // 调用构造函数 创建实例对象
-                return (IPresenter)buildMethod.Invoke(null, new[] { viewInstance });
+                return (IPresenter)buildMethod.Invoke(null, new[] { viewLogicInstance });
             }catch(Exception ex)
             {
                 var orginException = ex;
@@ -38,13 +34,7 @@ namespace MVPFramework.Binder
                     orginException = ex.InnerException;
 
                 throw new InvalidOperationException
-                    (
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "An exception was thrown whilst trying to create an instance of {0}. Check the InnerException for more information.",
-                        presenterType.FullName),
-                       orginException
-                    );
+                    (StringResources.ThrowInvalidOperationExceptionWhenCreatePresenter(presenterType.FullName),orginException);
             }
         }
 
@@ -57,22 +47,23 @@ namespace MVPFramework.Binder
         /// 构造函数的缓存
         /// </summary>
         static readonly IDictionary<string, DynamicMethod> buildMethodCache = new Dictionary<string, DynamicMethod>();
+
         /// <summary>
         /// 获取构造函数
         /// </summary>
         /// <param name="presenterType"></param>
-        /// <param name="viewType"></param>
+        /// <param name="viewLogicType"></param>
         /// <returns></returns>
-        internal static DynamicMethod GetBuildMethod(Type presenterType ,Type viewType)
+        internal static DynamicMethod GetBuildMethod(Type presenterType ,Type viewLogicType)
         {
             var cacheKey = string.Join("__:__", new[]
             {
                 presenterType.AssemblyQualifiedName,
-                viewType.AssemblyQualifiedName
+                viewLogicType.AssemblyQualifiedName
             });
 
             return buildMethodCache.GetOrCreateValue(cacheKey,
-                () => GetBuildMethodInternal(presenterType, viewType));
+                () => GetBuildMethodInternal(presenterType, viewLogicType));
         }
 
         /// <summary>
@@ -81,33 +72,24 @@ namespace MVPFramework.Binder
         /// viewType: 参数类型
         /// </summary>
         /// <param name="presenterType"></param>
-        /// <param name="viewType"></param>
+        /// <param name="viewLogicType"></param>
         /// <returns></returns>
-        internal static DynamicMethod GetBuildMethodInternal(Type presenterType, Type viewType)
+        internal static DynamicMethod GetBuildMethodInternal(Type presenterType, Type viewLogicType)
         {
             if(presenterType.IsNotPublic)
             {
-                throw new ArgumentException(string.Format(
-                    CultureInfo.InvariantCulture,
-                    "{0} does not meet accessibility requirements. For the WebFormsMvp framework to be able to call it, it must be public. Make the type public, or set PresenterBinder.Factory to an implementation that can access this type.",
-                    presenterType.FullName),
-                    "presenterType");
+                throw new ArgumentException(StringResources.TypeIsNotPublic(presenterType.FullName));
             }
 
             //查找presenterType中指定参数类型viewType的构造函数
-            var constructor = presenterType.GetConstructor(new[] { viewType });
+            var constructor = presenterType.GetConstructor(new[] { viewLogicType });
             if (constructor == null)
             {
-                throw new ArgumentException(string.Format(
-                    CultureInfo.InvariantCulture,
-                    "{0} is missing an expected constructor, or the constructor is not accessible. We tried to execute code equivalent to: new {0}({1} view). Add a public constructor with a compatible signature, or set PresenterBinder.Factory to an implementation that can supply constructor dependencies.",
-                    presenterType.FullName,
-                    viewType.FullName),
-                    "presenterType");
+                throw new ArgumentException(StringResources.NotFoundExpectedConstructorWhenCreatePresenter(presenterType,viewLogicType));
             }
 
             // 根据构造函数创建一个动态方法
-            var dynamicMethod = new DynamicMethod("DynamicConstructor", presenterType, new[] { viewType }, presenterType.Module, false);
+            var dynamicMethod = new DynamicMethod("DynamicConstructor", presenterType, new[] { viewLogicType }, presenterType.Module, false);
             var ilGenerator = dynamicMethod.GetILGenerator();
             ilGenerator.Emit(OpCodes.Nop);
             ilGenerator.Emit(OpCodes.Ldarg_0);

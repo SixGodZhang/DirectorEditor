@@ -18,7 +18,7 @@ namespace MVPFramework.Binder
         /// <param name="viewType"></param>
         /// <param name="viewInstance"></param>
         /// <returns></returns>
-        IPresenter Create(Type presenterType, Type viewType, IView viewInstance);
+        IPresenter Create(Type presenterType, Type viewType, IViewLogic viewInstance);
 
         /// <summary>
         /// 释放指定类型的presenter

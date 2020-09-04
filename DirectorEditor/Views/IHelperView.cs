@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DirectorEditor.Views
 {
-    public interface IHelperView:IView
+    public interface IHelperView:IViewLogic
     {
         void LayoutView(HelperModel modelInfo);// 刷新主界面UI
     }

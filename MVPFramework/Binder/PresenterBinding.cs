@@ -10,9 +10,9 @@ namespace MVPFramework.Binder
     {
         readonly Type presenterType;
         readonly Type viewLogicType;
-        readonly IView viewInstance;
+        readonly IViewLogic viewInstance;
 
-        public PresenterBinding(Type presenterType, Type viewLogicType, IView viewInstance)
+        public PresenterBinding(Type presenterType, Type viewLogicType, IViewLogic viewInstance)
         {
             this.presenterType = presenterType;
             this.viewLogicType = viewLogicType;
@@ -29,7 +29,7 @@ namespace MVPFramework.Binder
             get { return viewLogicType; }
         }
 
-        public IView ViewInstance
+        public IViewLogic ViewInstance
         {
             get { return viewInstance; }
         }

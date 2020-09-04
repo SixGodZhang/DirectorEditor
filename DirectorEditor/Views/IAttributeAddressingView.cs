@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DirectorEditor.Views
 {
-    public interface IAttributeAddressingView:IView
+    public interface IAttributeAddressingView:IViewLogic
     {
 
     }

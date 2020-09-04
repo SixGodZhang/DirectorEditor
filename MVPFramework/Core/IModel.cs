@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MVPFramework
 {
     /// <summary>
-    /// 纯Model
+    /// Model
     /// </summary>
     public interface IModel
     {

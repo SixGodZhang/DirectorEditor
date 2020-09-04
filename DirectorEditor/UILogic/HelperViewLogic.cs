@@ -16,7 +16,7 @@ namespace DirectorEditor.UILogic
     public class HelperViewLogic : ViewLogic<HelperView, IHelperView>, IHelperView
     {
 
-        public HelperViewLogic(ViewType type = ViewType.Single) : base(type)
+        public HelperViewLogic() : base()
         {
             InitViewLogic += () => { this.LayoutView(new HelperModel() { EditorDesc = "帮助文档描述初始数据" }); };
         }

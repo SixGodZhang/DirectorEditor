@@ -9,7 +9,7 @@ namespace MVPFramework.Core
     /// <summary>
     /// Presenter 中转中心
     /// </summary>
-    public static class PresenterStub
+    public static class PresenterManager
     {
         /// <summary>
         /// Presenter可以以类型做区分, 同一类型的presenter不会存在两个, 所以以Type作为键

@@ -2,7 +2,7 @@
 
 namespace MVPFramework.Core
 {
-    public class PresenterSingleViewBindingEventArgs : EventArgs
+    public class PresenterSingleViewLogicBindingEventArgs : EventArgs
     {
 
     }

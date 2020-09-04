@@ -1,4 +1,5 @@
 ﻿using MVPFramework.Extensions;
+using MVPFramework.Resources;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -15,10 +16,13 @@ namespace MVPFramework.Binder
     {
         /// <summary>
         /// 缓存已检索过类型的数据
+        /// key: ViewLogicType 类型
+        /// value: PresenterBindingAttribute 特性列表
+        /// 如果这个ViwLogicType已经查找过一次了, 则不需要再次查找
+        /// 否则就会获取ViewLogicType上由PresenterBindingAttribute传递的所有类型参数
         /// </summary>
         static readonly IDictionary<RuntimeTypeHandle, IEnumerable<PresenterBindingAttribute>> typeToAttributeCache
             = new Dictionary<RuntimeTypeHandle, IEnumerable<PresenterBindingAttribute>>();
-
 
         /// <summary>
         /// 获取与View绑定的Presenter
@@ -26,12 +30,12 @@ namespace MVPFramework.Binder
         /// </summary>
         /// <param name="viewInstance"></param>
         /// <returns></returns>
-        public PresenterDiscoveryResult GetBinding(IView viewInstance)
+        public PresenterDiscoveryResult GetBinding(IViewLogic viewInstance)
         {
             if (viewInstance == null)
                 throw new ArgumentNullException("viewInstance");
 
-            var messages = new List<string>();
+            var logRecord = new List<string>();
             var bindings = new List<PresenterBinding>();
 
             var viewLogicType = viewInstance.GetType();
@@ -41,10 +45,7 @@ namespace MVPFramework.Binder
             // View没有使用装饰器
             if (viewDefinedAttributes.Empty())
             {
-                messages.Add(string.Format(
-                    CultureInfo.InvariantCulture,
-                    "could not find a [PresenterBinding] attribute on view instance {0}",
-                    viewLogicType.FullName));
+                logRecord.Add(StringResources.NotFoundPresenterByAttribute(viewLogicType));
             }
 
             // 处理装饰器
@@ -52,26 +53,19 @@ namespace MVPFramework.Binder
             {
                 foreach (var attribute in viewDefinedAttributes.OrderBy(a=>a.PresenterType.Name))
                 {
-                    // 如果viewType不是Attribute中的ViewType实例， 取下一个
-                    if (!attribute.ViewLogicType.IsAssignableFrom(viewLogicType))
-                    {
-                        messages.Add(string.Format(
-                            CultureInfo.InvariantCulture,
-                            "found, but ignored, a [PresenterBinding] attribute on view instance {0} (presenter type: {1}, view type: {2}) because the view type on the attribute is not compatible with the type of the view instance",
-                            viewLogicType.FullName,
-                            attribute.PresenterType.FullName,
-                            attribute.ViewLogicType.FullName
-                                         ));
-                        continue;
-                    }
-
-                    messages.Add(string.Format(
-                        CultureInfo.InvariantCulture,
-                        "found a [PresenterBinding] attribute on view instance {0} (presenter type: {1}, view type: {2})",
-                        viewLogicType.FullName,
-                        attribute.PresenterType.FullName,
-                        attribute.ViewLogicType.FullName
-                                     ));
+                    // 如果viewLogicType不是Attribute中的ViewLogicType实例， 取下一个
+                    //if (!attribute.ViewLogicType.IsAssignableFrom(viewLogicType))
+                    //{
+                    //    messages.Add(string.Format(
+                    //        CultureInfo.InvariantCulture,
+                    //        "found, but ignored, a [PresenterBinding] attribute on view instance {0} (presenter type: {1}, view logic type: {2}) because the view logic type on the attribute is not compatible with the type of the view instance",
+                    //        viewLogicType.FullName,
+                    //        attribute.PresenterType.FullName,
+                    //        attribute.ViewLogicType.FullName
+                    //                     ));
+                    //    continue;
+                    //}
+                    logRecord.Add(StringResources.FoundPresenterByAtrribute(viewLogicType,attribute));
 
                     bindings.Add(new PresenterBinding(
                                      attribute.PresenterType,
@@ -89,7 +83,7 @@ namespace MVPFramework.Binder
             return new PresenterDiscoveryResult(
                 viewInstance,
                 "AttributeBasedPresenterDiscoveryStrategy:\r\n" +
-                string.Join("\r\n", messages.Select(m => "- " + m).ToArray()),
+                string.Join("\r\n", logRecord.Select(m => "- " + m).ToArray()),
                 bindings
                 );
         }

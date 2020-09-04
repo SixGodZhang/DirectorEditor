@@ -13,7 +13,7 @@ namespace DirectorEditor.UILogic
         /// 默认采用单例的方式
         /// </summary>
         /// <param name="type"></param>
-        public MainViewLogic(ViewType type = ViewType.Single):base(type)
+        public MainViewLogic():base()
         {
             //Instance.Show();
         }

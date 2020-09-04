@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DirectorEditor.Presenters
 {
-    public class DataPart2Presenter : PresenterNN<IList<IView>,IList<IModel>>
+    public class DataPart2Presenter : PresenterNN<IList<IViewLogic>,IList<IModel>>
     {
         public DataPart2Presenter()
         {

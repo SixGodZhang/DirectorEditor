@@ -17,6 +17,6 @@ namespace MVPFramework.Binder
         /// </summary>
         /// <param name="viewInstance"></param>
         /// <returns></returns>
-        PresenterDiscoveryResult GetBinding(IView viewInstance);
+        PresenterDiscoveryResult GetBinding(IViewLogic viewInstance);
     }
 }

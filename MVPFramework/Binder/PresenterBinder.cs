@@ -85,7 +85,7 @@ namespace MVPFramework.Binder
         /// 绑定ViewInstance
         /// </summary>
         /// <param name="viewInstance"></param>
-        public void PerformBinding(IView viewInstance)
+        public void PerformBinding(IViewLogic viewInstance)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace MVPFramework.Binder
         /// <param name="presenterFactory"></param>
         /// <returns></returns>
         private static IEnumerable<IPresenter> PerformBinding(
-            IView candidate,
+            IViewLogic candidate,
             IPresenterDiscoveryStrategy presenterDiscoveryStrategy,
             IPresenterFactory presenterFactory)
         {
@@ -156,7 +156,7 @@ namespace MVPFramework.Binder
 
             // 这里现在PresenterStub中查找， 看是否可以找到实例
             // 可以找到的实例保存在newPresenters中, 在cache中找不到的实例输出到failedPresenterTypes中
-            newPresenters = PresenterStub.Gets(presenterBindings.Select(p => p.PresenterType), out failedPresenterTypes);
+            newPresenters = PresenterManager.Gets(presenterBindings.Select(p => p.PresenterType), out failedPresenterTypes);
 
             if(newPresenters!=null && newPresenters.Count() > 0)
             {
@@ -241,7 +241,7 @@ namespace MVPFramework.Binder
                     {
                         IPresenter presenter = BuildPresenterInternal(presenterFactory, failedPresenter.GetType(), candidate.GetType(), candidate);
                         newPresenters.Add(presenter);
-                        PresenterStub.Add(presenter);// 添加到缓存中, 会将直接错误的进行覆盖
+                        PresenterManager.Add(presenter);// 添加到缓存中, 会将直接错误的进行覆盖
                     }
                 } 
             }
@@ -251,7 +251,7 @@ namespace MVPFramework.Binder
             {
                 IPresenter presenterInstance = BuildPresenterInternal(presenterFactory, presenterType, candidate.GetType(), candidate);
                 newPresenters.Add(presenterInstance);// 添加到结果中
-                PresenterStub.Add(presenterInstance);// 添加到缓存中
+                PresenterManager.Add(presenterInstance);// 添加到缓存中
             }
 
             return newPresenters;
@@ -302,7 +302,7 @@ namespace MVPFramework.Binder
             IPresenterFactory presenterFactory,
             Type presenterType,
             Type viewType,
-            IView viewInstnace)
+            IViewLogic viewInstnace)
         {
             return presenterFactory.Create(presenterType, viewType, viewInstnace);
         }
@@ -313,7 +313,7 @@ namespace MVPFramework.Binder
         /// <param name="candidate"></param>
         /// <param name="presenterDiscoveryStrategy"></param>
         /// <returns></returns>
-        private static IEnumerable<PresenterBinding> GetBinding(IView viewInstance,IPresenterDiscoveryStrategy presenterDiscoveryStrategy)
+        private static IEnumerable<PresenterBinding> GetBinding(IViewLogic viewInstance,IPresenterDiscoveryStrategy presenterDiscoveryStrategy)
         {
             // 查找所有与View关联的Presenter数据
             PresenterDiscoveryResult result = presenterDiscoveryStrategy.GetBinding(viewInstance);
@@ -328,13 +328,13 @@ namespace MVPFramework.Binder
         /// <param name="result"></param>
         private static void ThrowExceptionsForViewsWithNoPresenterBound(PresenterDiscoveryResult result)
         {
-            if (result.Bindings.Empty() && result.ViewInstance.ThrowExceptionIfNoPresenterBound)
+            if (result.Bindings.Empty() && result.ViewLogicInstance.ThrowExceptionIfNoPresenterBound)
 
                 throw new InvalidOperationException(string.Format(
                     CultureInfo.InvariantCulture,
                     @"Failed to find presenter for view instance of {0}.{1} If you do not want this exception to be thrown, set ThrowExceptionIfNoPresenterBound to false on your view.",
-                    result.ViewInstance.GetType().FullName,
-                    result.Message
+                    result.ViewLogicInstance.GetType().FullName,
+                    result.LogMessageRecord
                     ));
         }
 

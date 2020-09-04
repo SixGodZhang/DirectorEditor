@@ -39,14 +39,14 @@ namespace MVPFramework
         /// <summary>
         /// 销毁指定ViewLogic
         /// </summary>
-        void DestroyView(IEnumerable<IView> view);
+        void DestroyView(IEnumerable<IViewLogic> view);
     }
 
     /// <summary>
     /// 泛型接口, 与View关联(无Model)
     /// </summary>
     /// <typeparam name="TView"></typeparam>
-    public interface IPresenter<TView> : IPresenter where TView : class, IView
+    public interface IPresenter<TView> : IPresenter where TView : class, IViewLogic
     {
         TView View { get; }
     }
@@ -71,22 +71,22 @@ namespace MVPFramework
         /// <summary>
         /// 取消事件。在取消指定视图绑定时调用
         /// </summary>
-        public event EventHandler<PresenterCancelSingleViewEventArgs> CancelSingleViewBindingEvent;
+        public event EventHandler<PresenterCancelSingleViewLogicEventArgs> CancelSingleViewLogicBindingEvent;
 
         /// <summary>
         /// 取消事件。在取消多个指定视图绑定时调用
         /// </summary>
-        public event EventHandler<PresenterCancelMultiViewEventArgs> CancelMultiViewBindingEvent;
+        public event EventHandler<PresenterCancelMultiViewLogicEventArgs> CancelMultiViewLogicBindingEvent;
 
         /// <summary>
         /// 取消事件。在取消所有视图绑定时调用
         /// </summary>
-        public event EventHandler<PresenterCancelAllViewEventArgs> CancelAllViewBindingEvent;
+        public event EventHandler<PresenterCancelAllViewLogicEventArgs> CancelAllViewLogicBindingEvent;
 
         /// <summary>
         /// 绑定事件。在绑定某个视图时被调用
         /// </summary>
-        public event EventHandler<PresenterSingleViewBindingEventArgs> SingleViewBindingEvent;
+        public event EventHandler<PresenterSingleViewLogicBindingEventArgs> SingleViewLogicBindingEvent;
 
         /// <summary>
         /// 销毁事件。 在Presenter进行销毁时调用【仅被调用一次】
@@ -107,22 +107,22 @@ namespace MVPFramework
         /// 取消单个视图事件绑定回调函数。
         /// </summary>
         /// <param name="arg"></param>
-        public virtual void OnCancelSingleViewBinding(PresenterCancelSingleViewEventArgs arg) { }
+        public virtual void OnCancelSingleViewLogicBinding(PresenterCancelSingleViewLogicEventArgs arg) { }
         /// <summary>
         /// 取消多个视图事件绑定回调函数。
         /// </summary>
         /// <param name="arg"></param>
-        public virtual void OnCancelMultiViewBinding(PresenterCancelMultiViewEventArgs arg) { }
+        public virtual void OnCancelMultiViewLogicBinding(PresenterCancelMultiViewLogicEventArgs arg) { }
         /// <summary>
         /// 取消所有视图绑定事件回调函数。
         /// </summary>
         /// <param name="arg"></param>
-        public virtual void OnCancelAllViewBinding(PresenterCancelAllViewEventArgs arg) { }
+        public virtual void OnCancelAllViewLogicBinding(PresenterCancelAllViewLogicEventArgs arg) { }
         /// <summary>
         /// 注册单个视图绑定事件回调函数。
         /// </summary>
         /// <param name="arg"></param>
-        public virtual void OnSingleViewBinding(PresenterSingleViewBindingEventArgs arg) { }
+        public virtual void OnSingleViewLogicBinding(PresenterSingleViewLogicBindingEventArgs arg) { }
         /// <summary>
         /// 销毁Presenter事件回调函数。
         /// </summary>
@@ -134,7 +134,7 @@ namespace MVPFramework
     /// Presenter抽象类,无Model
     /// </summary>
     /// <typeparam name="TView"></typeparam>
-    public abstract class Presenter<TView> : AbstractPresenter, IPresenter where TView : class, IView
+    public abstract class Presenter<TView> : AbstractPresenter, IPresenter where TView : class, IViewLogic
     {
         private TView view; // View 在Presenter创建的时候就需要绑定
         private PresenterType presenterType = PresenterType.Default;
@@ -158,7 +158,7 @@ namespace MVPFramework
         public PresenterType PresenterType { get => this.presenterType; }
         public PresenterStatus PresenterStatus { get => this.presenterStatus; set => this.presenterStatus = value; }
 
-        public void Destroy(IView view)
+        public void Destroy(IViewLogic view)
         {
             if (this.view.Equals(view))
             {
@@ -170,7 +170,7 @@ namespace MVPFramework
         /// 移除指定的view
         /// </summary>
         /// <param name="view"></param>
-        public void DestroyView(IEnumerable<IView> view)
+        public void DestroyView(IEnumerable<IViewLogic> view)
         {
             if(view.Contains(this.view))
             {
@@ -185,7 +185,7 @@ namespace MVPFramework
     /// <typeparam name="TView"></typeparam>
     /// <typeparam name="TModel"></typeparam>
     public interface IPresenter<TView, TModel> : IPresenter
-        where TView : class, IView
+        where TView : class, IViewLogic
         where TModel : class, IModel
     {
         TView View { get; }// Presenter 中只能访问View
@@ -200,10 +200,10 @@ namespace MVPFramework
     /// <typeparam name="TViewN"></typeparam>
     /// <typeparam name="TModelN"></typeparam>
     public abstract class PresenterNN<TViewN, TModelN> : AbstractPresenter, IPresenter
-        where TViewN : IList<IView>
+        where TViewN : IList<IViewLogic>
         where TModelN : IList<IModel>
     {
-        private IList<IView> views;
+        private IList<IViewLogic> views;
         private IList<IModel> models;
         private PresenterType presenterType;
         private PresenterStatus presenterStatus = PresenterStatus.Default;
@@ -230,7 +230,7 @@ namespace MVPFramework
             }
         }
 
-        public IList<IView> Views
+        public IList<IViewLogic> Views
         {
             get
             {
@@ -261,7 +261,7 @@ namespace MVPFramework
         /// </summary>
         /// <param name="view"></param>
         /// <returns></returns>
-        public IView GetView<T>(T view) where T:IView
+        public IViewLogic GetView<T>(T view) where T:IViewLogic
         {
             var inputViewType = view.GetType();
             foreach (var v in this.views)
@@ -280,7 +280,7 @@ namespace MVPFramework
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="view"></param>
-        public void AddView<T>(T view) where T:IView
+        public void AddView<T>(T view) where T:IViewLogic
         {
             var inputViewType = view.GetType();
             if(!this.views.Contains(view))
@@ -294,7 +294,7 @@ namespace MVPFramework
         /// 从P层移除绑定的view
         /// </summary>
         /// <param name="view"></param>
-        public void DestroyView(IEnumerable<IView> view)
+        public void DestroyView(IEnumerable<IViewLogic> view)
         {
             foreach (var v in view)
             {
@@ -319,7 +319,7 @@ namespace MVPFramework
     /// </summary>
     /// <typeparam name="TView"></typeparam>
     public abstract class Presenter<TView,TModel> : AbstractPresenter, IPresenter<TView>
-        where TView : class , IView // View层
+        where TView : class , IViewLogic // View层
         where TModel :class , IModel // Model层
     {
         private TView view; 
@@ -380,7 +380,7 @@ namespace MVPFramework
             cacheMethodCallAction = null;
         }
 
-        public void Destroy(IView view)
+        public void Destroy(IViewLogic view)
         {
             if(view.Equals(view))
             {
@@ -392,7 +392,7 @@ namespace MVPFramework
         /// 在P层移除指定的View
         /// </summary>
         /// <param name="view"></param>
-        public void DestroyView(IEnumerable<IView> view)
+        public void DestroyView(IEnumerable<IViewLogic> view)
         {
             if(view.Contains(this.view))
             {

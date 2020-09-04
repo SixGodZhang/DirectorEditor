@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DirectorEditor.Views
 {
-    public interface IDataView:IView
+    public interface IDataView:IViewLogic
     {
 
     }

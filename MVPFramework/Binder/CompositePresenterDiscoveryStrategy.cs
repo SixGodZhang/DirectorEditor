@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MVPFramework.Resources;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -7,8 +8,14 @@ using System.Threading.Tasks;
 
 namespace MVPFramework.Binder
 {
+    /// <summary>
+    /// 组合寻找Presenter策略
+    /// </summary>
     public class CompositePresenterDiscoveryStrategy:IPresenterDiscoveryStrategy
     {
+        /// <summary>
+        /// 组合List
+        /// </summary>
         readonly IEnumerable<IPresenterDiscoveryStrategy> strategies;
 
         public CompositePresenterDiscoveryStrategy(params IPresenterDiscoveryStrategy[] strategies)
@@ -20,18 +27,23 @@ namespace MVPFramework.Binder
         public CompositePresenterDiscoveryStrategy(IEnumerable<IPresenterDiscoveryStrategy> strategies)
         {
             if (strategies == null)
-                throw new ArgumentNullException("strategies");
-
+            {
+                throw new ArgumentException(StringResources.NotFoundAnyStrategyInCompositeStrategy());
+            }
             this.strategies = strategies.ToArray();
-
             if (!strategies.Any())
-                throw new ArgumentException("You must supple at least one strategy.", "strategies");
+            {
+                throw new ArgumentException(StringResources.NotFoundAnyStrategyInCompositeStrategy());
+            }
+                
         }
 
-        public PresenterDiscoveryResult GetBinding(IView viewInstance)
+        public PresenterDiscoveryResult GetBinding(IViewLogic viewInstance)
         {
             if (ReferenceEquals(viewInstance, null))
-                throw new ArgumentNullException("viewInstance");
+            {
+                throw new ArgumentException(StringResources.ParamIsNull("viewInstance"));  
+            }
 
             // 找到的绑定数据结果
             var results = new List<PresenterDiscoveryResult>();
@@ -47,10 +59,10 @@ namespace MVPFramework.Binder
 
             // 根据ViewInstances进行分组， 其实就只有一组
             // 返回第一个
-            return results.GroupBy(r => r.ViewInstance).Select(r => BuildMergedResult(r.Key, r)).First();
+            return results.GroupBy(r => r.ViewLogicInstance).Select(r => BuildMergedResult(r.Key, r)).First();
         }
 
-        static PresenterDiscoveryResult BuildMergedResult(IView viewInstance, IEnumerable<PresenterDiscoveryResult> results)
+        static PresenterDiscoveryResult BuildMergedResult(IViewLogic viewInstance, IEnumerable<PresenterDiscoveryResult> results)
         {
             return new PresenterDiscoveryResult
             (
@@ -58,7 +70,7 @@ namespace MVPFramework.Binder
                 string.Format(
                     CultureInfo.InvariantCulture,
                     "CompositePresenterDiscoveryStrategy:\r\n\r\n{0}",
-                    string.Join("\r\n\r\n", results.Select(r => r.Message).ToArray())
+                    string.Join("\r\n\r\n", results.Select(r => r.LogMessageRecord).ToArray())
                 ),
                 results.SelectMany(r => r.Bindings)
             );
