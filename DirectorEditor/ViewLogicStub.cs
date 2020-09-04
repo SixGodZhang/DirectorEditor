@@ -1,4 +1,5 @@
-﻿using DirectorEditor.UILogic;
+﻿using DirectorEditor.UIComponents;
+using DirectorEditor.UILogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,21 @@ namespace DirectorEditor
                     _helperViewLogic.DestroyViewLogic += () => _helperViewLogic = null;
                 }
                 return _helperViewLogic;
+            }
+        }
+
+        // 装饰器寻址 演示界面
+        private static AttributeAddressingViewLogic _attributeAddressingViewLogic = null;
+        public static AttributeAddressingViewLogic AttributeAddressingViewLogic
+        {
+            get
+            {
+                if(_attributeAddressingViewLogic == null)
+                {
+                    _attributeAddressingViewLogic = new AttributeAddressingViewLogic();
+                    _attributeAddressingViewLogic.DestroyViewLogic += () => _attributeAddressingViewLogic = null;
+                }
+                return _attributeAddressingViewLogic;
             }
         }
 

@@ -51,5 +51,11 @@ namespace DirectorEditor
             });
             PresenterStub.HelperPresenter?.Activate();
         }
+
+        private void attributeBtn_Click(object sender, EventArgs e)
+        {
+            PresenterStub.AttributeAddressingPresenter?.Show();
+            PresenterStub.AttributeAddressingPresenter?.Activate();
+        }
     }
 }

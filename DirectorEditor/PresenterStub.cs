@@ -29,5 +29,14 @@ namespace DirectorEditor
 
         }
 
+        // 装饰器寻址界面的P层
+        private static AttributeAddressingPresenter _attributeAddressingPresenter;
+        public static AttributeAddressingPresenter AttributeAddressingPresenter { set => _attributeAddressingPresenter = value;
+            get
+            {
+                return ViewLogicStub.AttributeAddressingViewLogic.Presenters.ElementAt(0) as AttributeAddressingPresenter;
+            }
+        }
+
     }
 }

@@ -10,6 +10,16 @@ using System.Threading.Tasks;
 
 namespace MVPFramework.Binder
 {
+    /// <summary>
+    /// ViewLogic 与 Presenter 的查找方式
+    /// </summary>
+    public enum PresenterAddressingType
+    {
+        Attribute = 1, //基于装饰器寻址
+        Convention = 2, // 基于特殊命名规则寻址
+        Composite = 100,// 组合策略寻址 
+    }
+
     public sealed class PresenterBinder
     {
         private static IPresenterFactory factory;
@@ -66,9 +76,9 @@ namespace MVPFramework.Binder
         /// 目的: 加快检索速度, 灵活配置检索方案
         /// </summary>
         /// <param name="strategy"></param>
-        public PresenterBinder(IPresenterDiscoveryStrategy strategy = null)
+        public PresenterBinder(PresenterAddressingType addressingType = PresenterAddressingType.Composite)
         {
-            this.discoveryStrategy = strategy;
+            this.EnsureDiscoveryStrategy(addressingType);
         }
 
         /// <summary>
@@ -97,6 +107,29 @@ namespace MVPFramework.Binder
             if (PresenterCreated != null)
             {
                 PresenterCreated(this, args);
+            }
+        }
+
+        /// <summary>
+        /// 确定绑定器的寻址策略
+        /// </summary>
+        /// <param name="addressingType"></param>
+        private void EnsureDiscoveryStrategy(PresenterAddressingType addressingType)
+        {
+            switch (addressingType)
+            {
+                case PresenterAddressingType.Attribute:
+                    this.discoveryStrategy = new AttributeBasePresenterDiscoveryStrategy();
+                    break;
+                case PresenterAddressingType.Convention:
+                    this.discoveryStrategy = new ConventionBasedPresenterDiscoveryStrategy();
+                    break;
+                default:
+                    this.discoveryStrategy = new CompositePresenterDiscoveryStrategy(
+                        new AttributeBasePresenterDiscoveryStrategy(),// 通过特性搜索
+                        new ConventionBasedPresenterDiscoveryStrategy()// 通过命名规则搜索
+                        );
+                    break;
             }
         }
 

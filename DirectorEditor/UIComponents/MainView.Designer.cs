@@ -31,13 +31,15 @@
             this.topMenu = new System.Windows.Forms.MenuStrip();
             this.helpMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.testChangeHelpInfoBtn = new System.Windows.Forms.Button();
+            this.attributeBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.topMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // topMenu
             // 
             this.topMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.helpMenu});
+            this.helpMenu,
+            this.attributeBtn});
             this.topMenu.Location = new System.Drawing.Point(0, 0);
             this.topMenu.Name = "topMenu";
             this.topMenu.Size = new System.Drawing.Size(800, 25);
@@ -61,6 +63,13 @@
             this.testChangeHelpInfoBtn.UseVisualStyleBackColor = true;
             this.testChangeHelpInfoBtn.Click += new System.EventHandler(this.testChangeHelpInfoBtn_Click);
             // 
+            // attributeBtn
+            // 
+            this.attributeBtn.Name = "attributeBtn";
+            this.attributeBtn.Size = new System.Drawing.Size(80, 21);
+            this.attributeBtn.Text = "装饰器寻址";
+            this.attributeBtn.Click += new System.EventHandler(this.attributeBtn_Click);
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -83,6 +92,7 @@
         private System.Windows.Forms.MenuStrip topMenu;
         private System.Windows.Forms.ToolStripMenuItem helpMenu;
         private System.Windows.Forms.Button testChangeHelpInfoBtn;
+        private System.Windows.Forms.ToolStripMenuItem attributeBtn;
     }
 }
 

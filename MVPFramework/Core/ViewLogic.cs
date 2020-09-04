@@ -25,16 +25,22 @@ namespace MVPFramework.Core
         public ViewType ViewType { get => _viewType; set => _viewType = value; }
 
         public T1 target;
-        private readonly PresenterBinder presenterBinder = new PresenterBinder();
+        private readonly PresenterBinder presenterBinder;
         public IEnumerable<IPresenter> Presenters { get; set; }
 
         public bool ThrowExceptionIfNoPresenterBound { get; set; }
         public Action InitViewLogic;// 在View初始化完成时候调用
         public Action DestroyViewLogic;// 销毁viewlogic
 
-        protected ViewLogic(ViewType type = ViewType.Single)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="type">type暂时没用了， 还是保留， 考虑到后面的设计会用到</param>
+        /// <param name="strategy">将ViewLogic和Presenter绑定起来的寻址策略</param>
+        protected ViewLogic(ViewType type = ViewType.Single, PresenterAddressingType addressingType = PresenterAddressingType.Composite)
         {
             this._viewType = type;
+            presenterBinder = new PresenterBinder(addressingType: addressingType);
             target = this.GetType().Assembly.CreateInstance(typeof(T1).FullName) as T1;
             // TODO： 在此注册一些事件
             target.HandleDestroyed += ViewLogic_ControlDestroyed;
