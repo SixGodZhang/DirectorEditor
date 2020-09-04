@@ -59,5 +59,20 @@ namespace DirectorEditor
             }
         }
 
+        // 第三方控件 测试
+        private static HZHDialogViewLogic _hZHDialogViewLogic = null;
+        public static HZHDialogViewLogic HZHDialogViewLogic
+        {
+            get
+            {
+                if (_hZHDialogViewLogic == null)
+                {
+                    _hZHDialogViewLogic = new HZHDialogViewLogic();
+                    _hZHDialogViewLogic.DestroyViewLogic += () => _hZHDialogViewLogic = null;
+                }
+                return _hZHDialogViewLogic;
+            }
+        }
+
     }
 }

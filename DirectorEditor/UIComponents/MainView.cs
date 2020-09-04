@@ -57,5 +57,11 @@ namespace DirectorEditor
             PresenterStub.AttributeAddressingPresenter?.Show();
             PresenterStub.AttributeAddressingPresenter?.Activate();
         }
+
+        private void thirdPartyDialogBtn_Click(object sender, EventArgs e)
+        {
+            PresenterStub.HZHDialogPresenter?.Show();
+            PresenterStub.HZHDialogPresenter?.Activate();
+        }
     }
 }

@@ -32,6 +32,7 @@
             this.helpMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.testChangeHelpInfoBtn = new System.Windows.Forms.Button();
             this.attributeBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.thirdPartyDialogBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.topMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -39,7 +40,8 @@
             // 
             this.topMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.helpMenu,
-            this.attributeBtn});
+            this.attributeBtn,
+            this.thirdPartyDialogBtn});
             this.topMenu.Location = new System.Drawing.Point(0, 0);
             this.topMenu.Name = "topMenu";
             this.topMenu.Size = new System.Drawing.Size(800, 25);
@@ -70,6 +72,13 @@
             this.attributeBtn.Text = "装饰器寻址";
             this.attributeBtn.Click += new System.EventHandler(this.attributeBtn_Click);
             // 
+            // thirdPartyDialogBtn
+            // 
+            this.thirdPartyDialogBtn.Name = "thirdPartyDialogBtn";
+            this.thirdPartyDialogBtn.Size = new System.Drawing.Size(80, 21);
+            this.thirdPartyDialogBtn.Text = "第三方控件";
+            this.thirdPartyDialogBtn.Click += new System.EventHandler(this.thirdPartyDialogBtn_Click);
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -93,6 +102,7 @@
         private System.Windows.Forms.ToolStripMenuItem helpMenu;
         private System.Windows.Forms.Button testChangeHelpInfoBtn;
         private System.Windows.Forms.ToolStripMenuItem attributeBtn;
+        private System.Windows.Forms.ToolStripMenuItem thirdPartyDialogBtn;
     }
 }
 

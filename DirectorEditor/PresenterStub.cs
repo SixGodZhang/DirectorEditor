@@ -38,5 +38,16 @@ namespace DirectorEditor
             }
         }
 
+        // 第三方控件的P层
+        private static HZHDialogPresenter _hZHDialogPresenter;
+        public static HZHDialogPresenter HZHDialogPresenter
+        {
+            set => _hZHDialogPresenter = value;
+            get
+            {
+                return ViewLogicStub.HZHDialogViewLogic?.Presenters?.ElementAt(0) as HZHDialogPresenter;
+            }
+        }
+
     }
 }

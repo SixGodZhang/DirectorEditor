@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectorEditor", "DirectorEditor\DirectorEditor.csproj", "{756F19AD-FCA4-443B-953B-8EBA3E556BC4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B762F152-4C9A-4C8E-A2A0-A100D654E022} = {B762F152-4C9A-4C8E-A2A0-A100D654E022}
+		{AF32E163-C577-4CBC-A072-0DC1CE0E1DA3} = {AF32E163-C577-4CBC-A072-0DC1CE0E1DA3}
 		{4636229A-25E7-4BF0-8B0A-632044334A8A} = {4636229A-25E7-4BF0-8B0A-632044334A8A}
 	EndProjectSection
 EndProject
@@ -18,6 +19,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleInjector,Tests.Unit", "SimpleInjector.Tests.Unit\SimpleInjector,Tests.Unit.csproj", "{37DEDF25-09D3-4173-9B70-F89EDD2461DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVPFramework", "MVPFramework\MVPFramework.csproj", "{4636229A-25E7-4BF0-8B0A-632044334A8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HZH_Controls", "thirdparty\HZH_Controls\HZH_Controls.csproj", "{AF32E163-C577-4CBC-A072-0DC1CE0E1DA3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +52,10 @@ Global
 		{4636229A-25E7-4BF0-8B0A-632044334A8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4636229A-25E7-4BF0-8B0A-632044334A8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4636229A-25E7-4BF0-8B0A-632044334A8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF32E163-C577-4CBC-A072-0DC1CE0E1DA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF32E163-C577-4CBC-A072-0DC1CE0E1DA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF32E163-C577-4CBC-A072-0DC1CE0E1DA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF32E163-C577-4CBC-A072-0DC1CE0E1DA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

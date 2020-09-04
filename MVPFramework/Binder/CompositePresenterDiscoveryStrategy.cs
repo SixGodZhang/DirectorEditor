@@ -72,7 +72,7 @@ namespace MVPFramework.Binder
                     "CompositePresenterDiscoveryStrategy:\r\n\r\n{0}",
                     string.Join("\r\n\r\n", results.Select(r => r.LogMessageRecord).ToArray())
                 ),
-                results.SelectMany(r => r.Bindings)
+                results.SelectMany(r => r.Bindings.Distinct())
             );
         }
     }

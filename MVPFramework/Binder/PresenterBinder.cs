@@ -235,6 +235,10 @@ namespace MVPFramework.Binder
                 {
                     // 从newPresenter中排除那些创建失败的
                     newPresenters = newPresenters.Where(p => !failedPresenterFromCache.Contains(p)) as List<IPresenter>;
+                    if (newPresenters == null)// 如果全部失败了, 则会返回null
+                    {
+                        newPresenters = new List<IPresenter>();
+                    }
 
                     //遍历所有失败的Presenter， 然后重新创建
                     foreach (var failedPresenter in failedPresenterFromCache)
@@ -310,7 +314,7 @@ namespace MVPFramework.Binder
         /// <summary>
         /// 查找绑定关系
         /// </summary>
-        /// <param name="candidate"></param>
+        /// <param name="viewInstance"></param>
         /// <param name="presenterDiscoveryStrategy"></param>
         /// <returns></returns>
         private static IEnumerable<PresenterBinding> GetBinding(IViewLogic viewInstance,IPresenterDiscoveryStrategy presenterDiscoveryStrategy)
@@ -320,6 +324,7 @@ namespace MVPFramework.Binder
             ThrowExceptionsForViewsWithNoPresenterBound(result);
 
             return result.Bindings;
+
         }
 
         /// <summary>
