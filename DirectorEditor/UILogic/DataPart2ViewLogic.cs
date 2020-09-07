@@ -1,4 +1,5 @@
-﻿using DirectorEditor.UIComponents;
+﻿using DirectorEditor.Models;
+using DirectorEditor.UIComponents;
 using DirectorEditor.Views;
 using MVPFramework.Core;
 using System;
@@ -26,9 +27,11 @@ namespace DirectorEditor.UILogic
             target?.Show();
         }
 
-        public void ShowUserAccountInfo()
+        public void ShowUserAccountInfo(DataPart2Model model)
         {
-            throw new NotImplementedException();
+            target.lbUserID.Text = model.UserId;
+            target.lbVipLevel.Text = model.VIPLevel.ToString();
+            target.lbUserPassword.Text = model.userPassword.ToString();
         }
     }
 }

@@ -10,6 +10,9 @@ using System.Windows.Forms;
 
 namespace DirectorEditor.UIComponents
 {
+    /// <summary>
+    /// 这是演示1个Presenter对应多个View示例的一部分
+    /// </summary>
     public partial class DataPart2View : Form
     {
         public DataPart2View()

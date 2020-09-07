@@ -1,4 +1,5 @@
-﻿using DirectorEditor.UIComponents;
+﻿using DirectorEditor.Models;
+using DirectorEditor.UIComponents;
 using DirectorEditor.Views;
 using MVPFramework.Core;
 using System;
@@ -31,9 +32,11 @@ namespace DirectorEditor.UILogic
             target?.Show();
         }
 
-        public void ShowUserInfo()
+        public void ShowUserInfo(DataPart1Model model)
         {
-            throw new NotImplementedException();
+            target.lbName.Text = model.Name;
+            target.lbAge.Text = model.Age;
+            target.lbID.Text = model.Id;
         }
     }
 }

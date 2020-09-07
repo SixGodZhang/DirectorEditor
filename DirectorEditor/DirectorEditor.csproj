@@ -127,6 +127,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UIComponents\DataPart1View.resx">
+      <DependentUpon>DataPart1View.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIComponents\DataPart2View.resx">
+      <DependentUpon>DataPart2View.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UIComponents\HelperView.resx">
       <DependentUpon>HelperView.cs</DependentUpon>
     </EmbeddedResource>

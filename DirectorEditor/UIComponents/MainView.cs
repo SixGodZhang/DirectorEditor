@@ -1,4 +1,5 @@
-﻿using DirectorEditor.Presenters;
+﻿using DirectorEditor.Models;
+using DirectorEditor.Presenters;
 using DirectorEditor.UIComponents;
 using DirectorEditor.UILogic;
 using DirectorEditor.Views;
@@ -72,11 +73,27 @@ namespace DirectorEditor
 
         private void dataPart1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // 测试数据
+            DataPart1Model model1 = new DataPart1Model
+            {
+                Id = "10000",
+                Name = "张三",
+                Age = "25"
+            };
+            PresenterStub.DataPartPresenter?.AddModel(model1);
             PresenterStub.DataPartPresenter?.ShowUserInfo();
         }
 
         private void dataPart2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // 测试数据
+            DataPart2Model model2 = new DataPart2Model
+            {
+                UserId = "98328329@163.com",
+                userPassword = "12345678",
+                VIPLevel = 12
+            };
+            PresenterStub.DataPartPresenter?.AddModel(model2);
             PresenterStub.DataPartPresenter?.ShowUserAccountInfo();
         }
     }

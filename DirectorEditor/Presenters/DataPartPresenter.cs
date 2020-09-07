@@ -1,4 +1,5 @@
-﻿using DirectorEditor.UILogic;
+﻿using DirectorEditor.Models;
+using DirectorEditor.UILogic;
 using DirectorEditor.Views;
 using MVPFramework;
 using MVPFramework.Binder;
@@ -18,7 +19,7 @@ namespace DirectorEditor.Presenters
 {
     [ViewLogicBinding(typeof(DataPart1ViewLogic))]// 绑定DataPart1ViewLogic
     [ViewLogicBinding(typeof(DataPart2ViewLogic))]// 绑定DataPart2ViewLogic
-    public class DataPartPresenter : PresenterNN<IList<IViewLogic>,IList<IModel>>
+    public class DataPartPresenter : PresenterNN
     {
         public DataPartPresenter()
         {
@@ -34,6 +35,7 @@ namespace DirectorEditor.Presenters
             {
                 var viewLogic = GetOrCreateViewLogic(typeof(DataPart1ViewLogic)) as DataPart1ViewLogic;
                 viewLogic.Show();//先调用show方法吧
+                viewLogic.ShowUserInfo(GetModel<DataPart1Model>());
             }
             else
             {
@@ -52,12 +54,32 @@ namespace DirectorEditor.Presenters
             {
                 var viewLogic = GetOrCreateViewLogic(typeof(DataPart2ViewLogic)) as DataPart2ViewLogic;
                 viewLogic.Show();//先调用show方法吧
+                viewLogic.ShowUserAccountInfo(GetModel<DataPart2Model>());
             }
             else
             {
                 // 测试
                 MessageBox.Show(string.Format("{0}不可以处理{1},请检查presenter的装饰器", this.GetType().FullName, typeof(DataPart2ViewLogic).FullName));
             }
+        }
+
+
+        /// <summary>
+        /// 设置玩家信息
+        /// </summary>
+        /// <param name="model"></param>
+        public void SetUserInfo(DataPart1Model model)
+        {
+            AddModel(model);
+        }
+
+        /// <summary>
+        /// 设置玩家账户信息
+        /// </summary>
+        /// <param name="model"></param>
+        public void SetUserAccountInfo(DataPart2Model model)
+        {
+            AddModel(model);
         }
 
 

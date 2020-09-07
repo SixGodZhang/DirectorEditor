@@ -1,4 +1,5 @@
-﻿using MVPFramework;
+﻿using DirectorEditor.Models;
+using MVPFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace DirectorEditor.Views
 {
     public interface IDataPart1View:IViewLogic
     {
-        void ShowUserInfo();// 显示玩家个人信息
+        void ShowUserInfo(DataPart1Model data);// 显示玩家个人信息
     }
 }

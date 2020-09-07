@@ -202,12 +202,10 @@ namespace MVPFramework
     /// </summary>
     /// <typeparam name="TViewLogicN">ViewLogic集合</typeparam>
     /// <typeparam name="TModelN">Model(数据定义)集合</typeparam>
-    public abstract class PresenterNN<TViewLogicN, TModelN> : AbstractPresenter, IPresenter
-        where TViewLogicN : IList<IViewLogic>
-        where TModelN : IList<IModel>
+    public abstract class PresenterNN : AbstractPresenter, IPresenter
     {
         private IList<IViewLogic> viewLogicList;
-        private IList<IModel> modelList;
+        private IDictionary<Type,IModel> modelDict;
         private IList<Type> viewLogicTypeList;// 保存PresenterNN绑定的ViewLogicType
         private PresenterType presenterType;
         private PresenterStatus presenterStatus = PresenterStatus.Default;
@@ -231,13 +229,10 @@ namespace MVPFramework
             }
         }
 
-        public IList<IModel> Models
-        {
-            get
-            {
-                return this.modelList;
-            }
-        }
+        /// <summary>
+        /// 保存的所有数据
+        /// </summary>
+        public List<IModel> ModelList => this.modelDict.Values as List<IModel>;
 
         public IList<IViewLogic> ViewLogicList
         {
@@ -260,21 +255,53 @@ namespace MVPFramework
 
         /// <summary>
         /// 获取指定类型的Model
+        /// 普通方法。
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public IModel GetModel<T>(T model) where T: IModel
+        public IModel GetModel(Type model)
         {
-            var inputModelType = model.GetType();
-            foreach (var m in this.modelList)
+            foreach (var m in this.modelDict)
             {
-                if (m.GetType().Equals(inputModelType))
+                if (m.Key.Equals(model))
                 {
-                    return m;
+                    return m.Value;
                 }
             }
             return null;
         }
+
+        /// <summary>
+        /// 获取指定类型的Model
+        /// 泛型方法。
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T GetModel<T>() where T:class,IModel
+        {
+            foreach (var m in this.modelDict)
+            {
+                if (m.Key.Equals(typeof(T)))
+                {
+                    return m.Value as T;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 添加一个指定的Model,如果不存在才会添加)
+        /// </summary>
+        /// <param name="model"></param>
+        public void AddModel(IModel model)
+        {
+            // 是否包含类型定义
+            if(!this.modelDict.ContainsKey(model.GetType()))
+            {
+                this.modelDict.Add(model.GetType(), model);
+            }
+        }
+
 
         /// <summary>
         /// 获取指定类型的View
@@ -414,6 +441,7 @@ namespace MVPFramework
             // 初始化
             this.viewLogicList = new List<IViewLogic>();
             this.viewLogicTypeList = new List<Type>();
+            this.modelDict = new Dictionary<Type, IModel>();
 
             // 设置PresenterNN 绑定的所有ViewLogic类型
             this.viewLogicTypeList = this.GetType().GetCustomAttributes(typeof(ViewLogicBindingAttribute), true)
