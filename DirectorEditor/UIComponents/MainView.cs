@@ -63,5 +63,12 @@ namespace DirectorEditor
             PresenterStub.HZHDialogPresenter?.Show();
             PresenterStub.HZHDialogPresenter?.Activate();
         }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            PresenterStub.SkinDemoPresenter?.Show();
+            PresenterStub.SkinDemoPresenter?.Activate();
+        }
+
     }
 }

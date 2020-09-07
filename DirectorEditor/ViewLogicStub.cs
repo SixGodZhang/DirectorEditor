@@ -59,7 +59,7 @@ namespace DirectorEditor
             }
         }
 
-        // 第三方控件 测试
+        // 第三方HZH控件 测试
         private static HZHDialogViewLogic _hZHDialogViewLogic = null;
         public static HZHDialogViewLogic HZHDialogViewLogic
         {
@@ -71,6 +71,21 @@ namespace DirectorEditor
                     _hZHDialogViewLogic.DestroyViewLogic += () => _hZHDialogViewLogic = null;
                 }
                 return _hZHDialogViewLogic;
+            }
+        }
+
+        // 第三方MaterialSkin控件 测试
+        private static SkinDemoViewLogic _materialSkinDemoViewLogic = null;
+        public static SkinDemoViewLogic MaterialSkinDemoViewLogic
+        {
+            get
+            {
+                if (_materialSkinDemoViewLogic == null)
+                {
+                    _materialSkinDemoViewLogic = new SkinDemoViewLogic();
+                    _materialSkinDemoViewLogic.DestroyViewLogic += () => _materialSkinDemoViewLogic = null;
+                }
+                return _materialSkinDemoViewLogic;
             }
         }
 

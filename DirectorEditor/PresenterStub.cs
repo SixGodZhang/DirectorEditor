@@ -38,7 +38,7 @@ namespace DirectorEditor
             }
         }
 
-        // 第三方控件的P层
+        // 第三方HZH控件的P层
         private static HZHDialogPresenter _hZHDialogPresenter;
         public static HZHDialogPresenter HZHDialogPresenter
         {
@@ -46,6 +46,17 @@ namespace DirectorEditor
             get
             {
                 return ViewLogicStub.HZHDialogViewLogic?.Presenters?.ElementAt(0) as HZHDialogPresenter;
+            }
+        }
+
+        // 第三方Material Skin控件的P层
+        private static SkinDemoPresenter _skinDemoPresenter;
+        public static SkinDemoPresenter SkinDemoPresenter
+        {
+            set => _skinDemoPresenter = value;
+            get
+            {
+                return ViewLogicStub.MaterialSkinDemoViewLogic?.Presenters?.ElementAt(0) as SkinDemoPresenter;
             }
         }
 

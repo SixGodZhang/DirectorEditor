@@ -30,9 +30,10 @@
         {
             this.topMenu = new System.Windows.Forms.MenuStrip();
             this.helpMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.testChangeHelpInfoBtn = new System.Windows.Forms.Button();
             this.attributeBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.thirdPartyDialogBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.thirdPartyHZHDialogBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.testChangeHelpInfoBtn = new System.Windows.Forms.Button();
+            this.thirdPartyMaterialSKinDemoBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.topMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -41,7 +42,9 @@
             this.topMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.helpMenu,
             this.attributeBtn,
-            this.thirdPartyDialogBtn});
+            this.thirdPartyHZHDialogBtn,
+            this.thirdPartyMaterialSKinDemoBtn
+            });
             this.topMenu.Location = new System.Drawing.Point(0, 0);
             this.topMenu.Name = "topMenu";
             this.topMenu.Size = new System.Drawing.Size(800, 25);
@@ -55,6 +58,20 @@
             this.helpMenu.Text = "帮助";
             this.helpMenu.Click += new System.EventHandler(this.helpMenu_Click);
             // 
+            // attributeBtn
+            // 
+            this.attributeBtn.Name = "attributeBtn";
+            this.attributeBtn.Size = new System.Drawing.Size(80, 21);
+            this.attributeBtn.Text = "装饰器寻址";
+            this.attributeBtn.Click += new System.EventHandler(this.attributeBtn_Click);
+            // 
+            // thirdPartyDialogBtn
+            // 
+            this.thirdPartyHZHDialogBtn.Name = "thirdPartyDialogBtn";
+            this.thirdPartyHZHDialogBtn.Size = new System.Drawing.Size(69, 21);
+            this.thirdPartyHZHDialogBtn.Text = "HZH控件";
+            this.thirdPartyHZHDialogBtn.Click += new System.EventHandler(this.thirdPartyDialogBtn_Click);
+            // 
             // testChangeHelpInfoBtn
             // 
             this.testChangeHelpInfoBtn.Location = new System.Drawing.Point(12, 44);
@@ -65,19 +82,12 @@
             this.testChangeHelpInfoBtn.UseVisualStyleBackColor = true;
             this.testChangeHelpInfoBtn.Click += new System.EventHandler(this.testChangeHelpInfoBtn_Click);
             // 
-            // attributeBtn
+            // toolStripMenuItem1
             // 
-            this.attributeBtn.Name = "attributeBtn";
-            this.attributeBtn.Size = new System.Drawing.Size(80, 21);
-            this.attributeBtn.Text = "装饰器寻址";
-            this.attributeBtn.Click += new System.EventHandler(this.attributeBtn_Click);
-            // 
-            // thirdPartyDialogBtn
-            // 
-            this.thirdPartyDialogBtn.Name = "thirdPartyDialogBtn";
-            this.thirdPartyDialogBtn.Size = new System.Drawing.Size(80, 21);
-            this.thirdPartyDialogBtn.Text = "第三方控件";
-            this.thirdPartyDialogBtn.Click += new System.EventHandler(this.thirdPartyDialogBtn_Click);
+            this.thirdPartyMaterialSKinDemoBtn.Name = "toolStripMenuItem1";
+            this.thirdPartyMaterialSKinDemoBtn.Size = new System.Drawing.Size(116, 21);
+            this.thirdPartyMaterialSKinDemoBtn.Text = "MaterialSkin控件";
+            this.thirdPartyMaterialSKinDemoBtn.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // MainView
             // 
@@ -102,7 +112,8 @@
         private System.Windows.Forms.ToolStripMenuItem helpMenu;
         private System.Windows.Forms.Button testChangeHelpInfoBtn;
         private System.Windows.Forms.ToolStripMenuItem attributeBtn;
-        private System.Windows.Forms.ToolStripMenuItem thirdPartyDialogBtn;
+        private System.Windows.Forms.ToolStripMenuItem thirdPartyHZHDialogBtn;
+        private System.Windows.Forms.ToolStripMenuItem thirdPartyMaterialSKinDemoBtn;
     }
 }
 

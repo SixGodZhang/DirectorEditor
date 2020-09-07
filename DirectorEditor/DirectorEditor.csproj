@@ -56,6 +56,7 @@
     <Compile Include="Presenters\DataPart1Presenter.cs" />
     <Compile Include="Presenters\HelperPresenter.cs" />
     <Compile Include="Presenters\HZHDialogPresenter.cs" />
+    <Compile Include="Presenters\SkinDemoPresenter.cs" />
     <Compile Include="UIComponents\AttributeAddressingView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +81,12 @@
     <Compile Include="UIComponents\HelperView.Designer.cs">
       <DependentUpon>HelperView.cs</DependentUpon>
     </Compile>
+    <Compile Include="UIComponents\ThirdParty_MaterialSkin_DemoView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UIComponents\ThirdParty_MaterialSkin_DemoView.Designer.cs">
+      <DependentUpon>ThirdParty_MaterialSkin_DemoView.cs</DependentUpon>
+    </Compile>
     <Compile Include="UIComponents\MainView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,12 +106,14 @@
     <Compile Include="UILogic\HelperViewLogic.cs" />
     <Compile Include="UILogic\HZHDialogViewLogic.cs" />
     <Compile Include="UILogic\MainViewLogic.cs" />
+    <Compile Include="UILogic\SkinDemoViewLogic.cs" />
     <Compile Include="ViewLogicStub.cs" />
     <Compile Include="Views\IAttributeAddressingView.cs" />
     <Compile Include="Views\IDataView.cs" />
     <Compile Include="Views\IHelperView.cs" />
     <Compile Include="Views\IHZHDialogView.cs" />
     <Compile Include="Views\IMainView.cs" />
+    <Compile Include="Views\ISkinDemoView.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -113,9 +122,13 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="UIComponents\HelperView.resx">
       <DependentUpon>HelperView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UIComponents\ThirdParty_MaterialSkin_DemoView.resx">
+      <DependentUpon>ThirdParty_MaterialSkin_DemoView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UIComponents\MainView.resx">
       <DependentUpon>MainView.cs</DependentUpon>
@@ -149,6 +162,19 @@
       <Project>{af32e163-c577-4cbc-a072-0dc1ce0e1da3}</Project>
       <Name>HZH_Controls</Name>
     </ProjectReference>
+    <ProjectReference Include="..\thirdparty\MaterialSkin\MaterialSkin.csproj">
+      <Project>{8eb7611b-68cd-4b8b-987a-11717e2b250c}</Project>
+      <Name>MaterialSkin</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="UIComponents\Resources\minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="UIComponents\Resources\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
