@@ -52,6 +52,10 @@
 
 
 ## 进度(设计思考流程过程在此记录)
+### 2020.9.7.8
+接入MaterialSkin控件开源库  
+![](Images/接入MatetrialSkin控件开源库.png)
+
 ### 2020.9.4 晚上
 尝试接入第三方插件库【HZH_Controls】, 完美接入.  
 ![](Images/接入开源控件HZH.png)
