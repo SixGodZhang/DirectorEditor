@@ -52,12 +52,35 @@
 
 
 ## 进度(设计思考流程过程在此记录)
+### 2020.9.7.17.30
+实现了Presenter -> ViewLogic 的1:N结构, 具体demo见DataPartPresenter  
+``` csharp
+	[ViewLogicBinding(typeof(DataPart1ViewLogic))]// 绑定DataPart1ViewLogic
+	[ViewLogicBinding(typeof(DataPart2ViewLogic))]// 绑定DataPart2ViewLogic
+	public class DataPartPresenter : PresenterNN
+	{
+		// ...
+	}
+```
+Presenter 需要2步:  
+1. 继承PresenterNN  
+2. 与Presenter绑定的ViewLogic需要用装饰器进行标注  
+
+PresenterNN的意思是, 对应N个ViewLogic,  N个Model数据描述结构  
+效果图如下, DataPartPresenter可以处理两个ViewLogic的内容:  
+![](Images/PresenterNN结构实现.png)  
+
 ### 2020.9.7.9.30
 现在注册到PresenterStub的访问顺序结构有问题:  
 之前是这样的:  
 ``` csharp
 PresenterStub.HelperPresenter?.Show();
 ```
+Presenter -> 创建ViewLogic实例 ->  创建组件实例  
+问题出现在Presenter的实例是在ViewLogic的实例创建之后, 从ViewLogic实例中的绑定的Presenters中选择的第一个  
+现在的想法是, Presenter可以独立创建. 如果Presenter需要显示某个界面, 则再去处理ViewLogi的创建  
+
+这样思考的话, 其实我只是做了ViewLogic -> Presenter的单向绑定, 如果需要做NN关系的话, 那么就需要做一个双向绑定  
 
 ### 2020.9.7.8
 接入MaterialSkin控件开源库  
