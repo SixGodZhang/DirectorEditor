@@ -47,13 +47,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\DataModel.cs" />
+    <Compile Include="Models\DataPart1Model.cs" />
+    <Compile Include="Models\DataPart2Model.cs" />
     <Compile Include="Models\HelperModel.cs" />
     <Compile Include="Models\HZHDialogModel.cs" />
     <Compile Include="PresenterStub.cs" />
     <Compile Include="Presenters\AttributeAddressingPresenter.cs" />
-    <Compile Include="Presenters\DataPart2Presenter.cs" />
-    <Compile Include="Presenters\DataPart1Presenter.cs" />
+    <Compile Include="Presenters\DataPartPresenter.cs" />
     <Compile Include="Presenters\HelperPresenter.cs" />
     <Compile Include="Presenters\HZHDialogPresenter.cs" />
     <Compile Include="Presenters\SkinDemoPresenter.cs" />
@@ -103,13 +103,16 @@
       <DependentUpon>ThirdParty_HZH_DialogView.cs</DependentUpon>
     </Compile>
     <Compile Include="UILogic\AttributeAddressingViewLogic.cs" />
+    <Compile Include="UILogic\DataPart1ViewLogic.cs" />
+    <Compile Include="UILogic\DataPart2ViewLogic.cs" />
     <Compile Include="UILogic\HelperViewLogic.cs" />
     <Compile Include="UILogic\HZHDialogViewLogic.cs" />
     <Compile Include="UILogic\MainViewLogic.cs" />
     <Compile Include="UILogic\SkinDemoViewLogic.cs" />
     <Compile Include="ViewLogicStub.cs" />
     <Compile Include="Views\IAttributeAddressingView.cs" />
-    <Compile Include="Views\IDataView.cs" />
+    <Compile Include="Views\IDataPart1View.cs" />
+    <Compile Include="Views\IDataPart2View.cs" />
     <Compile Include="Views\IHelperView.cs" />
     <Compile Include="Views\IHZHDialogView.cs" />
     <Compile Include="Views\IMainView.cs" />

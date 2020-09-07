@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attribute\CustomLogic.cs" />
+    <Compile Include="Binder\ViewLogicBindingAttribute.cs" />
     <Compile Include="Core\EventArgs\PresenterDestoryEventArgs.cs" />
     <Compile Include="Core\EventArgs\PresenterSingleViewBindingEventArgs.cs" />
     <Compile Include="Core\EventArgs\PresenterCancelAllViewEventArgs.cs" />

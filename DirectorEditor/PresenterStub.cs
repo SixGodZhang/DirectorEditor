@@ -60,5 +60,21 @@ namespace DirectorEditor
             }
         }
 
+        // PresenterNN 测试
+        private static DataPartPresenter _dataPartPresenter;
+        public static DataPartPresenter DataPartPresenter
+        {
+            set => _dataPartPresenter = value;
+            get
+            {
+                if (_dataPartPresenter == null)
+                {
+                    _dataPartPresenter = new DataPartPresenter();
+                }
+                return _dataPartPresenter;
+                //return ViewLogicStub.MaterialSkinDemoViewLogic?.Presenters?.ElementAt(0) as DataPartPresenter;
+            }
+        }
+
     }
 }

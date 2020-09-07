@@ -32,8 +32,10 @@
             this.helpMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.attributeBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.thirdPartyHZHDialogBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.testChangeHelpInfoBtn = new System.Windows.Forms.Button();
             this.thirdPartyMaterialSKinDemoBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.testChangeHelpInfoBtn = new System.Windows.Forms.Button();
+            this.dataPart1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataPart2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,7 +45,9 @@
             this.helpMenu,
             this.attributeBtn,
             this.thirdPartyHZHDialogBtn,
-            this.thirdPartyMaterialSKinDemoBtn
+            this.thirdPartyMaterialSKinDemoBtn,
+            this.dataPart1ToolStripMenuItem,
+            this.dataPart2ToolStripMenuItem
             });
             this.topMenu.Location = new System.Drawing.Point(0, 0);
             this.topMenu.Name = "topMenu";
@@ -65,12 +69,19 @@
             this.attributeBtn.Text = "装饰器寻址";
             this.attributeBtn.Click += new System.EventHandler(this.attributeBtn_Click);
             // 
-            // thirdPartyDialogBtn
+            // thirdPartyHZHDialogBtn
             // 
-            this.thirdPartyHZHDialogBtn.Name = "thirdPartyDialogBtn";
+            this.thirdPartyHZHDialogBtn.Name = "thirdPartyHZHDialogBtn";
             this.thirdPartyHZHDialogBtn.Size = new System.Drawing.Size(69, 21);
             this.thirdPartyHZHDialogBtn.Text = "HZH控件";
             this.thirdPartyHZHDialogBtn.Click += new System.EventHandler(this.thirdPartyDialogBtn_Click);
+            // 
+            // thirdPartyMaterialSKinDemoBtn
+            // 
+            this.thirdPartyMaterialSKinDemoBtn.Name = "thirdPartyMaterialSKinDemoBtn";
+            this.thirdPartyMaterialSKinDemoBtn.Size = new System.Drawing.Size(116, 21);
+            this.thirdPartyMaterialSKinDemoBtn.Text = "MaterialSkin控件";
+            this.thirdPartyMaterialSKinDemoBtn.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // testChangeHelpInfoBtn
             // 
@@ -82,12 +93,19 @@
             this.testChangeHelpInfoBtn.UseVisualStyleBackColor = true;
             this.testChangeHelpInfoBtn.Click += new System.EventHandler(this.testChangeHelpInfoBtn_Click);
             // 
-            // toolStripMenuItem1
+            // dataPart1ToolStripMenuItem
             // 
-            this.thirdPartyMaterialSKinDemoBtn.Name = "toolStripMenuItem1";
-            this.thirdPartyMaterialSKinDemoBtn.Size = new System.Drawing.Size(116, 21);
-            this.thirdPartyMaterialSKinDemoBtn.Text = "MaterialSkin控件";
-            this.thirdPartyMaterialSKinDemoBtn.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            this.dataPart1ToolStripMenuItem.Name = "dataPart1ToolStripMenuItem";
+            this.dataPart1ToolStripMenuItem.Size = new System.Drawing.Size(77, 21);
+            this.dataPart1ToolStripMenuItem.Text = "DataPart1";
+            this.dataPart1ToolStripMenuItem.Click += new System.EventHandler(this.dataPart1ToolStripMenuItem_Click);
+            // 
+            // dataPart2ToolStripMenuItem
+            // 
+            this.dataPart2ToolStripMenuItem.Name = "dataPart2ToolStripMenuItem";
+            this.dataPart2ToolStripMenuItem.Size = new System.Drawing.Size(77, 21);
+            this.dataPart2ToolStripMenuItem.Text = "DataPart2";
+            this.dataPart2ToolStripMenuItem.Click += new System.EventHandler(this.dataPart2ToolStripMenuItem_Click);
             // 
             // MainView
             // 
@@ -114,6 +132,8 @@
         private System.Windows.Forms.ToolStripMenuItem attributeBtn;
         private System.Windows.Forms.ToolStripMenuItem thirdPartyHZHDialogBtn;
         private System.Windows.Forms.ToolStripMenuItem thirdPartyMaterialSKinDemoBtn;
+        private System.Windows.Forms.ToolStripMenuItem dataPart1ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dataPart2ToolStripMenuItem;
     }
 }
 

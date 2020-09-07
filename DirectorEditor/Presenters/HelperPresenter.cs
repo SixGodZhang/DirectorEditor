@@ -16,7 +16,7 @@ namespace DirectorEditor.Presenters
             //var model = new HelperModel();
             //model.EditorDesc = "这里显示的是帮助信息";
             //SetHelperInfo(model);
-            View = view;
+            ViewLogic = view;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace DirectorEditor.Presenters
             if (modelInfo!= null)
             {
                 Model = modelInfo;// 重新拉取数据
-                View.LayoutView(modelInfo);// 刷新界面
+                ViewLogic.LayoutView(modelInfo);// 刷新界面
             }
         }
 
@@ -44,7 +44,7 @@ namespace DirectorEditor.Presenters
         /// </summary>
         public void Show()
         {
-            View.Show();
+            ViewLogic.Show();
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace DirectorEditor.Presenters
         /// </summary>
         public void Activate()
         {
-            View.Activate();
+            ViewLogic.Activate();
         }
 
 

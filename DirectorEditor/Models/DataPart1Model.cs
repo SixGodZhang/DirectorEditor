@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DirectorEditor.Models
 {
-    public class DataModel:IModel
+    public class DataPart1Model:IModel
     {
         public string Id { set; get; }
         public string Name { set; get; }

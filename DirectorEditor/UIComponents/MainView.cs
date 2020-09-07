@@ -47,7 +47,7 @@ namespace DirectorEditor
 
             PresenterStub.HelperPresenter?.SetHelperInfo(new Models.HelperModel()
             {
-                EditorDesc = string.Format("点击了帮助按钮, 修改帮助信息 - {0} - {1}", PresenterStub.HelperPresenter?.View.GetHashCode(), new Random().Next())
+                EditorDesc = string.Format("点击了帮助按钮, 修改帮助信息 - {0} - {1}", PresenterStub.HelperPresenter?.ViewLogic.GetHashCode(), new Random().Next())
             });
             PresenterStub.HelperPresenter?.Activate();
         }
@@ -70,5 +70,14 @@ namespace DirectorEditor
             PresenterStub.SkinDemoPresenter?.Activate();
         }
 
+        private void dataPart1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PresenterStub.DataPartPresenter?.ShowUserInfo();
+        }
+
+        private void dataPart2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PresenterStub.DataPartPresenter?.ShowUserAccountInfo();
+        }
     }
 }

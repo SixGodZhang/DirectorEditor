@@ -52,6 +52,13 @@
 
 
 ## 进度(设计思考流程过程在此记录)
+### 2020.9.7.9.30
+现在注册到PresenterStub的访问顺序结构有问题:  
+之前是这样的:  
+``` csharp
+PresenterStub.HelperPresenter?.Show();
+```
+
 ### 2020.9.7.8
 接入MaterialSkin控件开源库  
 ![](Images/接入MatetrialSkin控件开源库.png)

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace DirectorEditor.Views
 {
-    public interface IDataView:IViewLogic
+    public interface IDataPart1View:IViewLogic
     {
-
+        void ShowUserInfo();// 显示玩家个人信息
     }
 }

@@ -22,7 +22,7 @@ namespace DirectorEditor
                 if (_mainViewLogic == null)
                 {
                     _mainViewLogic = new MainViewLogic();
-                    _mainViewLogic.DestroyViewLogic += () => _mainViewLogic = null;
+                    _mainViewLogic.DestoryViewLogicEvent += (sender, args) => _mainViewLogic = null;
                 }
 
                 return _mainViewLogic;
@@ -38,7 +38,7 @@ namespace DirectorEditor
                 if(_helperViewLogic == null)
                 {
                     _helperViewLogic = new HelperViewLogic();
-                    _helperViewLogic.DestroyViewLogic += () => _helperViewLogic = null;
+                    _helperViewLogic.DestoryViewLogicEvent += (sender, args) => _helperViewLogic = null;
                 }
                 return _helperViewLogic;
             }
@@ -53,7 +53,7 @@ namespace DirectorEditor
                 if(_attributeAddressingViewLogic == null)
                 {
                     _attributeAddressingViewLogic = new AttributeAddressingViewLogic();
-                    _attributeAddressingViewLogic.DestroyViewLogic += () => _attributeAddressingViewLogic = null;
+                    _attributeAddressingViewLogic.DestoryViewLogicEvent += (sender, args) => _attributeAddressingViewLogic = null;
                 }
                 return _attributeAddressingViewLogic;
             }
@@ -68,7 +68,7 @@ namespace DirectorEditor
                 if (_hZHDialogViewLogic == null)
                 {
                     _hZHDialogViewLogic = new HZHDialogViewLogic();
-                    _hZHDialogViewLogic.DestroyViewLogic += () => _hZHDialogViewLogic = null;
+                    _hZHDialogViewLogic.DestoryViewLogicEvent += (sender, args) => _hZHDialogViewLogic = null;
                 }
                 return _hZHDialogViewLogic;
             }
@@ -83,11 +83,43 @@ namespace DirectorEditor
                 if (_materialSkinDemoViewLogic == null)
                 {
                     _materialSkinDemoViewLogic = new SkinDemoViewLogic();
-                    _materialSkinDemoViewLogic.DestroyViewLogic += () => _materialSkinDemoViewLogic = null;
+                    _materialSkinDemoViewLogic.DestoryViewLogicEvent += (sender, args) => _materialSkinDemoViewLogic = null;
                 }
                 return _materialSkinDemoViewLogic;
             }
         }
+
+        // PresenterNN 测试一
+        //private static DataPart1ViewLogic _dataPart1ViewLogic = null;
+        //public static DataPart1ViewLogic DataPart1ViewLogic
+        //{
+        //    get
+        //    {
+        //        if (_dataPart1ViewLogic == null)
+        //        {
+        //            _dataPart1ViewLogic = new DataPart1ViewLogic();
+        //            _dataPart1ViewLogic.DestoryViewLogicEvent += () => _dataPart1ViewLogic = null;
+        //        }
+        //        return _dataPart1ViewLogic;
+        //    }
+        //}
+
+        // PresenterNN 测试二
+        //private static DataPart2ViewLogic _dataPart2ViewLogic = null;
+        //public static DataPart2ViewLogic DataPart2ViewLogic
+        //{
+        //    get
+        //    {
+        //        if (_dataPart2ViewLogic == null)
+        //        {
+        //            _dataPart2ViewLogic = new DataPart2ViewLogic();
+        //            _dataPart2ViewLogic.DestoryViewLogicEvent += () => _dataPart2ViewLogic = null;
+        //        }
+        //        return _dataPart2ViewLogic;
+        //    }
+        //}
+
+
 
     }
 }

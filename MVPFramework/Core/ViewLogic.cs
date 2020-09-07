@@ -47,9 +47,9 @@ namespace MVPFramework.Core
         /// </summary>
         public Action InitViewLogic;
         /// <summary>
-        /// ViewLogic销毁时回调
+        /// 销毁事件
         /// </summary>
-        public Action DestroyViewLogic;
+        public event EventHandler DestoryViewLogicEvent;
 
         /// <summary>
         /// 
@@ -99,10 +99,10 @@ namespace MVPFramework.Core
                 presenter.DestroyView(new List<IViewLogic>() { this as T2 });
             }
 
-            // 销毁全局引用
-            if (this.DestroyViewLogic!= null)
+            //销毁引用
+            if (this.DestoryViewLogicEvent!=null)
             {
-                DestroyViewLogic();
+                this.DestoryViewLogicEvent(this,null);
             }
 
         }

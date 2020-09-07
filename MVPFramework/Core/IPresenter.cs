@@ -1,7 +1,9 @@
-﻿using MVPFramework.Core;
+﻿using MVPFramework.Binder;
+using MVPFramework.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,7 +50,7 @@ namespace MVPFramework
     /// <typeparam name="TView"></typeparam>
     public interface IPresenter<TView> : IPresenter where TView : class, IViewLogic
     {
-        TView View { get; }
+        TView ViewLogic { get; }
     }
 
     /// <summary>
@@ -196,20 +198,27 @@ namespace MVPFramework
     /// <summary>
     /// Presenter抽象类。 
     /// 主要实现Presenter 同时与多个View或Model的绑定
+    /// 包含1:1, N:N,1:N,N:1关系
     /// </summary>
-    /// <typeparam name="TViewN"></typeparam>
-    /// <typeparam name="TModelN"></typeparam>
-    public abstract class PresenterNN<TViewN, TModelN> : AbstractPresenter, IPresenter
-        where TViewN : IList<IViewLogic>
+    /// <typeparam name="TViewLogicN">ViewLogic集合</typeparam>
+    /// <typeparam name="TModelN">Model(数据定义)集合</typeparam>
+    public abstract class PresenterNN<TViewLogicN, TModelN> : AbstractPresenter, IPresenter
+        where TViewLogicN : IList<IViewLogic>
         where TModelN : IList<IModel>
     {
-        private IList<IViewLogic> views;
-        private IList<IModel> models;
+        private IList<IViewLogic> viewLogicList;
+        private IList<IModel> modelList;
+        private IList<Type> viewLogicTypeList;// 保存PresenterNN绑定的ViewLogicType
         private PresenterType presenterType;
         private PresenterStatus presenterStatus = PresenterStatus.Default;
 
+        /// <summary>
+        /// P层类型
+        /// </summary>
         public PresenterType PresenterType => this.presenterType;
-
+        /// <summary>
+        /// P层状态
+        /// </summary>
         public PresenterStatus PresenterStatus
         {
             get => this.presenterStatus;
@@ -226,15 +235,26 @@ namespace MVPFramework
         {
             get
             {
-                return this.models;
+                return this.modelList;
             }
         }
 
-        public IList<IViewLogic> Views
+        public IList<IViewLogic> ViewLogicList
         {
             get
             {
-                return this.views;
+                return this.viewLogicList;
+            }
+        }
+
+        /// <summary>
+        /// Presenter绑定的所有 ViewLogicTypeList
+        /// </summary>
+        public IList<Type> ViewLogicTypeList
+        {
+            get
+            {
+                return this.viewLogicTypeList;
             }
         }
 
@@ -246,7 +266,7 @@ namespace MVPFramework
         public IModel GetModel<T>(T model) where T: IModel
         {
             var inputModelType = model.GetType();
-            foreach (var m in this.models)
+            foreach (var m in this.modelList)
             {
                 if (m.GetType().Equals(inputModelType))
                 {
@@ -261,12 +281,16 @@ namespace MVPFramework
         /// </summary>
         /// <param name="view"></param>
         /// <returns></returns>
-        public IViewLogic GetView<T>(T view) where T:IViewLogic
+        public IViewLogic GetViewLogicInstance(Type viewLogicType)
         {
-            var inputViewType = view.GetType();
-            foreach (var v in this.views)
+            if(this.viewLogicList == null)
             {
-                if(v.GetType().Equals(inputViewType))
+                return null;
+            }
+
+            foreach (var v in this.viewLogicList)
+            {
+                if(v.GetType().Equals(viewLogicType))
                 {
                     return v;
                 }
@@ -275,17 +299,94 @@ namespace MVPFramework
         }
 
         /// <summary>
+        /// 获取Presenter需要处理的ViewLogic， 如果不存在实例, 则新建一个
+        /// </summary>
+        /// <param name="viewLogicType"></param>
+        /// <returns></returns>
+        public IViewLogic GetOrCreateViewLogic(Type viewLogicType)
+        {
+            // 先判断此类型的实例是否存在
+            IViewLogic returnViewLogicInstance = this.GetViewLogicInstance(viewLogicType);
+
+            if (returnViewLogicInstance == null)// 如果不存在, 则新建
+            {
+                var newViewLogicInstance = viewLogicType.Assembly.CreateInstance(viewLogicType.FullName);
+
+                //var destroyViewLogicEvent = newViewLogicInstance.GetType().GetField("DestroyViewLogic");
+                //Action tt = destroyViewLogicEvent.GetValue(null) as Action;
+                //Delegate.Combine(tt,)
+                // 思考了一下, 还是用事件处理吧, 不用委托来搞了
+                // 原因: 麻烦， 还要改结构, 但是效果却是一样的
+
+                EventInfo destoryViewLogic = newViewLogicInstance.GetType().GetEvent("DestoryViewLogicEvent");
+                if (destoryViewLogic!= null)
+                {
+                    destoryViewLogic.AddEventHandler(newViewLogicInstance, new EventHandler(DestroySingleViewLogic));
+                }
+                returnViewLogicInstance = newViewLogicInstance as IViewLogic;
+                this.AddViewLogic(returnViewLogicInstance);
+
+            }
+
+            return returnViewLogicInstance;
+        }
+
+        /// <summary>
+        /// 从PresenterView中销毁指定的ViewLogic instance
+        /// 只销毁实例, 不销毁类型
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DestroySingleViewLogic(object sender, EventArgs e)
+        {
+            if (this.viewLogicList.Contains(sender))
+            {
+                viewLogicList.Remove(sender as IViewLogic);
+            }
+        }
+
+
+        /// <summary>
+        /// Presenter是否可以处理指定的ViewLogic
+        /// 需要指定参数。
+        /// </summary>
+        /// <param name="viewLogicType"></param>
+        /// <returns></returns>
+        public bool hasViewLogicType(Type viewLogicType)
+        {
+            return this.viewLogicTypeList.Contains(viewLogicType);
+        }
+
+        /// <summary>
+        /// Presenter是否可以处理指定的ViewLogic
+        /// 泛型方法。
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public bool hasViewLogicType<T>() where T:IViewLogic
+        {
+
+            return this.viewLogicTypeList.Contains(typeof(T));
+        }
+
+        /// <summary>
         /// 添加一个View实例
         /// 只有当实例不存在，才会添加。不会出现覆盖的情况。
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="view"></param>
-        public void AddView<T>(T view) where T:IViewLogic
+        public void AddViewLogic(IViewLogic view)
         {
-            var inputViewType = view.GetType();
-            if(!this.views.Contains(view))
+            // 添加该viewlogic type
+            if (!this.viewLogicTypeList.Contains(view.GetType()))
             {
-                this.views.Add(view);
+                this.viewLogicTypeList.Add(view.GetType());
+            }
+
+            // 添加该viewlogic 实例
+            if(!this.viewLogicList.Contains(view))
+            {
+                this.viewLogicList.Add(view);
             }
 
         }
@@ -298,17 +399,30 @@ namespace MVPFramework
         {
             foreach (var v in view)
             {
-                this.views.Remove(v);
+                this.viewLogicList.Remove(v);
             }
         }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         protected PresenterNN()
         {
             this.presenterType = PresenterType.ModelViewNN;
             this.presenterStatus = PresenterStatus.Initing;
+
+            // 初始化
+            this.viewLogicList = new List<IViewLogic>();
+            this.viewLogicTypeList = new List<Type>();
+
+            // 设置PresenterNN 绑定的所有ViewLogic类型
+            this.viewLogicTypeList = this.GetType().GetCustomAttributes(typeof(ViewLogicBindingAttribute), true)
+                .OfType<ViewLogicBindingAttribute>()
+                .Select(vlba => vlba.ViewLogicType)
+                .ToArray();
+
         }
 
-        
     }
 
 
@@ -317,12 +431,12 @@ namespace MVPFramework
     /// 抽象类, 与View关联， 有View、Model
     /// 这里View和Model只做到了一一对应
     /// </summary>
-    /// <typeparam name="TView"></typeparam>
-    public abstract class Presenter<TView,TModel> : AbstractPresenter, IPresenter<TView>
-        where TView : class , IViewLogic // View层
+    /// <typeparam name="TViewLogic">ViewLogic层</typeparam>
+    public abstract class Presenter<TViewLogic,TModel> : AbstractPresenter, IPresenter<TViewLogic>
+        where TViewLogic : class , IViewLogic // ViewLogic层
         where TModel :class , IModel // Model层
     {
-        private TView view; 
+        private TViewLogic viewLogic; 
         private PresenterType presenterType;
         private PresenterStatus presenterStatus = PresenterStatus.Default;
         public PresenterType PresenterType { get => this.presenterType; }
@@ -338,9 +452,9 @@ namespace MVPFramework
 
         public Action cacheMethodCallAction;// 如果界面还没有初始化完成，缓存一些提前调用的函数
 
-        protected Presenter(TView view)
+        protected Presenter(TViewLogic viewLogic)
         {
-            this.view = view;
+            this.viewLogic = viewLogic;
             this.presenterType = PresenterType.ModelView;
             this.presenterStatus = PresenterStatus.Initing;
         }
@@ -348,10 +462,10 @@ namespace MVPFramework
         /// <summary>
         /// View层(只处理显示)
         /// </summary>
-        public TView View
+        public TViewLogic ViewLogic
         {
-            get { return view; }
-            set { view = value; }
+            get { return viewLogic; }
+            set { viewLogic = value; }
         }
 
         /// <summary>
@@ -364,7 +478,7 @@ namespace MVPFramework
         /// </summary>
         public void ClearViewPart()
         {
-            this.view = null;
+            this.viewLogic = null;
             this.presenterStatus = PresenterStatus.OnlyDataAfterClear;
             this.cacheMethodCallAction = null;
         }
@@ -380,25 +494,26 @@ namespace MVPFramework
             cacheMethodCallAction = null;
         }
 
-        public void Destroy(IViewLogic view)
+        public void Destroy(IViewLogic viewLogic)
         {
-            if(view.Equals(view))
+            if(viewLogic.Equals(viewLogic))
             {
-                this.view = null;
+                this.viewLogic = null;
             }
         }
 
         /// <summary>
         /// 在P层移除指定的View
         /// </summary>
-        /// <param name="view"></param>
-        public void DestroyView(IEnumerable<IViewLogic> view)
+        /// <param name="viewLogics"></param>
+        public void DestroyView(IEnumerable<IViewLogic> viewLogics)
         {
-            if(view.Contains(this.view))
+            if(viewLogics.Contains(this.viewLogic))
             {
-                this.view = null;
+                this.viewLogic = null;
             }
         }
     }
+
 
 }

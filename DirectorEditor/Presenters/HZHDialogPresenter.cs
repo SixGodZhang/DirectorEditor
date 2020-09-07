@@ -13,7 +13,7 @@ namespace DirectorEditor.Presenters
     {
         public HZHDialogPresenter(IHZHDialogView view) : base(view)
         {
-            View = view;
+            ViewLogic = view;
         }
 
         public void SetTip(HZHDialogModel modelInfo)
@@ -27,7 +27,7 @@ namespace DirectorEditor.Presenters
             if (modelInfo != null)
             {
                 Model = modelInfo;// 重新拉取数据
-                View.ShowTip(modelInfo);// 刷新界面
+                ViewLogic.ShowTip(modelInfo);// 刷新界面
             }
         }
 
@@ -36,7 +36,7 @@ namespace DirectorEditor.Presenters
         /// </summary>
         public void Show()
         {
-            View.Show();
+            ViewLogic.Show();
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace DirectorEditor.Presenters
         /// </summary>
         public void Activate()
         {
-            View.Activate();
+            ViewLogic.Activate();
         }
     }
 }
