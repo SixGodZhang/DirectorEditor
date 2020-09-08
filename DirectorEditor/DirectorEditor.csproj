@@ -57,6 +57,8 @@
     <Compile Include="Presenters\HelperPresenter.cs" />
     <Compile Include="Presenters\HZHDialogPresenter.cs" />
     <Compile Include="Presenters\SkinDemoPresenter.cs" />
+    <Compile Include="Presenters\ViewLogicNNPart1Presenter.cs" />
+    <Compile Include="Presenters\ViewLogicNNPart2Presenter.cs" />
     <Compile Include="UIComponents\AttributeAddressingView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +104,12 @@
     <Compile Include="UIComponents\ThirdParty_HZH_DialogView.Designer.cs">
       <DependentUpon>ThirdParty_HZH_DialogView.cs</DependentUpon>
     </Compile>
+    <Compile Include="UIComponents\ViewLogicNNView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UIComponents\ViewLogicNNView.Designer.cs">
+      <DependentUpon>ViewLogicNNView.cs</DependentUpon>
+    </Compile>
     <Compile Include="UILogic\AttributeAddressingViewLogic.cs" />
     <Compile Include="UILogic\DataPart1ViewLogic.cs" />
     <Compile Include="UILogic\DataPart2ViewLogic.cs" />
@@ -109,6 +117,7 @@
     <Compile Include="UILogic\HZHDialogViewLogic.cs" />
     <Compile Include="UILogic\MainViewLogic.cs" />
     <Compile Include="UILogic\SkinDemoViewLogic.cs" />
+    <Compile Include="UILogic\ViewLogicNNViewLogic.cs" />
     <Compile Include="ViewLogicStub.cs" />
     <Compile Include="Views\IAttributeAddressingView.cs" />
     <Compile Include="Views\IDataPart1View.cs" />
@@ -117,6 +126,7 @@
     <Compile Include="Views\IHZHDialogView.cs" />
     <Compile Include="Views\IMainView.cs" />
     <Compile Include="Views\ISkinDemoView.cs" />
+    <Compile Include="Views\IViewLogicNNView.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -38,6 +38,33 @@ namespace MVPFramework.Binder
             }
         }
 
+        /// <summary>
+        /// 调用presenterType的默认构造函数创建实例对象
+        /// </summary>
+        /// <param name="presenterType"></param>
+        /// <returns></returns>
+        public IPresenter Create(Type presenterType)
+        {
+            if (presenterType == null)
+                throw new ArgumentException(StringResources.ParamIsNull("presenterType"));
+
+            var buildMethod = GetDefaultBuildMethod(presenterType);
+            try
+            {
+                return (IPresenter)buildMethod.Invoke(null, null);
+            }catch(Exception ex)
+            {
+                var orginException = ex;
+                if (ex is TargetInvocationException && ex.InnerException != null)
+                {
+                    orginException = ex.InnerException;
+                }
+
+                throw new InvalidOperationException
+                    (StringResources.ThrowInvalidOperationExceptionWhenCreatePresenter(presenterType.FullName), orginException);
+            }
+        }
+
         public void Release(IPresenter presenter)
         {
             throw new NotImplementedException();
@@ -67,6 +94,24 @@ namespace MVPFramework.Binder
         }
 
         /// <summary>
+        /// 获取默认构造函数
+        /// </summary>
+        /// <param name="presenterType"></param>
+        /// <param name="viewLogicType"></param>
+        /// <returns></returns>
+        internal static DynamicMethod GetDefaultBuildMethod(Type presenterType)
+        {
+            var cacheKey = string.Join("__:default", new[]
+            {
+                presenterType.AssemblyQualifiedName
+            });
+
+            return buildMethodCache.GetOrCreateValue(cacheKey,
+                () => GetDefaultBuildMethodInternal(presenterType));
+        }
+
+
+        /// <summary>
         /// 创建一个动态方法
         /// presenterType: 返回类型
         /// viewType: 参数类型
@@ -93,6 +138,38 @@ namespace MVPFramework.Binder
             var ilGenerator = dynamicMethod.GetILGenerator();
             ilGenerator.Emit(OpCodes.Nop);
             ilGenerator.Emit(OpCodes.Ldarg_0);
+            ilGenerator.Emit(OpCodes.Newobj, constructor);
+            ilGenerator.Emit(OpCodes.Ret);
+
+            return dynamicMethod;
+        }
+
+        /// <summary>
+        /// 创建一个默认的构造函数
+        /// presenterType: 返回类型
+        /// viewType: 参数类型
+        /// </summary>
+        /// <param name="presenterType"></param>
+        /// <param name="viewLogicType"></param>
+        /// <returns></returns>
+        internal static DynamicMethod GetDefaultBuildMethodInternal(Type presenterType)
+        {
+            if (presenterType.IsNotPublic)
+            {
+                throw new ArgumentException(StringResources.TypeIsNotPublic(presenterType.FullName));
+            }
+
+            //查找presenterType中指定参数类型viewType的构造函数
+            var constructor = presenterType.GetConstructor(Type.EmptyTypes);//默认构造函数
+            if (constructor == null)
+            {
+                throw new ArgumentException("GetDefaultBuildMethodInternal failed when call it! ");
+            }
+
+            // 根据构造函数创建一个动态方法
+            var dynamicMethod = new DynamicMethod("DynamicConstructor", presenterType, null, presenterType.Module, false);
+            var ilGenerator = dynamicMethod.GetILGenerator();
+            ilGenerator.Emit(OpCodes.Nop);
             ilGenerator.Emit(OpCodes.Newobj, constructor);
             ilGenerator.Emit(OpCodes.Ret);
 

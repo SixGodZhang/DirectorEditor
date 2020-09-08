@@ -12,13 +12,21 @@ namespace MVPFramework.Binder
     public interface IPresenterFactory
     {
         /// <summary>
-        /// 创建一个指定类型的presenter、view 
+        /// 创建一个指定类型的presenter、viewlogic
+        /// presenter 和 viewlogic 强绑定
         /// </summary>
         /// <param name="presenterType"></param>
         /// <param name="viewType"></param>
         /// <param name="viewInstance"></param>
         /// <returns></returns>
         IPresenter Create(Type presenterType, Type viewType, IViewLogic viewInstance);
+
+        /// <summary>
+        /// 创建一个指定类型的presenter
+        /// </summary>
+        /// <param name="presenterType"></param>
+        /// <returns></returns>
+        IPresenter Create(Type presenterType);
 
         /// <summary>
         /// 释放指定类型的presenter

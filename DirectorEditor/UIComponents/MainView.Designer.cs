@@ -33,9 +33,11 @@
             this.attributeBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.thirdPartyHZHDialogBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.thirdPartyMaterialSKinDemoBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.testChangeHelpInfoBtn = new System.Windows.Forms.Button();
             this.dataPart1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataPart2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testChangeHelpInfoBtn = new System.Windows.Forms.Button();
+            this.viewLogicNNToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewLogicNNCloseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.topMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,8 +49,9 @@
             this.thirdPartyHZHDialogBtn,
             this.thirdPartyMaterialSKinDemoBtn,
             this.dataPart1ToolStripMenuItem,
-            this.dataPart2ToolStripMenuItem
-            });
+            this.dataPart2ToolStripMenuItem,
+            this.viewLogicNNToolStripMenuItem,
+            this.viewLogicNNCloseToolStripMenuItem});
             this.topMenu.Location = new System.Drawing.Point(0, 0);
             this.topMenu.Name = "topMenu";
             this.topMenu.Size = new System.Drawing.Size(800, 25);
@@ -83,16 +86,6 @@
             this.thirdPartyMaterialSKinDemoBtn.Text = "MaterialSkin控件";
             this.thirdPartyMaterialSKinDemoBtn.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
-            // testChangeHelpInfoBtn
-            // 
-            this.testChangeHelpInfoBtn.Location = new System.Drawing.Point(12, 44);
-            this.testChangeHelpInfoBtn.Name = "testChangeHelpInfoBtn";
-            this.testChangeHelpInfoBtn.Size = new System.Drawing.Size(145, 51);
-            this.testChangeHelpInfoBtn.TabIndex = 1;
-            this.testChangeHelpInfoBtn.Text = "点击可以改变帮助信息";
-            this.testChangeHelpInfoBtn.UseVisualStyleBackColor = true;
-            this.testChangeHelpInfoBtn.Click += new System.EventHandler(this.testChangeHelpInfoBtn_Click);
-            // 
             // dataPart1ToolStripMenuItem
             // 
             this.dataPart1ToolStripMenuItem.Name = "dataPart1ToolStripMenuItem";
@@ -106,6 +99,30 @@
             this.dataPart2ToolStripMenuItem.Size = new System.Drawing.Size(77, 21);
             this.dataPart2ToolStripMenuItem.Text = "DataPart2";
             this.dataPart2ToolStripMenuItem.Click += new System.EventHandler(this.dataPart2ToolStripMenuItem_Click);
+            // 
+            // testChangeHelpInfoBtn
+            // 
+            this.testChangeHelpInfoBtn.Location = new System.Drawing.Point(12, 44);
+            this.testChangeHelpInfoBtn.Name = "testChangeHelpInfoBtn";
+            this.testChangeHelpInfoBtn.Size = new System.Drawing.Size(145, 51);
+            this.testChangeHelpInfoBtn.TabIndex = 1;
+            this.testChangeHelpInfoBtn.Text = "点击可以改变帮助信息";
+            this.testChangeHelpInfoBtn.UseVisualStyleBackColor = true;
+            this.testChangeHelpInfoBtn.Click += new System.EventHandler(this.testChangeHelpInfoBtn_Click);
+            // 
+            // viewLogicNNToolStripMenuItem
+            // 
+            this.viewLogicNNToolStripMenuItem.Name = "viewLogicNNToolStripMenuItem";
+            this.viewLogicNNToolStripMenuItem.Size = new System.Drawing.Size(132, 21);
+            this.viewLogicNNToolStripMenuItem.Text = "ViewLogicNN open";
+            this.viewLogicNNToolStripMenuItem.Click += new System.EventHandler(this.viewLogicNNToolStripMenuItem_Click);
+            // 
+            // viewLogicNNCloseToolStripMenuItem
+            // 
+            this.viewLogicNNCloseToolStripMenuItem.Name = "viewLogicNNCloseToolStripMenuItem";
+            this.viewLogicNNCloseToolStripMenuItem.Size = new System.Drawing.Size(132, 21);
+            this.viewLogicNNCloseToolStripMenuItem.Text = "ViewLogicNN close";
+            this.viewLogicNNCloseToolStripMenuItem.Click += new System.EventHandler(this.viewLogicNNCloseToolStripMenuItem_Click);
             // 
             // MainView
             // 
@@ -134,6 +151,8 @@
         private System.Windows.Forms.ToolStripMenuItem thirdPartyMaterialSKinDemoBtn;
         private System.Windows.Forms.ToolStripMenuItem dataPart1ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem dataPart2ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewLogicNNToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewLogicNNCloseToolStripMenuItem;
     }
 }
 

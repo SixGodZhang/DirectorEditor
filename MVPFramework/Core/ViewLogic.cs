@@ -36,10 +36,12 @@ namespace MVPFramework.Core
         /// Presenter绑定器--> 处理ViewLogic和Presenter具体的绑定过程
         /// </summary>
         private readonly PresenterBinder presenterBinder;
+
+        private IEnumerable<IPresenter> presenters { get; set; }
         /// <summary>
         /// ViewLogic 关联的所有Presenters
         /// </summary>
-        public IEnumerable<IPresenter> Presenters { get; set; }
+        public IEnumerable<IPresenter> Presenters { get => presenters; set => presenters = value; }
 
         public bool ThrowExceptionIfNoPresenterBound { get; set; }
         /// <summary>
@@ -71,6 +73,53 @@ namespace MVPFramework.Core
             //
             presenterBinder.PresenterCreated += ViewLogic_PresenterCreated;
             presenterBinder.PerformBinding(this as T2);
+        }
+
+
+        /// <summary>
+        /// 获取指定的Presenter
+        /// </summary>
+        /// <param name="presenterType"></param>
+        /// <returns></returns>
+        public IPresenter GetSinglePresenter(Type presenterType)
+        {
+            if (presenters == null)
+            {
+                return null;
+            }
+
+            foreach (var presenter in presenters)
+            {
+                if (presenter.GetType() == presenterType)
+                {
+                    return presenter;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 获取指定类型的Presenter
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T GetSinglePresenter<T>() where T: class,IPresenter
+        {
+            if(presenters == null)
+            {
+                return default(T);
+            }
+
+            foreach (var presenter in presenters)
+            {
+                if (presenter.GetType() == typeof(T))
+                {
+                    return presenter as T;
+                }
+            }
+
+            return default(T);
         }
 
         /// <summary>

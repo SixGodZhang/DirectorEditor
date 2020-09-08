@@ -89,35 +89,21 @@ namespace DirectorEditor
             }
         }
 
-        // PresenterNN 测试一
-        //private static DataPart1ViewLogic _dataPart1ViewLogic = null;
-        //public static DataPart1ViewLogic DataPart1ViewLogic
-        //{
-        //    get
-        //    {
-        //        if (_dataPart1ViewLogic == null)
-        //        {
-        //            _dataPart1ViewLogic = new DataPart1ViewLogic();
-        //            _dataPart1ViewLogic.DestoryViewLogicEvent += () => _dataPart1ViewLogic = null;
-        //        }
-        //        return _dataPart1ViewLogic;
-        //    }
-        //}
+        // 演示一个ViewLogic对应多个Presenter
+        private static ViewLogicNNViewLogic _viewLogicNNViewLogic = null;
+        public static ViewLogicNNViewLogic ViewLogicNNViewLogic
+        {
+            get
+            {
+                if (_viewLogicNNViewLogic == null)
+                {
+                    _viewLogicNNViewLogic = new ViewLogicNNViewLogic();
+                    _viewLogicNNViewLogic.DestoryViewLogicEvent += (sender, args) => _viewLogicNNViewLogic = null;
+                }
+                return _viewLogicNNViewLogic;
+            }
+        }
 
-        // PresenterNN 测试二
-        //private static DataPart2ViewLogic _dataPart2ViewLogic = null;
-        //public static DataPart2ViewLogic DataPart2ViewLogic
-        //{
-        //    get
-        //    {
-        //        if (_dataPart2ViewLogic == null)
-        //        {
-        //            _dataPart2ViewLogic = new DataPart2ViewLogic();
-        //            _dataPart2ViewLogic.DestoryViewLogicEvent += () => _dataPart2ViewLogic = null;
-        //        }
-        //        return _dataPart2ViewLogic;
-        //    }
-        //}
 
 
 

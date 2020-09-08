@@ -84,12 +84,12 @@ namespace MVPFramework.Binder
         /// <summary>
         /// 绑定ViewInstance
         /// </summary>
-        /// <param name="viewInstance"></param>
-        public void PerformBinding(IViewLogic viewInstance)
+        /// <param name="viewLogicInstance"></param>
+        public void PerformBinding(IViewLogic viewLogicInstance)
         {
             try
             {
-                IEnumerable<IPresenter> presenters = PerformBinding(viewInstance, DiscoveryStrategy,Factory);
+                IEnumerable<IPresenter> presenters = PerformBinding(viewLogicInstance, DiscoveryStrategy,Factory);
                 OnPresenterCreated(new PresenterCreatedEventArgs(presenters));// Presenter初始化
             }
             catch(Exception e)
@@ -136,25 +136,25 @@ namespace MVPFramework.Binder
         /// <summary>
         /// 绑定
         /// </summary>
-        /// <param name="candidate">viewInstance</param>
+        /// <param name="viewLogicInstance">viewInstance</param>
         /// <param name="presenterDiscoveryStrategy"></param>
         /// <param name="presenterCreatedCallback"></param>
         /// <param name="presenterFactory"></param>
         /// <returns></returns>
         private static IEnumerable<IPresenter> PerformBinding(
-            IViewLogic candidate,
+            IViewLogic viewLogicInstance,
             IPresenterDiscoveryStrategy presenterDiscoveryStrategy,
             IPresenterFactory presenterFactory)
         {
-            // 获取candidate所有的绑定信息
+            // 获取viewLogicInstance所有的绑定信息
             // 绑定信息包含View和Predicate
             // 根据策略找到所有
-            IEnumerable<PresenterBinding> presenterBindings = GetBinding(candidate,presenterDiscoveryStrategy);
+            IEnumerable<PresenterBinding> presenterBindings = GetBinding(viewLogicInstance,presenterDiscoveryStrategy);
 
             List<IPresenter> newPresenters = null;
             List<Type> failedPresenterTypes = null;
 
-            // 这里现在PresenterStub中查找， 看是否可以找到实例
+            // 这里现在PresenterManager中查找， 看是否可以找到实例
             // 可以找到的实例保存在newPresenters中, 在cache中找不到的实例输出到failedPresenterTypes中
             newPresenters = PresenterManager.Gets(presenterBindings.Select(p => p.PresenterType), out failedPresenterTypes);
 
@@ -169,26 +169,26 @@ namespace MVPFramework.Binder
                     IPresenter newPresenter = newPresenters.ElementAt(i);
                     switch(newPresenter.PresenterType)
                     {
-                        case PresenterType.ModelView:
+                        case PresenterType.PresenterView11:
                             if (newPresenter.PresenterStatus == PresenterStatus.Inited || newPresenter.PresenterStatus == PresenterStatus.OnlyDataAfterClear)
                             {
                                 try
                                 {
-                                    // call ClearViewPart
+                                    // call ClearViewPart 仅清理视图部分, 保留Model
                                     MethodInfo mi = newPresenter.GetType().GetMethod("ClearViewPart");
                                     if (mi != null)
                                     {
                                         mi.Invoke(newPresenter, null);
                                     }
-                                    // set View Property
-                                    PropertyInfo viewPropertyInfo = newPresenter.GetType().GetProperty("View");
+                                    // set View Property Presenter和View 1:1 关系, 所以在此重新绑定
+                                    PropertyInfo viewPropertyInfo = newPresenter.GetType().GetProperty("ViewLogic");
                                     if (viewPropertyInfo != null && viewPropertyInfo.CanWrite)
                                     {
-                                        viewPropertyInfo.SetValue(newPresenter, candidate);
+                                        viewPropertyInfo.SetValue(newPresenter, viewLogicInstance);
                                     }
                                     // set PresenterStatus Property
                                     PropertyInfo statusPropertyInfo = newPresenter.GetType().GetProperty("PresenterStatus");
-                                    if (statusPropertyInfo != null && viewPropertyInfo.CanWrite)
+                                    if (statusPropertyInfo != null && statusPropertyInfo.CanWrite)
                                     {
                                         statusPropertyInfo.SetValue(newPresenter, PresenterStatus.Initing);
                                     }
@@ -203,19 +203,14 @@ namespace MVPFramework.Binder
                                 failedPresenterFromCache.Add(newPresenter);
                             }
                             break;
-                        case PresenterType.ModelViewNN:
+                        case PresenterType.PresenterViewNN:
                             if (newPresenter.PresenterStatus == PresenterStatus.Inited)
                             {
-                                try
+                                // set PresenterStatus Property
+                                PropertyInfo statusPropertyInfo = newPresenter.GetType().GetProperty("PresenterStatus");
+                                if (statusPropertyInfo != null && statusPropertyInfo.CanWrite)
                                 {
-                                    MethodInfo mi = newPresenter.GetType().GetMethod("AddView");
-                                    if (mi != null)
-                                    {
-                                        mi.Invoke(newPresenter, new object[] { candidate });
-                                    }
-                                }catch(Exception ex)
-                                {
-                                    failedPresenterFromCache.Add(newPresenter);
+                                    statusPropertyInfo.SetValue(newPresenter, PresenterStatus.Initing);
                                 }
                             }
                             else
@@ -243,7 +238,8 @@ namespace MVPFramework.Binder
                     //遍历所有失败的Presenter， 然后重新创建
                     foreach (var failedPresenter in failedPresenterFromCache)
                     {
-                        IPresenter presenter = BuildPresenterInternal(presenterFactory, failedPresenter.GetType(), candidate.GetType(), candidate);
+                        IPresenter presenter = BuildPresenterInternal(presenterFactory, failedPresenter.GetType(), viewLogicInstance.GetType(), viewLogicInstance);
+                        presenter.PresenterStatus = PresenterStatus.Initing;
                         newPresenters.Add(presenter);
                         PresenterManager.Add(presenter);// 添加到缓存中, 会将直接错误的进行覆盖
                     }
@@ -251,11 +247,29 @@ namespace MVPFramework.Binder
             }
 
             // 创建不存在缓存中的实例
-            foreach (var presenterType in failedPresenterTypes)
+            foreach (var presenterItem in failedPresenterTypes)
             {
-                IPresenter presenterInstance = BuildPresenterInternal(presenterFactory, presenterType, candidate.GetType(), candidate);
-                newPresenters.Add(presenterInstance);// 添加到结果中
-                PresenterManager.Add(presenterInstance);// 添加到缓存中
+                // 通过反射获取PresenterType
+                var presenterType = presenterItem.BaseType.GetField("presenterType", BindingFlags.NonPublic | BindingFlags.Static)
+                    .GetValue(null);
+                if (presenterType == null)
+                {
+                    throw new Exception("get presenterType failed !");
+                }
+
+                IPresenter presenter;
+                switch ((PresenterType)presenterType)
+                {
+                    case PresenterType.View:// 目前只允许View类型的可以脱离viewInstance单独创建
+                        presenter = BuildPresenterInternal(presenterFactory, presenterItem);
+                        break;
+                    default:
+                        presenter = BuildPresenterInternal(presenterFactory, presenterItem, viewLogicInstance.GetType(), viewLogicInstance);
+                        break;
+                }
+                presenter.PresenterStatus = PresenterStatus.Initing;
+                newPresenters.Add(presenter);// 添加到结果中
+                PresenterManager.Add(presenter);// 添加到缓存中
             }
 
             return newPresenters;
@@ -309,6 +323,19 @@ namespace MVPFramework.Binder
             IViewLogic viewInstnace)
         {
             return presenterFactory.Create(presenterType, viewType, viewInstnace);
+        }
+
+        /// <summary>
+        /// 调用Presenter的默认构造函数创建
+        /// </summary>
+        /// <param name="presenterFactory"></param>
+        /// <param name="presenterType"></param>
+        /// <returns></returns>
+        private static IPresenter BuildPresenterInternal(
+            IPresenterFactory presenterFactory,
+            Type presenterType)
+        {
+            return presenterFactory.Create(presenterType);
         }
 
         /// <summary>

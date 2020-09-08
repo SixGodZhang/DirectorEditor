@@ -96,5 +96,15 @@ namespace DirectorEditor
             PresenterStub.DataPartPresenter?.AddModel(model2);
             PresenterStub.DataPartPresenter?.ShowUserAccountInfo();
         }
+
+        private void viewLogicNNToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PresenterStub.ViewLogicNNPart1Presenter?.Show();
+        }
+
+        private void viewLogicNNCloseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PresenterStub.ViewLogicNNPart2Presenter?.Show();
+        }
     }
 }

@@ -1,5 +1,7 @@
-﻿using DirectorEditor.Views;
+﻿using DirectorEditor.UILogic;
+using DirectorEditor.Views;
 using MVPFramework;
+using MVPFramework.Binder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace DirectorEditor.Presenters
 {
+    [ViewLogicBinding(typeof(AttributeAddressingViewLogic))]
     public class AttributeAddressingPresenter:Presenter<IAttributeAddressingView>
     {
-        public AttributeAddressingPresenter(IAttributeAddressingView view):base(view)
+        public AttributeAddressingPresenter()
         {
-            View = view;
         }
 
         public void Show()

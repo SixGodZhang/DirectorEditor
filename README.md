@@ -1,204 +1,109 @@
-# DirectorEditor
+有关调用实时(JIT)调试而不是此对话框的详细信息，
+请参见此消息的结尾。
 
-基于winform实现的桌面应用开发框架.  
-目前计划包含以下主要内容:  
-1. 网络通信框架  
-2. 组件库  
-3. 容器注册服务  
-
-## 框架的最终设计理念汇总:
-### MVPFramework UI框架设计结构图:
-                              +--------------------------------------------------------------------------+                              
-                              |                          MVPFramework                                    |                              
-                              +--------------------------------------------------------------------------+                              
-                                                                                                                                        
-               +-------------+                            +------------------------------+                                              
-               |= Model Layer|                            |= Presenter Layer             |                                              
-               |             |----------send------------->|+----------------------------+|                                              
-               |             |                            ||                            ||                             |   |            
-               |             |                            ||                            ||                    +---------   ----------+  
-               +-------------+                            ||                            ||                    |= Presenter Stub      |  
-                                                          ||      Presenter List        ||-----register------>|                      |  
-                                                          ||                            ||                    +----------------------+  
-                                                          ||                            ||                               |              
-                                                          ||                            ||                               |              
-                                                          |+----------------------------+|                               |              
-                                                          +------------------------------+                               |              
-                                                                          |                                              |              
-                                                                          |                                              |              
-                                                                          n                                              |              
-                                                                          :                                              |              
-                                                                          n                                              |              
-                                                                          |                                              |              
-                                                                          |                                              |              
-                                                                          V                                              |              
-      +---------------------------------------------------------------------------------+                                |              
-      |= View Layer                                                                     |                                |              
-      |  +-------------------------+                      +----------------------------+|                                |              
-      |  |= View Component Layer   |                      |= View Logic Layer          ||                                |              
-      |  |                         |                      |                            ||                                V              
-      |  |                         |                      |                            ||                    +----------------------+   
-      |  |                         |<--------1:1--------->|                            ||                    |= View Logic Stub     |   
-      |  |                         |                      |                            ||-----register------>|                      |   
-      |  |                         |                      |                            ||                    +----------------------+   
-      |  |                         |                      |                            ||                                               
-      |  +-------------------------+                      +----------------------------+|                                               
-      |---------------------------------------------------------------------------------+                                               
-优势如下:
-1. 实现V层和P层的完全隔离
-2. 完全的数据驱动. 利用Ioc,实现UI的依赖注入
-3. 增加对P层的缓存结构, 提升显示界面显示时的效率
+************** 异常文本 **************
+System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 DirectorEditor.Presenters.ViewLogicNNPart1Presenter.Show() 位置 C:\Users\zhanghui03\source\repos\DirectorEditor\DirectorEditor\Presenters\ViewLogicNNPart1Presenter.cs:行号 20
+   在 DirectorEditor.MainView.viewLogicNNToolStripMenuItem_Click(Object sender, EventArgs e) 位置 C:\Users\zhanghui03\source\repos\DirectorEditor\DirectorEditor\UIComponents\MainView.cs:行号 102
+   在 System.Windows.Forms.ToolStripItem.RaiseEvent(Object key, EventArgs e)
+   在 System.Windows.Forms.ToolStripMenuItem.OnClick(EventArgs e)
+   在 System.Windows.Forms.ToolStripItem.HandleClick(EventArgs e)
+   在 System.Windows.Forms.ToolStripItem.HandleMouseUp(MouseEventArgs e)
+   在 System.Windows.Forms.ToolStripItem.FireEventInteractive(EventArgs e, ToolStripItemEventType met)
+   在 System.Windows.Forms.ToolStripItem.FireEvent(EventArgs e, ToolStripItemEventType met)
+   在 System.Windows.Forms.ToolStrip.OnMouseUp(MouseEventArgs mea)
+   在 System.Windows.Forms.Control.WmMouseUp(Message& m, MouseButtons button, Int32 clicks)
+   在 System.Windows.Forms.Control.WndProc(Message& m)
+   在 System.Windows.Forms.ScrollableControl.WndProc(Message& m)
+   在 System.Windows.Forms.ToolStrip.WndProc(Message& m)
+   在 System.Windows.Forms.MenuStrip.WndProc(Message& m)
+   在 System.Windows.Forms.Control.ControlNativeWindow.OnMessage(Message& m)
+   在 System.Windows.Forms.Control.ControlNativeWindow.WndProc(Message& m)
+   在 System.Windows.Forms.NativeWindow.Callback(IntPtr hWnd, Int32 msg, IntPtr wparam, IntPtr lparam)
 
 
+************** 已加载的程序集 **************
+mscorlib
+    程序集版本:4.0.0.0
+    Win32 版本:4.7.3468.0 built by: NET472REL1LAST_C
+    基本代码:file:///C:/Windows/Microsoft.NET/Framework/v4.0.30319/mscorlib.dll
+----------------------------------------
+DirectorEditor
+    程序集版本:1.0.0.0
+    Win32 版本:1.0.0.0
+    基本代码:file:///C:/Users/zhanghui03/source/repos/DirectorEditor/DirectorEditor/bin/Debug/DirectorEditor.exe
+----------------------------------------
+System.Windows.Forms
+    程序集版本:4.0.0.0
+    Win32 版本:4.7.3324.0 built by: NET472REL1LAST_C
+    基本代码:file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Windows.Forms/v4.0_4.0.0.0__b77a5c561934e089/System.Windows.Forms.dll
+----------------------------------------
+System
+    程序集版本:4.0.0.0
+    Win32 版本:4.7.3451.0 built by: NET472REL1LAST_C
+    基本代码:file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System/v4.0_4.0.0.0__b77a5c561934e089/System.dll
+----------------------------------------
+System.Drawing
+    程序集版本:4.0.0.0
+    Win32 版本:4.7.3190.0 built by: NET472REL1LAST_C
+    基本代码:file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Drawing/v4.0_4.0.0.0__b03f5f7f11d50a3a/System.Drawing.dll
+----------------------------------------
+MVPFramework
+    程序集版本:1.0.0.0
+    Win32 版本:1.0.0.0
+    基本代码:file:///C:/Users/zhanghui03/source/repos/DirectorEditor/DirectorEditor/bin/Debug/MVPFramework.DLL
+----------------------------------------
+System.Core
+    程序集版本:4.0.0.0
+    Win32 版本:4.7.3468.0 built by: NET472REL1LAST_C
+    基本代码:file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Core/v4.0_4.0.0.0__b77a5c561934e089/System.Core.dll
+----------------------------------------
+HZH_Controls
+    程序集版本:1.0.0.0
+    Win32 版本:1.0.0.0
+    基本代码:file:///C:/Users/zhanghui03/source/repos/DirectorEditor/DirectorEditor/bin/Debug/HZH_Controls.DLL
+----------------------------------------
+MaterialSkin
+    程序集版本:1.0.0.0
+    Win32 版本:1.0.0.0
+    基本代码:file:///C:/Users/zhanghui03/source/repos/DirectorEditor/DirectorEditor/bin/Debug/MaterialSkin.DLL
+----------------------------------------
+System.Configuration
+    程序集版本:4.0.0.0
+    Win32 版本:4.7.3324.0 built by: NET472REL1LAST_C
+    基本代码:file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Configuration/v4.0_4.0.0.0__b03f5f7f11d50a3a/System.Configuration.dll
+----------------------------------------
+System.Xml
+    程序集版本:4.0.0.0
+    Win32 版本:4.7.3190.0 built by: NET472REL1LAST_C
+    基本代码:file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Xml/v4.0_4.0.0.0__b77a5c561934e089/System.Xml.dll
+----------------------------------------
+mscorlib.resources
+    程序集版本:4.0.0.0
+    Win32 版本:4.7.3190.0 built by: NET472REL1LAST_C
+    基本代码:file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/mscorlib.resources/v4.0_4.0.0.0_zh-Hans_b77a5c561934e089/mscorlib.resources.dll
+----------------------------------------
+System.Windows.Forms.resources
+    程序集版本:4.0.0.0
+    Win32 版本:4.7.3190.0 built by: NET472REL1LAST_C
+    基本代码:file:///C:/WINDOWS/Microsoft.Net/assembly/GAC_MSIL/System.Windows.Forms.resources/v4.0_4.0.0.0_zh-Hans_b77a5c561934e089/System.Windows.Forms.resources.dll
+----------------------------------------
 
-## 进度(设计思考流程过程在此记录)
-### 2020.9.7.17.30
-实现了Presenter -> ViewLogic 的1:N结构, 具体demo见DataPartPresenter  
-``` csharp
-	[ViewLogicBinding(typeof(DataPart1ViewLogic))]// 绑定DataPart1ViewLogic
-	[ViewLogicBinding(typeof(DataPart2ViewLogic))]// 绑定DataPart2ViewLogic
-	public class DataPartPresenter : PresenterNN
-	{
-		// ...
-	}
-```
-Presenter 需要2步:  
-1. 继承PresenterNN  
-2. 与Presenter绑定的ViewLogic需要用装饰器进行标注  
+************** JIT 调试 **************
+要启用实时(JIT)调试，
+该应用程序或计算机的 .config 文件(machine.config)的 system.windows.forms 节中必须设置
+jitDebugging 值。
+编译应用程序时还必须启用
+调试。
 
-PresenterNN的意思是, 对应N个ViewLogic,  N个Model数据描述结构  
-效果图如下, DataPartPresenter可以处理两个ViewLogic的内容:  
-![](Images/PresenterNN结构实现.png)  
+例如:
 
-### 2020.9.7.9.30
-现在注册到PresenterStub的访问顺序结构有问题:  
-之前是这样的:  
-``` csharp
-PresenterStub.HelperPresenter?.Show();
-```
-Presenter -> 创建ViewLogic实例 ->  创建组件实例  
-问题出现在Presenter的实例是在ViewLogic的实例创建之后, 从ViewLogic实例中的绑定的Presenters中选择的第一个  
-现在的想法是, Presenter可以独立创建. 如果Presenter需要显示某个界面, 则再去处理ViewLogi的创建  
+<configuration>
+    <system.windows.forms jitDebugging="true" />
+</configuration>
 
-这样思考的话, 其实我只是做了ViewLogic -> Presenter的单向绑定, 如果需要做NN关系的话, 那么就需要做一个双向绑定  
+启用 JIT 调试后，任何未经处理的异常
+都将被发送到在此计算机上注册的 JIT 调试程序，
+而不是由此对话框处理。
 
-### 2020.9.7.8
-接入MaterialSkin控件开源库  
-![](Images/接入MatetrialSkin控件开源库.png)
-
-### 2020.9.4 晚上
-尝试接入第三方插件库【HZH_Controls】, 完美接入.  
-![](Images/接入开源控件HZH.png)
-
-### 2020.9.4 早晨  
-在仔细思考了MVC、MVP等框架的设计理念之后, 对MVPFramework进行了迭代升级:  
-                              +--------------------------------------------------------------------------+                              
-                              |                          MVPFramework                                    |                              
-                              +--------------------------------------------------------------------------+                              
-                                                                                                                                        
-               +-------------+                            +------------------------------+                                              
-               |= Model Layer|                            |= Presenter Layer             |                                              
-               |             |----------send------------->|+----------------------------+|                                              
-               |             |                            ||                            ||                             |   |            
-               |             |                            ||                            ||                    +---------   ----------+  
-               +-------------+                            ||                            ||                    |= Presenter Stub      |  
-                                                          ||      Presenter List        ||-----register------>|                      |  
-                                                          ||                            ||                    +----------------------+  
-                                                          ||                            ||                               |              
-                                                          ||                            ||                               |              
-                                                          |+----------------------------+|                               |              
-                                                          +------------------------------+                               |              
-                                                                          |                                              |              
-                                                                          |                                              |              
-                                                                          n                                              |              
-                                                                          :                                              |              
-                                                                          n                                              |              
-                                                                          |                                              |              
-                                                                          |                                              |              
-                                                                          V                                              |              
-      +---------------------------------------------------------------------------------+                                |              
-      |= View Layer                                                                     |                                |              
-      |  +-------------------------+                      +----------------------------+|                                |              
-      |  |= View Component Layer   |                      |= View Logic Layer          ||                                |              
-      |  |                         |                      |                            ||                                V              
-      |  |                         |                      |                            ||                    +----------------------+   
-      |  |                         |<--------1:1--------->|                            ||                    |= View Logic Stub     |   
-      |  |                         |                      |                            ||-----register------>|                      |   
-      |  |                         |                      |                            ||                    +----------------------+   
-      |  |                         |                      |                            ||                                               
-      |  +-------------------------+                      +----------------------------+|                                               
-      |---------------------------------------------------------------------------------+                                               
-
-其实, 传统的MVC等模式等模式并没有完全实现V层和C层的完全分离, 有的在V层甚至可以直接修改Model层的数据, 基于此, 主要做了以下改进:  
-1. **将V层进一步划分为View Component Layer 和 View Logic Layer**  
-  这样做的好处主要有:  
-  a. 在View Component Layer上， 不进行任何业务逻辑的处理， UI设计可以完全移交给美术，并且业务逻辑不会受到UI迭代的影响  
-  b. 可以自由嵌入第三方的组件库, 并且支持随时升级。 很多时候，我们都会去选择魔改第三方库以支持自己的业务，这种设计对第三方库无任何侵入式修改，便于维护  
-2. **完全的数据驱动View层**  
-  a. 为了严格做到各层之间的隔离, 防止因开发者的随意访问各层，而造成后期项目层之间的混乱  
-  b. 作为开发者一方， 我们只关注数据和业务即可， 做到有变动即刷新  
-3. **P层 和 V层 n:n 的对应关系**  
-  传统的MVC、或则MVP框架, V层和C层、P层都是1:1关系, 主要会出现数据复制的情况:  
-  a. 对于那些不会改动的数据, 每次重新显示界面的时候都会在C层或P层重新处理一遍  
-  b. 如果多个界面用到同一份数据, 传统做法是将数据在每个C层或P层都赋值一份，然后重新处理一遍,效率比较低  
-  c. 如果一个界面有多个数据源, 传统做法是将涉及到的所有Model都会放到C层去处理, 然后传递到V层.问题同上  
-  因此,做了一下改进:  
-  在P层做一次缓存(已做), 缓存的量级达到某一程度时, 触发清理过程(还没做). 清理过程就是根据GC那套思想, 不常用的先清理, 数据占用内存较大的先清理  
-
-此外, 完善了View Logic Layer 和 Presenter Layer 绑定时的策略。 目前支持以下三种策略, 预计未来增加一种配置文件策略:  
-- 装饰器策略  
-- 标准命名策略  
-- 组合策略  
-
-9.2 的版本提到的DispatchCenter 概念正式替换为 Presenter Stub, 所有的Presenter 都可以在此访问.  
-
-DirectorEditor 项目为演示工程  
-目录结构如下:  
-Models: 存储各种数据结构  
-Presenters: 存储Presenter， 也就是业务逻辑处理层  
-UIComponents: UI组件层, 不包含任何业务逻辑  
-UILogic: UI业务逻辑层  
-Views: ViewLogic 需要暴露给Presenter的接口集合  
-PresenterStub：PresenterStub的全局访问中心  
-ViewLogicStub: ViewLogicStub的全局访问中心(这个在未来不会对开发者开放直接访问权限)  
-
-UI界面编写流程:  
-1. 在UIComponents目录下创建组件  
-2. 在Views目录下创建ViewLogic层需要暴露给Presenter层的接口  
-3. 在UILogic目录下,编写界面的业务逻辑以及实现需要暴露个Presenter层的接口  
-4. 在Presenters目录下,进行数据处理项目的业务逻辑, 如果有需要,在Models文件夹下定义数据结构  
-5. 将ViewLogic和PresenteStub分别注册到全局访问中心  
-6. 在需要的地方进行数据驱动即可  
-
-### 2020.9.2  
-MVPFramework 主体框架初步搭建完成  
- - M : Model层, 主要定义数据结构.  
- - P : Presenter层, 主要定义逻辑.  
- - V : View层, 主要控制视图的显示  
-
-相比于传统的winform开发流程(View、逻辑、数据结构全部混在一起), MVPFramework将数据、逻辑、View进行了解耦合,利用C#的反射原理, 在View被初始化的时候,将Presenter与之绑定起来.  
-Model层是一个可选的层, 因为有一些不需要与服务端、表格、数据库等数据源交互的界面，可以不用Model层。  
-
-View和Presenter绑定原理  
-允许自定义策略去实现绑定结构。 目前主要支持三种策略:  
-- 装饰器策略  
-- 标准命名策略  
-- 组合策略  
-所谓装饰器策略, 就是在View初始化的时候, 找到CustomAttribute， 如果是PresenterBinding类型, 则将此View和Presenter绑定起来  
-标准命名策略, 也是在View初始化的时候, 根据固定命名规则在整个Assembly中找到相应的Presenter, 如果找到， 则将它们绑定起来  
-组合策略, 就是上面的策略组合,找到一个之后， 立马结束。  
-
-需要注意的是:   
-Model ---> Presenter <-----> View  
-View层需要重新填充内容有以下几种场景:  
-- View初始化  
-- Presenter接收到其绑定的数据  
-
-调度中心 DispatchCenter  
-传统的MVC等模式, 其Control层还是依赖于View层, 如果View层被回收了, 那么相应的Control层也没有了。  
-原则上来说， 没什么问题， 但是Control层还有一个可以做但是不是必须做的内容 - 缓存。  
-基于这一点思考了下,   
-之前我们是这样去处理数据刷新的:  
-从View层获取Control层 ---> 然后调用Control中的接口去处理数据 ---> 如果有改动，则通知View层去刷新  
-其实在这个流程上, 第一步【从View层获取Control层】可以省略, 前提是需要我们设计一个独立的Control层，实现与View层的完全解耦合。  
 

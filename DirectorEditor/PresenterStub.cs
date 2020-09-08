@@ -15,7 +15,11 @@ namespace DirectorEditor
         public static MainPresenter MainPresenter { set => _mainPresenter = value;
             get
             {
-                return ViewLogicStub.MainViewLogic.Presenters.ElementAt(0) as MainPresenter;
+                if (_mainPresenter == null)
+                {
+                    _mainPresenter = new MainPresenter();
+                }
+                return _mainPresenter;
             }
         }
 
@@ -34,7 +38,11 @@ namespace DirectorEditor
         public static AttributeAddressingPresenter AttributeAddressingPresenter { set => _attributeAddressingPresenter = value;
             get
             {
-                return ViewLogicStub.AttributeAddressingViewLogic.Presenters.ElementAt(0) as AttributeAddressingPresenter;
+                if (_attributeAddressingPresenter == null)
+                {
+                    _attributeAddressingPresenter = new AttributeAddressingPresenter();
+                }
+                return _attributeAddressingPresenter;
             }
         }
 
@@ -56,7 +64,11 @@ namespace DirectorEditor
             set => _skinDemoPresenter = value;
             get
             {
-                return ViewLogicStub.MaterialSkinDemoViewLogic?.Presenters?.ElementAt(0) as SkinDemoPresenter;
+                if(_skinDemoPresenter == null)
+                {
+                    _skinDemoPresenter = new SkinDemoPresenter();
+                }
+                return _skinDemoPresenter;
             }
         }
 
@@ -72,7 +84,36 @@ namespace DirectorEditor
                     _dataPartPresenter = new DataPartPresenter();
                 }
                 return _dataPartPresenter;
-                //return ViewLogicStub.MaterialSkinDemoViewLogic?.Presenters?.ElementAt(0) as DataPartPresenter;
+            }
+        }
+
+        // ViewLogicNN 测试一
+        private static ViewLogicNNPart1Presenter _viewLogicNNPart1Presenter;
+        public static ViewLogicNNPart1Presenter ViewLogicNNPart1Presenter
+        {
+            set => _viewLogicNNPart1Presenter = value;
+            get
+            {
+                if(_viewLogicNNPart1Presenter == null)
+                {
+                    _viewLogicNNPart1Presenter = new ViewLogicNNPart1Presenter();
+                }
+                return _viewLogicNNPart1Presenter;
+            }
+        }
+
+        // ViewLogicNN 测试二
+        private static ViewLogicNNPart2Presenter _viewLogicNNPart2Presenter;
+        public static ViewLogicNNPart2Presenter ViewLogicNNPart2Presenter
+        {
+            set => _viewLogicNNPart2Presenter = value;
+            get
+            {
+                if (_viewLogicNNPart2Presenter == null)
+                {
+                    _viewLogicNNPart2Presenter = new ViewLogicNNPart2Presenter();
+                }
+                return _viewLogicNNPart2Presenter;
             }
         }
 

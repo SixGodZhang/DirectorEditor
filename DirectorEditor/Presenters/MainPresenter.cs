@@ -1,5 +1,7 @@
-﻿using DirectorEditor.Views;
+﻿using DirectorEditor.UILogic;
+using DirectorEditor.Views;
 using MVPFramework;
+using MVPFramework.Binder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace DirectorEditor.Presenters
 {
-    public class MainPresenter: Presenter<IMainView>
+    [ViewLogicBinding(typeof(MainViewLogic))] // ViewLogicBinding 指定Presenter绑定的Logic
+    public class MainPresenter: Presenter<IMainView>// IMainView 标记出MainPresenter可以访问MainViewLogic中的接口
     {
-        public MainPresenter(IMainView view):base(view)
+        public MainPresenter()
         {
-            //view.ShowMainForm();
-            View = view;
+
         }
     }
 }

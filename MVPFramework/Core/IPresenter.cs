@@ -12,9 +12,9 @@ namespace MVPFramework
     public enum PresenterType
     {
         Default = 1,// 啥都没有
-        View = 2,// 与View绑定了
-        ModelView = 3, // ModelView 1:1 对应
-        ModelViewNN // ModelView n:n对应
+        View = 2,// Presenter:View = 1:1  && 没有Model
+        PresenterView11 = 3, // Presenter: View =  1:1
+        PresenterViewNN // Presenter : View = n:n
     }
 
     public enum PresenterStatus
@@ -34,6 +34,7 @@ namespace MVPFramework
         /// Presenter 类型
         /// </summary>
         PresenterType PresenterType { get; }
+        //PresenterType GetPresenterType();
         /// <summary>
         /// Presenter 状态
         /// </summary>
@@ -139,13 +140,64 @@ namespace MVPFramework
     public abstract class Presenter<TView> : AbstractPresenter, IPresenter where TView : class, IViewLogic
     {
         private TView view; // View 在Presenter创建的时候就需要绑定
-        private PresenterType presenterType = PresenterType.Default;
+        private Type viewLogicType; // Presenter绑定的ViewLogic类型
+        private static readonly PresenterType presenterType = PresenterType.View;
         private PresenterStatus presenterStatus = PresenterStatus.Default;
 
-        protected Presenter(TView view)
+        protected Presenter()
         {
-            this.view = view;
-            this.presenterType = PresenterType.View;
+            //GetOrCreateViewLogic(this.GetType());
+            // 设置Presenter<TView> 绑定的所有ViewLogic类型
+            var allViewLogicType  = this.GetType().GetCustomAttributes(typeof(ViewLogicBindingAttribute), true)
+                .OfType<ViewLogicBindingAttribute>()
+                .Select(vlba => vlba.ViewLogicType)
+                .ToArray();
+            if (allViewLogicType.Count() != 1)
+            {
+                throw new ArgumentException(string.Format("{0} 没有绑定ViewLogic 或 绑定的ViewLogic数目超过此种PresenterType限制的最高数目:1",this.GetType().FullName));
+            }
+
+            viewLogicType = allViewLogicType[0];
+        }
+
+        /// <summary>
+        /// 获取Presenter需要处理的ViewLogic， 如果不存在实例, 则新建一个
+        /// </summary>
+        /// <param name="viewLogicType"></param>
+        /// <returns></returns>
+        public IViewLogic GetOrCreateViewLogic(Type viewLogicType)
+        {
+            // 先判断此类型的实例是否存在
+            IViewLogic returnViewLogicInstance = this.view;
+
+            if (returnViewLogicInstance == null)// 如果不存在, 则新建
+            {
+                var newViewLogicInstance = viewLogicType.Assembly.CreateInstance(viewLogicType.FullName);
+
+                EventInfo destoryViewLogic = newViewLogicInstance.GetType().GetEvent("DestoryViewLogicEvent");
+                if (destoryViewLogic != null)
+                {
+                    destoryViewLogic.AddEventHandler(newViewLogicInstance, new EventHandler(DestroySingleViewLogic));
+                }
+                returnViewLogicInstance = newViewLogicInstance as IViewLogic;
+                this.view = returnViewLogicInstance as TView;
+            }
+
+            return returnViewLogicInstance;
+        }
+
+        /// <summary>
+        /// 从PresenterView中销毁指定的ViewLogic instance
+        /// 只销毁实例, 不销毁类型
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DestroySingleViewLogic(object sender, EventArgs e)
+        {
+            if(this.view == sender)
+            {
+                this.view = null;
+            }
         }
 
         /// <summary>
@@ -153,11 +205,17 @@ namespace MVPFramework
         /// </summary>
         public TView View
         {
-            get { return view; }
+            get {
+                if (this.view == null)
+                {
+                    GetOrCreateViewLogic(this.viewLogicType);
+                }
+                return this.view;
+            }
             set { view = value; }
         }
 
-        public PresenterType PresenterType { get => this.presenterType; }
+        public PresenterType PresenterType { get => presenterType; }
         public PresenterStatus PresenterStatus { get => this.presenterStatus; set => this.presenterStatus = value; }
 
         public void Destroy(IViewLogic view)
@@ -179,6 +237,7 @@ namespace MVPFramework
                 this.view = null;
             }
         }
+
     }
 
     /// <summary>
@@ -186,13 +245,13 @@ namespace MVPFramework
     /// </summary>
     /// <typeparam name="TView"></typeparam>
     /// <typeparam name="TModel"></typeparam>
-    public interface IPresenter<TView, TModel> : IPresenter
-        where TView : class, IViewLogic
-        where TModel : class, IModel
-    {
-        TView View { get; }// Presenter 中只能访问View
-        TModel Model { get; set; }// Presenter 中可以访问和修改Model
-    }
+    //public interface IPresenter<TView, TModel> : IPresenter
+    //    where TView : class, IViewLogic
+    //    where TModel : class, IModel
+    //{
+    //    TView View { get; }// Presenter 中只能访问View
+    //    TModel Model { get; set; }// Presenter 中可以访问和修改Model
+    //}
 
 
     /// <summary>
@@ -207,13 +266,13 @@ namespace MVPFramework
         private IList<IViewLogic> viewLogicList;
         private IDictionary<Type,IModel> modelDict;
         private IList<Type> viewLogicTypeList;// 保存PresenterNN绑定的ViewLogicType
-        private PresenterType presenterType;
+        private static readonly PresenterType presenterType = PresenterType.PresenterViewNN;
         private PresenterStatus presenterStatus = PresenterStatus.Default;
 
         /// <summary>
         /// P层类型
         /// </summary>
-        public PresenterType PresenterType => this.presenterType;
+        public PresenterType PresenterType => presenterType;
         /// <summary>
         /// P层状态
         /// </summary>
@@ -352,7 +411,6 @@ namespace MVPFramework
                 }
                 returnViewLogicInstance = newViewLogicInstance as IViewLogic;
                 this.AddViewLogic(returnViewLogicInstance);
-
             }
 
             return returnViewLogicInstance;
@@ -435,7 +493,6 @@ namespace MVPFramework
         /// </summary>
         protected PresenterNN()
         {
-            this.presenterType = PresenterType.ModelViewNN;
             this.presenterStatus = PresenterStatus.Initing;
 
             // 初始化
@@ -453,8 +510,6 @@ namespace MVPFramework
 
     }
 
-
-
     /// <summary>
     /// 抽象类, 与View关联， 有View、Model
     /// 这里View和Model只做到了一一对应
@@ -465,9 +520,9 @@ namespace MVPFramework
         where TModel :class , IModel // Model层
     {
         private TViewLogic viewLogic; 
-        private PresenterType presenterType;
+        private static readonly PresenterType presenterType = PresenterType.PresenterView11;
         private PresenterStatus presenterStatus = PresenterStatus.Default;
-        public PresenterType PresenterType { get => this.presenterType; }
+        public PresenterType PresenterType { get => presenterType; }
         public PresenterStatus PresenterStatus {
             get => this.presenterStatus; 
             set{
@@ -483,7 +538,6 @@ namespace MVPFramework
         protected Presenter(TViewLogic viewLogic)
         {
             this.viewLogic = viewLogic;
-            this.presenterType = PresenterType.ModelView;
             this.presenterStatus = PresenterStatus.Initing;
         }
 
@@ -541,6 +595,7 @@ namespace MVPFramework
                 this.viewLogic = null;
             }
         }
+
     }
 
 
