@@ -44,21 +44,24 @@
       |  |                         |                      |                            ||                                               
       |  +-------------------------+                      +----------------------------+|                                               
       |---------------------------------------------------------------------------------+                                               
-优势如下:
+
+**优势如下:**
 1. 实现V层和P层的完全隔离  
 2. 完全的数据驱动. 利用Ioc,实现UI的依赖注入  
 3. 增加对P层的缓存结构, 提升显示界面显示时的效率  
-  
-设计的几个约定:  
+
+
+**设计的几个约定:  **
 P层上的每个P都是单例  
 View Component Layer 和 View Logic Layer 是一一对应关系, 并且可以同时存在多个实例  
 Presenter Stub是整个结构的访问入口, 不要尝试通过其它手段(比如反射等)去强行直接访问MVP结构中的其它层次,这样做的目的是完全的数据驱动  
+
 
 View Logic layer 与 Presenter layer 有以下几种对应关系:  
 - Presenter : ViewLogic = 1:1  
 - Presenter : ViewLogic = N:1  
 - Presenter : ViewLogic = 1:N  
-详细说明：  
+**详细说明：**  
 Presenter : ViewLogic = 1:1 -> 一个Presenter实例对应一个ViewLogic实例  
 Presenter : ViewLogic = N:1 -> N种不同类型的实例对应同一ViewLogic类型的不同实例  
 Presenter : ViewLogic = 1:N -> 一个Presenter实例对应多个类型的ViewLogic实例  
@@ -68,7 +71,8 @@ P层在代码中是以单例的形式存在, V层在代码中是以多实例的�
 一个P层的单例对应一个V层的实例,也就是是说不同类型P层的单例可以对应V层同一类型的多实例  
 
 ### MVPFramework 界面开发具体流程【以HelperView举例, 详细可参考代码】  
-1. 建立全局可访问的P层, 也是MVP结构的入口。  
+
+1. **建立全局可访问的P层, 也是MVP结构的入口。**  
 ``` csharp
 // 帮助界面的P层
 private static HelperPresenter _helperPresenter = null;
@@ -85,7 +89,8 @@ public static HelperPresenter HelperPresenter { set => _helperPresenter = value;
 }
 ```
 如上， 我们可以使用单例来缓存P层, 当然, 如果不缓存P层，可以不这样做。但是，建议这样做。  
-2. P层和View Logic绑定。P层主要处理2件事, 一是与ViewLogic绑定, 而是处理数据, 将数据转换成界面显示需要的格式。  
+
+2. **P层和View Logic绑定。P层主要处理2件事, 一是与ViewLogic绑定, 而是处理数据, 将数据转换成界面显示需要的格式。**  
 ``` csharp
 [ViewLogicBinding(typeof(HelperViewLogic))]// 指定Presenter绑定的ViewLogic类型
 public class HelperPresenter:Presenter<IHelperView,HelperModel>
@@ -94,7 +99,8 @@ public class HelperPresenter:Presenter<IHelperView,HelperModel>
 ｝
 ```
 如上, 通过装饰器我们可以确定P层和ViewLogic的绑定关系, IHelperView 定义了P层可以访问ViewLogic中的接口,HelperModel 定义了P层可以缓存M层类型的数据  
-3. 创建ViewLogic类。这一层级专注于处理界面的显示逻辑。比如组件的显/隐、组件的数据填充等  
+
+3. **创建ViewLogic类。这一层级专注于处理界面的显示逻辑。比如组件的显/隐、组件的数据填充等**  
 ``` csharp
 // ViewLogic<T1,T2>
 // T1 : 指的是绑定的 UI组件
@@ -107,7 +113,8 @@ public class HelperViewLogic : ViewLogic<HelperView, IHelperView>, IHelperView
 		InitViewLogic += () => { this.LayoutView(new HelperModel() { EditorDesc = "帮助文档描述初始数据" }); };
 	}
 ```
-4. 创建组件。也可以直接引用第三方组件, 因为不需要修改, 这需要在这一层级用第三方的组件拼接好界面即可。  
+
+4. **创建组件。也可以直接引用第三方组件, 因为不需要修改, 这需要在这一层级用第三方的组件拼接好界面即可。**  
 ``` csharp
 /// <summary>
 /// 帮助界面
