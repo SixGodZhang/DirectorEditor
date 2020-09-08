@@ -1,28 +1,19 @@
 ﻿using DirectorEditor.Models;
+using DirectorEditor.UILogic;
 using DirectorEditor.Views;
 using MVPFramework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DirectorEditor.Presenters
 {
+    [ViewLogicBinding(typeof(HZHDialogViewLogic))]
     public class HZHDialogPresenter:Presenter<IHZHDialogView, HZHDialogModel>
     {
-        public HZHDialogPresenter(IHZHDialogView view) : base(view)
+        public HZHDialogPresenter()
         {
-            ViewLogic = view;
         }
 
         public void SetTip(HZHDialogModel modelInfo)
         {
-            if (PresenterStatus == PresenterStatus.Initing)
-            {
-                cacheMethodCallAction += () => { SetTip(modelInfo); };
-                return;
-            }
 
             if (modelInfo != null)
             {

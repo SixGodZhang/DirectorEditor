@@ -1,19 +1,10 @@
-﻿using MVPFramework.Binder;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace MVPFramework.Core
+namespace MVPFramework
 {
-    [Obsolete("暂时还没考虑好怎么使用")]
-    public enum ViewType
-    {
-        None,
-        Single,// 单例, 可以直接通过Instance字段进行访问
-        Multi//可以允许创建多个
-    }
-
     /// <summary>
     /// 实现IViewLogic中的部分逻辑
     /// </summary>
@@ -23,27 +14,16 @@ namespace MVPFramework.Core
         where T1:Control
         where T2:class, IViewLogic
     {
-        [Obsolete("还没考虑好怎么用")]
-        private ViewType _viewType = ViewType.None;
-        [Obsolete("还没考虑好怎么用")]
-        public ViewType ViewType { get => _viewType; set => _viewType = value; }
-
         /// <summary>
         /// 控件实例
         /// </summary>
         public T1 target;
-        /// <summary>
-        /// Presenter绑定器--> 处理ViewLogic和Presenter具体的绑定过程
-        /// </summary>
-        private readonly PresenterBinder presenterBinder;
 
-        private IEnumerable<IPresenter> presenters { get; set; }
+        private IEnumerable<IPresenter> presenters;
         /// <summary>
         /// ViewLogic 关联的所有Presenters
         /// </summary>
         public IEnumerable<IPresenter> Presenters { get => presenters; set => presenters = value; }
-
-        public bool ThrowExceptionIfNoPresenterBound { get; set; }
         /// <summary>
         /// View初始化回调
         /// </summary>
@@ -58,11 +38,11 @@ namespace MVPFramework.Core
         /// </summary>
         /// <param name="type">type暂时没用了， 还是保留， 考虑到后面的设计会用到</param>
         /// <param name="strategy">将ViewLogic和Presenter绑定起来的寻址策略</param>
-        protected ViewLogic( PresenterAddressingType addressingType = PresenterAddressingType.Composite)
+        protected ViewLogic()
         {
             //this._viewType = type;
-            presenterBinder = new PresenterBinder(addressingType: addressingType);
-            target = this.GetType().Assembly.CreateInstance(typeof(T1).FullName) as T1;
+            //presenterBinder = new PresenterBinder(addressingType: addressingType);// 创建绑定器
+            target = this.GetType().Assembly.CreateInstance(typeof(T1).FullName) as T1;// 创建组件
             // 特殊事件注册
             target.HandleDestroyed += ViewLogic_ControlDestroyed;
             EventInfo loadEvent = target.GetType().GetEvent("Load");
@@ -71,8 +51,9 @@ namespace MVPFramework.Core
                 loadEvent.AddEventHandler(target, new EventHandler(ViewLogic_ControlLoad));
             }
             //
-            presenterBinder.PresenterCreated += ViewLogic_PresenterCreated;
-            presenterBinder.PerformBinding(this as T2);
+            //presenterBinder.PresenterCreated += ViewLogic_PresenterCreated;
+            // 绑定
+            //presenterBinder.PerformBinding(this as T2);
         }
 
 
@@ -145,25 +126,20 @@ namespace MVPFramework.Core
             // 在Presenter上销毁View
             foreach (var presenter in Presenters)
             {
-                presenter.DestroyView(new List<IViewLogic>() { this as T2 });
+                presenter.ClearViewPart(new List<IViewLogic>() { this as T2 });
             }
 
-            //销毁引用
+            //销毁ViewLogicEvent引用
             if (this.DestoryViewLogicEvent!=null)
             {
                 this.DestoryViewLogicEvent(this,null);
             }
 
-        }
+            // 如果是Presenter和View11关系,也就是强绑定
+            //if (presenters.Count() == 1 && presenters.ElementAt(0).PresenterType == PresenterType.PresenterView11)
+            //{
 
-        private void ViewLogic_PresenterCreated(object sender, PresenterCreatedEventArgs e)
-        {
-            // e.Presenter 就是与此View绑定的Presenter
-            Presenters = e.Presenters;
-            foreach (var p in Presenters)
-            {
-                p.PresenterStatus = PresenterStatus.Inited;
-            }
+            //}
         }
 
     }

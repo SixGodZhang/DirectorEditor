@@ -48,36 +48,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attribute\CustomLogic.cs" />
-    <Compile Include="Binder\ViewLogicBindingAttribute.cs" />
-    <Compile Include="Core\EventArgs\PresenterDestoryEventArgs.cs" />
-    <Compile Include="Core\EventArgs\PresenterSingleViewBindingEventArgs.cs" />
-    <Compile Include="Core\EventArgs\PresenterCancelAllViewEventArgs.cs" />
-    <Compile Include="Core\EventArgs\PresenterCancelMultiViewEventArgs.cs" />
-    <Compile Include="Core\EventArgs\PresenterCancelSingleViewEventArgs.cs" />
-    <Compile Include="Core\EventArgs\PresenterInitEventArgs.cs" />
-    <Compile Include="Core\EventArgs\PresenterCreateEventArgs.cs" />
-    <Compile Include="Core\PresenterManager.cs" />
+    <Compile Include="Attribute\CustomLogicAttribute.cs" />
+    <Compile Include="Attribute\ViewLogicBindingAttribute.cs" />
     <Compile Include="Core\ViewLogic.cs" />
-    <Compile Include="Extensions\AssemblyExtensions.cs" />
-    <Compile Include="Binder\AttributeBasePresenterDiscoveryStrategy.cs" />
-    <Compile Include="Binder\CompositePresenterDiscoveryStrategy.cs" />
-    <Compile Include="Binder\DefaultPresenterFactory.cs" />
-    <Compile Include="Binder\IPresenterDiscoveryStrategy.cs" />
-    <Compile Include="Binder\IPresenterFactory.cs" />
-    <Compile Include="Binder\PresenterBinder.cs" />
-    <Compile Include="Binder\PresenterBinding.cs" />
-    <Compile Include="Binder\PresenterBindingAttribute.cs" />
-    <Compile Include="Binder\PresenterCreatedEventArgs.cs" />
-    <Compile Include="Binder\PresenterDiscoveryResult.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
-    <Compile Include="Binder\ConventionBasedPresenterDiscoveryStrategy.cs" />
     <Compile Include="Core\IModel.cs" />
     <Compile Include="Core\IPresenter.cs" />
     <Compile Include="Core\IViewLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Resources\StringResources.cs" />
   </ItemGroup>
   <ItemGroup>

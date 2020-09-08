@@ -1,8 +1,7 @@
 ﻿using DirectorEditor.Presenters;
 using DirectorEditor.UIComponents;
 using DirectorEditor.Views;
-using MVPFramework.Binder;
-using MVPFramework.Core;
+using MVPFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +13,6 @@ namespace DirectorEditor.UILogic
     /// <summary>
     /// 演示ViewLogic绑定多个Presenter
     /// </summary>
-    [PresenterBinding(typeof(ViewLogicNNPart1Presenter))]
-    [PresenterBinding(typeof(ViewLogicNNPart2Presenter))]
     public class ViewLogicNNViewLogic : ViewLogic<ViewLogicNNView, IViewLogicNNView>, IViewLogicNNView
     {
 

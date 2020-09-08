@@ -1,22 +1,19 @@
 ﻿using DirectorEditor.Models;
-using DirectorEditor.UIComponents;
-using MVPFramework;
-using System;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
+using DirectorEditor.UILogic;
 using DirectorEditor.Views;
+using MVPFramework;
 
 namespace DirectorEditor.Presenters
 {
+    [ViewLogicBinding(typeof(HelperViewLogic))]// 指定Presenter绑定的ViewLogic类型
     public class HelperPresenter:Presenter<IHelperView,HelperModel>
     {
-        public HelperPresenter(IHelperView view):base(view)
+        public HelperPresenter()
         {
             // 这里直接处理View中的Model的初始化
             //var model = new HelperModel();
             //model.EditorDesc = "这里显示的是帮助信息";
             //SetHelperInfo(model);
-            ViewLogic = view;
         }
 
         /// <summary>
@@ -25,12 +22,6 @@ namespace DirectorEditor.Presenters
         /// <param name="modelInfo"></param>
         public void SetHelperInfo(HelperModel modelInfo)
         {
-            if (PresenterStatus == PresenterStatus.Initing)
-            {
-                //string methodName = new StackTrace().GetFrame(0).GetMethod().Name;
-                cacheMethodCallAction += () => { SetHelperInfo(modelInfo); };
-                return;
-            }
 
             if (modelInfo!= null)
             {
@@ -54,8 +45,6 @@ namespace DirectorEditor.Presenters
         {
             ViewLogic.Activate();
         }
-
-
 
     }
 }

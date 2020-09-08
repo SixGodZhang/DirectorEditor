@@ -1,12 +1,7 @@
-﻿using MVPFramework.Binder;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MVPFramework.Resources
+namespace MVPFramework
 {
     /// <summary>
     /// 框架中使用的一些字符串
@@ -20,18 +15,6 @@ namespace MVPFramework.Resources
         /// <returns></returns>
         public static string NotFoundPresenterByAttribute(Type viewLogicType) => Format(
             "could not find a [PresenterBinding] attribute on viewlogic instance {0}", viewLogicType.FullName);
-
-        /// <summary>
-        /// 通过特性找到了Presenter
-        /// </summary>
-        /// <param name="viewLogicType"></param>
-        /// <param name="attribute"></param>
-        /// <returns></returns>
-        public static string FoundPresenterByAtrribute(Type viewLogicType, PresenterBindingAttribute attribute) => Format(
-           "found a [PresenterBinding] attribute on viewlogic instance {0} (presenter type: {1}, viewlogic type: {2})",
-           viewLogicType.FullName,
-           attribute.PresenterType.FullName,
-           attribute.ViewLogicType.FullName);
 
         /// <summary>
         /// 根据类型名不能找到Presenter

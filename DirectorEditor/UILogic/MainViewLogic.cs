@@ -1,5 +1,5 @@
 ﻿using DirectorEditor.Views;
-using MVPFramework.Core;
+using MVPFramework;
 using System.Windows.Forms;
 
 namespace DirectorEditor.UILogic

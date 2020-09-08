@@ -28,7 +28,11 @@ namespace DirectorEditor
         public static HelperPresenter HelperPresenter { set => _helperPresenter = value;
             get
             {
-                return ViewLogicStub.HelperViewLogic.Presenters.ElementAt(0) as HelperPresenter;
+                if (_helperPresenter == null)
+                {
+                    _helperPresenter = new HelperPresenter();
+                }
+                return _helperPresenter;
             }
 
         }
@@ -53,7 +57,11 @@ namespace DirectorEditor
             set => _hZHDialogPresenter = value;
             get
             {
-                return ViewLogicStub.HZHDialogViewLogic?.Presenters?.ElementAt(0) as HZHDialogPresenter;
+                if (_hZHDialogPresenter == null)
+                {
+                    _hZHDialogPresenter = new HZHDialogPresenter();
+                }
+                return _hZHDialogPresenter;
             }
         }
 

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MVPFramework
+﻿namespace MVPFramework
 {
     /// <summary>
     /// 纯View(需要在Presenter中访问的接口就在这里进行定义)
@@ -12,10 +6,6 @@ namespace MVPFramework
     /// </summary>
     public interface IViewLogic
     {
-        /// <summary>
-        /// true: 如果此View没有绑定的Presenter， 则会在获取绑定的过程中抛出异常
-        /// </summary>
-        bool ThrowExceptionIfNoPresenterBound { get; set; }
 
         /// <summary>
         /// 显示窗口

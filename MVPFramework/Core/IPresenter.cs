@@ -1,6 +1,4 @@
-﻿using MVPFramework.Binder;
-using MVPFramework.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -42,7 +40,7 @@ namespace MVPFramework
         /// <summary>
         /// 销毁指定ViewLogic
         /// </summary>
-        void DestroyView(IEnumerable<IViewLogic> view);
+        void ClearViewPart(IEnumerable<IViewLogic> view);
     }
 
     /// <summary>
@@ -54,90 +52,12 @@ namespace MVPFramework
         TView ViewLogic { get; }
     }
 
-    /// <summary>
-    /// Presenter 抽象类 
-    /// 定义一些通用的字段
-    /// </summary>
-    public abstract class AbstractPresenter
-    {
-        /// <summary>
-        /// 创建事件。在创建的时候被调用【仅被调用一次】
-        /// 【预定义触发时间 - Presenter 创建的最后一步】
-        /// </summary>
-        public event EventHandler<PresenterCreateEventArgs> CreateEvent;
-
-        /// <summary>
-        /// 初始化事件。每次对Presenter进行绑定时,都可以重新调用
-        /// </summary>
-        public event EventHandler<PresenterInitEventArgs> InitEvent;
-
-        /// <summary>
-        /// 取消事件。在取消指定视图绑定时调用
-        /// </summary>
-        public event EventHandler<PresenterCancelSingleViewLogicEventArgs> CancelSingleViewLogicBindingEvent;
-
-        /// <summary>
-        /// 取消事件。在取消多个指定视图绑定时调用
-        /// </summary>
-        public event EventHandler<PresenterCancelMultiViewLogicEventArgs> CancelMultiViewLogicBindingEvent;
-
-        /// <summary>
-        /// 取消事件。在取消所有视图绑定时调用
-        /// </summary>
-        public event EventHandler<PresenterCancelAllViewLogicEventArgs> CancelAllViewLogicBindingEvent;
-
-        /// <summary>
-        /// 绑定事件。在绑定某个视图时被调用
-        /// </summary>
-        public event EventHandler<PresenterSingleViewLogicBindingEventArgs> SingleViewLogicBindingEvent;
-
-        /// <summary>
-        /// 销毁事件。 在Presenter进行销毁时调用【仅被调用一次】
-        /// </summary>
-        public event EventHandler<PresenterDestoryEventArgs> DestoryEvent;
-
-        /// <summary>
-        /// 创建事件回调函数。
-        /// </summary>
-        /// <param name="arg"></param>
-        public virtual void OnCreate(PresenterCreateEventArgs arg) { }
-        /// <summary>
-        /// 初始化事件回调函数。
-        /// </summary>
-        /// <param name="arg"></param>
-        public virtual void OnInit(PresenterInitEventArgs arg) { }
-        /// <summary>
-        /// 取消单个视图事件绑定回调函数。
-        /// </summary>
-        /// <param name="arg"></param>
-        public virtual void OnCancelSingleViewLogicBinding(PresenterCancelSingleViewLogicEventArgs arg) { }
-        /// <summary>
-        /// 取消多个视图事件绑定回调函数。
-        /// </summary>
-        /// <param name="arg"></param>
-        public virtual void OnCancelMultiViewLogicBinding(PresenterCancelMultiViewLogicEventArgs arg) { }
-        /// <summary>
-        /// 取消所有视图绑定事件回调函数。
-        /// </summary>
-        /// <param name="arg"></param>
-        public virtual void OnCancelAllViewLogicBinding(PresenterCancelAllViewLogicEventArgs arg) { }
-        /// <summary>
-        /// 注册单个视图绑定事件回调函数。
-        /// </summary>
-        /// <param name="arg"></param>
-        public virtual void OnSingleViewLogicBinding(PresenterSingleViewLogicBindingEventArgs arg) { }
-        /// <summary>
-        /// 销毁Presenter事件回调函数。
-        /// </summary>
-        /// <param name="arg"></param>
-        public virtual void OnDestory(PresenterDestoryEventArgs arg) { }
-    }
 
     /// <summary>
     /// Presenter抽象类,无Model
     /// </summary>
     /// <typeparam name="TView"></typeparam>
-    public abstract class Presenter<TView> : AbstractPresenter, IPresenter where TView : class, IViewLogic
+    public abstract class Presenter<TView> : IPresenter where TView : class, IViewLogic
     {
         private TView view; // View 在Presenter创建的时候就需要绑定
         private Type viewLogicType; // Presenter绑定的ViewLogic类型
@@ -173,6 +93,13 @@ namespace MVPFramework
             if (returnViewLogicInstance == null)// 如果不存在, 则新建
             {
                 var newViewLogicInstance = viewLogicType.Assembly.CreateInstance(viewLogicType.FullName);
+                // 对 viewlogic 中的 presenters 进行赋值
+                FieldInfo viewLogicPresentersFieldInfo = newViewLogicInstance.GetType().BaseType.GetField("presenters", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (viewLogicPresentersFieldInfo != null)
+                {
+                    viewLogicPresentersFieldInfo.SetValue(newViewLogicInstance, new List<IPresenter>() { this as IPresenter });
+                }
+
 
                 EventInfo destoryViewLogic = newViewLogicInstance.GetType().GetEvent("DestoryViewLogicEvent");
                 if (destoryViewLogic != null)
@@ -230,7 +157,7 @@ namespace MVPFramework
         /// 移除指定的view
         /// </summary>
         /// <param name="view"></param>
-        public void DestroyView(IEnumerable<IViewLogic> view)
+        public void ClearViewPart(IEnumerable<IViewLogic> view)
         {
             if(view.Contains(this.view))
             {
@@ -261,7 +188,7 @@ namespace MVPFramework
     /// </summary>
     /// <typeparam name="TViewLogicN">ViewLogic集合</typeparam>
     /// <typeparam name="TModelN">Model(数据定义)集合</typeparam>
-    public abstract class PresenterNN : AbstractPresenter, IPresenter
+    public abstract class PresenterNN : IPresenter
     {
         private IList<IViewLogic> viewLogicList;
         private IDictionary<Type,IModel> modelDict;
@@ -397,6 +324,12 @@ namespace MVPFramework
             if (returnViewLogicInstance == null)// 如果不存在, 则新建
             {
                 var newViewLogicInstance = viewLogicType.Assembly.CreateInstance(viewLogicType.FullName);
+                // 对 viewlogic 中的 presenters 进行赋值
+                FieldInfo viewLogicPresentersFieldInfo = newViewLogicInstance.GetType().BaseType.GetField("presenters", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (viewLogicPresentersFieldInfo != null)
+                {
+                    viewLogicPresentersFieldInfo.SetValue(newViewLogicInstance, new List<IPresenter>() { this as IPresenter });
+                }
 
                 //var destroyViewLogicEvent = newViewLogicInstance.GetType().GetField("DestroyViewLogic");
                 //Action tt = destroyViewLogicEvent.GetValue(null) as Action;
@@ -480,7 +413,7 @@ namespace MVPFramework
         /// 从P层移除绑定的view
         /// </summary>
         /// <param name="view"></param>
-        public void DestroyView(IEnumerable<IViewLogic> view)
+        public void ClearViewPart(IEnumerable<IViewLogic> view)
         {
             foreach (var v in view)
             {
@@ -515,11 +448,12 @@ namespace MVPFramework
     /// 这里View和Model只做到了一一对应
     /// </summary>
     /// <typeparam name="TViewLogic">ViewLogic层</typeparam>
-    public abstract class Presenter<TViewLogic,TModel> : AbstractPresenter, IPresenter<TViewLogic>
+    public abstract class Presenter<TViewLogic,TModel> : IPresenter<TViewLogic>
         where TViewLogic : class , IViewLogic // ViewLogic层
         where TModel :class , IModel // Model层
     {
-        private TViewLogic viewLogic; 
+        private TViewLogic viewLogic;
+        private Type viewLogicType;// 绑定的ViewLogic的类型
         private static readonly PresenterType presenterType = PresenterType.PresenterView11;
         private PresenterStatus presenterStatus = PresenterStatus.Default;
         public PresenterType PresenterType { get => presenterType; }
@@ -533,12 +467,66 @@ namespace MVPFramework
             }
         }
 
-        public Action cacheMethodCallAction;// 如果界面还没有初始化完成，缓存一些提前调用的函数
-
-        protected Presenter(TViewLogic viewLogic)
+        protected Presenter()
         {
-            this.viewLogic = viewLogic;
             this.presenterStatus = PresenterStatus.Initing;
+            var allViewLogicType = this.GetType().GetCustomAttributes(typeof(ViewLogicBindingAttribute), true)
+            .OfType<ViewLogicBindingAttribute>()
+            .Select(vlba => vlba.ViewLogicType)
+            .ToArray();
+                    if (allViewLogicType.Count() != 1)
+                    {
+                        throw new ArgumentException(string.Format("{0} 没有绑定ViewLogic类型 或 绑定的ViewLogic数目超过此种PresenterType限制的最高数目:1", this.GetType().FullName));
+                    }
+
+            viewLogicType = allViewLogicType[0];
+        }
+
+        /// <summary>
+        /// 获取Presenter需要处理的ViewLogic， 如果不存在实例, 则新建一个
+        /// </summary>
+        /// <param name="viewLogicType"></param>
+        /// <returns></returns>
+        public IViewLogic GetOrCreateViewLogic(Type viewLogicType)
+        {
+            // 先判断此类型的实例是否存在
+            IViewLogic returnViewLogicInstance = this.viewLogic;
+
+            if (returnViewLogicInstance == null)// 如果不存在, 则新建
+            {
+                var newViewLogicInstance = viewLogicType.Assembly.CreateInstance(viewLogicType.FullName);
+                // 对 viewlogic 中的 presenters 进行赋值
+                var t = newViewLogicInstance.GetType().BaseType;
+                FieldInfo viewLogicPresentersFieldInfo = newViewLogicInstance.GetType().BaseType.GetField("presenters", BindingFlags.Instance|BindingFlags.NonPublic);
+                if (viewLogicPresentersFieldInfo!= null)
+                {
+                    viewLogicPresentersFieldInfo.SetValue(newViewLogicInstance, new List<IPresenter>() { this as IPresenter});
+                }
+
+                EventInfo destoryViewLogic = newViewLogicInstance.GetType().GetEvent("DestoryViewLogicEvent");
+                if (destoryViewLogic != null)
+                {
+                    destoryViewLogic.AddEventHandler(newViewLogicInstance, new EventHandler(DestroySingleViewLogic));
+                }
+                returnViewLogicInstance = newViewLogicInstance as IViewLogic;
+                this.viewLogic = returnViewLogicInstance as TViewLogic;
+            }
+
+            return returnViewLogicInstance;
+        }
+
+        /// <summary>
+        /// 从PresenterView中销毁指定的ViewLogic instance
+        /// 只销毁实例, 不销毁类型
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DestroySingleViewLogic(object sender, EventArgs e)
+        {
+            if (this.viewLogic == sender)
+            {
+                this.viewLogic = null;
+            }
         }
 
         /// <summary>
@@ -546,7 +534,13 @@ namespace MVPFramework
         /// </summary>
         public TViewLogic ViewLogic
         {
-            get { return viewLogic; }
+            get {
+                if (viewLogic == null)
+                {
+                    GetOrCreateViewLogic(this.viewLogicType);
+                }
+                return viewLogic;
+            }
             set { viewLogic = value; }
         }
 
@@ -562,37 +556,18 @@ namespace MVPFramework
         {
             this.viewLogic = null;
             this.presenterStatus = PresenterStatus.OnlyDataAfterClear;
-            this.cacheMethodCallAction = null;
-        }
-
-        /// <summary>
-        /// 处理缓存的方法
-        /// </summary>
-        private void DoCacheMethodCallAction()
-        {
-            if (cacheMethodCallAction == null)
-                return;
-            cacheMethodCallAction();
-            cacheMethodCallAction = null;
-        }
-
-        public void Destroy(IViewLogic viewLogic)
-        {
-            if(viewLogic.Equals(viewLogic))
-            {
-                this.viewLogic = null;
-            }
         }
 
         /// <summary>
         /// 在P层移除指定的View
         /// </summary>
         /// <param name="viewLogics"></param>
-        public void DestroyView(IEnumerable<IViewLogic> viewLogics)
+        public void ClearViewPart(IEnumerable<IViewLogic> viewLogics)
         {
-            if(viewLogics.Contains(this.viewLogic))
+            if (viewLogics.Contains(this.viewLogic))
             {
                 this.viewLogic = null;
+                this.presenterStatus = PresenterStatus.OnlyDataAfterClear;
             }
         }
 

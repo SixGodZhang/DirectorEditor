@@ -1,7 +1,7 @@
 ﻿using DirectorEditor.Models;
 using DirectorEditor.UIComponents;
 using DirectorEditor.Views;
-using MVPFramework.Core;
+using MVPFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;

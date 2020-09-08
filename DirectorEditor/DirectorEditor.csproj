@@ -118,7 +118,6 @@
     <Compile Include="UILogic\MainViewLogic.cs" />
     <Compile Include="UILogic\SkinDemoViewLogic.cs" />
     <Compile Include="UILogic\ViewLogicNNViewLogic.cs" />
-    <Compile Include="ViewLogicStub.cs" />
     <Compile Include="Views\IAttributeAddressingView.cs" />
     <Compile Include="Views\IDataPart1View.cs" />
     <Compile Include="Views\IDataPart2View.cs" />

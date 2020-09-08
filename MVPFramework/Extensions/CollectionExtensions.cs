@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MVPFramework.Extensions
+namespace MVPFramework
 {
     public static class CollectionExtensions
     {

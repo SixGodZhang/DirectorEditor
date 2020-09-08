@@ -2,7 +2,6 @@
 using DirectorEditor.UILogic;
 using DirectorEditor.Views;
 using MVPFramework;
-using MVPFramework.Binder;
 using System;
 using System.Collections.Generic;
 using System.Linq;

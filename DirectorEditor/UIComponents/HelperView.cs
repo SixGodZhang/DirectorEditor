@@ -1,9 +1,4 @@
-﻿using DirectorEditor.Models;
-using DirectorEditor.Presenters;
-using DirectorEditor.Views;
-using MVPFramework;
-using MVPFramework.Binder;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace DirectorEditor.UIComponents
 {
@@ -15,12 +10,6 @@ namespace DirectorEditor.UIComponents
         public HelperView()
         {
             InitializeComponent();
-
-            // 如果界面初始化完成, 则处理缓存的数据调用
-            //if (Presenter.PresenterType == PresenterType.ModelView && (Presenter as HelperPresenter).cacheMethodCallAction!=null)
-            //{
-            //    (Presenter as HelperPresenter).cacheMethodCallAction();
-            //}
         }
 
         /// <summary>
