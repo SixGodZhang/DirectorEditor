@@ -97,7 +97,8 @@ namespace MaterialSkin.Properties {
         /// </summary>
         internal static byte[] Roboto_Regular {
             get {
-                object obj = ResourceManager.GetObject("Roboto_Regular", resourceCulture);
+                // Roboto_Regular
+                object obj = ResourceManager.GetObject("fzjz", resourceCulture);
                 return ((byte[])(obj));
             }
         }

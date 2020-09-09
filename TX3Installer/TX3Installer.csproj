@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -100,6 +101,10 @@
     <ProjectReference Include="..\MVPFramework\MVPFramework.csproj">
       <Project>{4636229a-25e7-4bf0-8b0a-632044334a8a}</Project>
       <Name>MVPFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\thirdparty\HZH_Controls\HZH_Controls.csproj">
+      <Project>{AF32E163-C577-4CBC-A072-0DC1CE0E1DA3}</Project>
+      <Name>HZH_Controls</Name>
     </ProjectReference>
     <ProjectReference Include="..\thirdparty\MaterialSkin\MaterialSkin.csproj">
       <Project>{8eb7611b-68cd-4b8b-987a-11717e2b250c}</Project>

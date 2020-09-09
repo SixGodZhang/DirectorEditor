@@ -20,13 +20,6 @@ using MaterialSkin.Common;
 
 namespace MaterialSkin.Controls
 {
-    public enum FontType
-    {
-        System = 1, // winform 自带的各种字体
-        MaterialSkin = 2, // 插件中定义的各种默认字体
-        CustomFont = 3, // 自定义字体
-    }
-
     /// <summary>
     /// 自定义控件, 非官方控件
     /// </summary>
@@ -50,7 +43,7 @@ namespace MaterialSkin.Controls
         /// 通常, 会将自定义字体放在Resources.resx文件中
         /// </summary>
         [Category("自定义字体")]
-        public string CutomFontName { get; set; }
+        public string CustomFontName { get; set; }
         /// <summary>
         /// 自定义字体大小,如果启用此属性, UseCustomFont 必须设置为True
         /// </summary>
@@ -110,7 +103,7 @@ namespace MaterialSkin.Controls
                         font = new System.Drawing.Font(Font.Name, Font.Size);
                         break;
                     case FontType.CustomFont:
-                        font = new Font(FontManager.GetFont(Font.Name), CustomFontSize);
+                        font = new Font(FontManager.GetFont(CustomFontName), CustomFontSize);
                         break;
                     case FontType.MaterialSkin:
                         font = SkinManager.ROBOTO_MEDIUM_10;
@@ -203,12 +196,12 @@ namespace MaterialSkin.Controls
                     font = new System.Drawing.Font(Font.Name, Font.Size);
                     break;
                 case FontType.CustomFont:
-                    if (CutomFontName == null || CustomFontSize == 0f)
+                    if (CustomFontName == null || CustomFontSize == 0f)
                     {
                         MessageBox.Show("请先设置字体的名字和大小");
                         return;
                     }
-                    font = new Font(FontManager.GetFont(CutomFontName), CustomFontSize);
+                    font = new Font(FontManager.GetFont(CustomFontName), CustomFontSize);
                     break;
                 case FontType.MaterialSkin:
                     font = SkinManager.ROBOTO_MEDIUM_10;

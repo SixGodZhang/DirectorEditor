@@ -80,5 +80,9 @@ namespace MaterialSkinExample
             materialProgressBar1.Value = Math.Max(materialProgressBar1.Value - 10, 0);
         }
 
+        private void materialTabSelector1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

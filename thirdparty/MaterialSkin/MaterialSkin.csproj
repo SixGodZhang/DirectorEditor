@@ -42,6 +42,12 @@
     <Compile Include="Animations\Animations.cs" />
     <Compile Include="ColorScheme.cs" />
     <Compile Include="Common\FontManager.cs" />
+    <Compile Include="CustomControls\CMaterialLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomControls\CMaterialCheckBoxWithTip.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Controls\MaterialCheckBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -63,7 +69,7 @@
     <Compile Include="Controls\MaterialListView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CustomControls\MaterialTextButton.cs">
+    <Compile Include="CustomControls\CMaterialTextButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\MaterialRaisedButton.cs">

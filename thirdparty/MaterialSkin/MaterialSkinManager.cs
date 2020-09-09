@@ -240,10 +240,10 @@ namespace MaterialSkin
 
         private MaterialSkinManager()
         {
-            ROBOTO_MEDIUM_12 = new Font(LoadFont(Resources.Roboto_Medium), 12f);
-            ROBOTO_MEDIUM_10 = new Font(LoadFont(Resources.Roboto_Medium), 10f);
-            ROBOTO_REGULAR_11 = new Font(LoadFont(Resources.Roboto_Regular), 11f);
-            ROBOTO_MEDIUM_11 = new Font(LoadFont(Resources.Roboto_Medium), 11f);
+            ROBOTO_MEDIUM_12 = new Font(LoadFont(Resources.Fzjz_Medium), 12f);
+            ROBOTO_MEDIUM_10 = new Font(LoadFont(Resources.Fzjz_Medium), 10f);
+            ROBOTO_REGULAR_11 = new Font(LoadFont(Resources.Fzjz_Medium), 11f);
+            ROBOTO_MEDIUM_11 = new Font(LoadFont(Resources.Fzjz_Medium), 11f);
             ROBOTO_MEDIUM_24 = new Font(LoadFont(Resources.Fzjz_Medium), 24f);
             Theme = Themes.LIGHT;
             ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);

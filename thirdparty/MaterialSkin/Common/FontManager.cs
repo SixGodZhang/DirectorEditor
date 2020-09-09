@@ -12,6 +12,13 @@ using System.Threading.Tasks;
 
 namespace MaterialSkin.Common
 {
+    public enum FontType
+    {
+        System = 1, // winform 自带的各种字体
+        MaterialSkin = 2, // 插件中定义的各种默认字体
+        CustomFont = 3, // 自定义字体
+    }
+
     /// <summary>
     /// 处理字体
     /// </summary>
