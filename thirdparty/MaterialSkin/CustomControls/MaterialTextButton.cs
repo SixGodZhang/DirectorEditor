@@ -5,9 +5,28 @@ using System.Drawing.Text;
 using System.Windows.Forms;
 using MaterialSkin.Animations;
 using System;
+using MaterialSkin.Common;
+
+/// <summary>
+/// MaterialTextButton 是 仿造 MaterialRaisedButton, 会加上一些适应项目的改动
+/// 1. AutoSize, AutoSize 会改变控件的默认值False, 但是WinForm控件机会记录变动值, 因而在界面上显示为False, 这段是不会出现在脚本中的
+///    也就变相导致了开发者在开发视图界面时, 发现AutoSize设置的是False, 但是实际是True的效果, 因此, 不建议在自定义控件中修改控件的默认参数值
+///  
+/// 
+/// ## 添加自定义字体
+/// PrivateFontColllection pfc = new PrivateFontColllection();
+/// pfc.AddFontFile("xxx.ttf");
+/// </summary>
 
 namespace MaterialSkin.Controls
 {
+    public enum FontType
+    {
+        System = 1, // winform 自带的各种字体
+        MaterialSkin = 2, // 插件中定义的各种默认字体
+        CustomFont = 3, // 自定义字体
+    }
+
     /// <summary>
     /// 自定义控件, 非官方控件
     /// </summary>
@@ -20,9 +39,30 @@ namespace MaterialSkin.Controls
         [Browsable(false)]
         public MouseState MouseState { get; set; }
         public bool Primary { get; set; }
+        /// <summary>
+        /// 是否使用自定义字体
+        /// </summary>
+        [Category("自定义字体")] 
+        [DefaultValue(FontType.MaterialSkin)]
+        public FontType UseFontType { get; set; }
+        /// <summary>
+        /// 自定字体名, 如果启用此属性, UseCustomFont 必须设置为True
+        /// 通常, 会将自定义字体放在Resources.resx文件中
+        /// </summary>
+        [Category("自定义字体")]
+        public string CutomFontName { get; set; }
+        /// <summary>
+        /// 自定义字体大小,如果启用此属性, UseCustomFont 必须设置为True
+        /// </summary>
+        [Category("自定义字体")]
+        public float CustomFontSize { get; set; }
+        
 
         private readonly AnimationManager _animationManager;
 
+        /// <summary>
+        /// 此字段用来测量文字将要显示的大小, 然后根据这个大小来调整按钮的大小
+        /// </summary>
         private SizeF _textSize;
 
         /// <summary>
@@ -45,6 +85,7 @@ namespace MaterialSkin.Controls
         {
             Primary = true;
 
+            // 管理动画
             _animationManager = new AnimationManager(false)
             {
                 Increment = 0.03,
@@ -53,7 +94,7 @@ namespace MaterialSkin.Controls
             _animationManager.OnAnimationProgress += sender => Invalidate();
 
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            AutoSize = true;
+            //AutoSize = true;
         }
 
         public override string Text
@@ -62,7 +103,20 @@ namespace MaterialSkin.Controls
             set
             {
                 base.Text = value;
-                _textSize = CreateGraphics().MeasureString(value.ToUpper(), SkinManager.ROBOTO_MEDIUM_10);
+                Font font = SkinManager.ROBOTO_MEDIUM_10; // 默认使用皮肤管理中的字体
+                switch(UseFontType)
+                {
+                    case FontType.System:
+                        font = new System.Drawing.Font(Font.Name, Font.Size);
+                        break;
+                    case FontType.CustomFont:
+                        font = new Font(FontManager.GetFont(Font.Name), CustomFontSize);
+                        break;
+                    case FontType.MaterialSkin:
+                        font = SkinManager.ROBOTO_MEDIUM_10;
+                        break;
+                }
+                _textSize = CreateGraphics().MeasureString(value.ToUpper(), font);
                 if (AutoSize)
                     Size = GetPreferredSize();
                 Invalidate();
@@ -136,9 +190,35 @@ namespace MaterialSkin.Controls
                 textRect.X += 8 + 24 + 4;
             }
 
+            // 其实这里可以在上面做一个字体缓存, 这里就先做一下简单验证
+            Font font = SkinManager.ROBOTO_MEDIUM_10; // 默认使用皮肤管理中的字体
+            switch (UseFontType)
+            {
+                case FontType.System:
+                    if(Font.Name == null || Font.Size == 0f)
+                    {
+                        MessageBox.Show("请先设置字体的名字和大小");
+                        return;
+                    }
+                    font = new System.Drawing.Font(Font.Name, Font.Size);
+                    break;
+                case FontType.CustomFont:
+                    if (CutomFontName == null || CustomFontSize == 0f)
+                    {
+                        MessageBox.Show("请先设置字体的名字和大小");
+                        return;
+                    }
+                    font = new Font(FontManager.GetFont(CutomFontName), CustomFontSize);
+                    break;
+                case FontType.MaterialSkin:
+                    font = SkinManager.ROBOTO_MEDIUM_10;
+                    break;
+            }
+
+            // 绘制文本
             g.DrawString(
                 Text.ToUpper(),
-                SkinManager.ROBOTO_MEDIUM_10,
+                font,
                 SkinManager.GetRaisedButtonTextBrush(Primary),
                 textRect,
                 new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center });

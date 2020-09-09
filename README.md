@@ -128,13 +128,17 @@ public partial class HelperView:Form
 ```
 
 ## 进度(设计思考流程过程在此记录)
+### 2020.9.9.10
+新建MaterialTextButton类型, 支持自定义字体及大小, 效果如下:  
+![](Images/修改按钮字体.png)
+
 ### 2020.9.9.8
 开始着手研究Windows下的安装器怎么搞。
-Visual Studio 2017 有一个官方的安装器插件, 如下：
-https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2017InstallerProjects
-大致创建了一个测试工程, 界面不太友好, 而且不太好改.
-从这个样例工程倒是可以学到安装器的大致流程， 仿造这个流程做就好.
-于是, 接下来这段时间, 就用MVP Framework 写一个安装器吧, 也验证一下这种设计的优缺点
+Visual Studio 2017 有一个官方的安装器插件, 如下：  
+https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2017InstallerProjects  
+大致创建了一个测试工程, 界面不太友好, 而且不太好改.  
+从这个样例工程倒是可以学到安装器的大致流程， 仿造这个流程做就好.  
+于是, 接下来这段时间, 就用MVP Framework 写一个安装器吧, 也验证一下这种设计的优缺点  
 
 ### 2020.9.8.15.34  
 超级大版本更新 -> 移除绑定器的概念  

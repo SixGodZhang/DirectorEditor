@@ -18,17 +18,17 @@ namespace TX3Installer.UIComponents
         {
             InitializeComponent();
 
-            // 创建一个颜色主题管理器
-            MaterialSkinManager materialSkinManager = MaterialSkinManager.Instance;
-            materialSkinManager.AddFormToManage(this);
-            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+            //// 创建一个颜色主题管理器
+            //MaterialSkinManager materialSkinManager = MaterialSkinManager.Instance;
+            //materialSkinManager.AddFormToManage(this);
+            //materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
 
-            //
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.Blue400,
-                Primary.Blue500,
-                Primary.Blue500,
-                Accent.LightBlue200,
-                TextShade.WHITE);
+            ////
+            //materialSkinManager.ColorScheme = new ColorScheme(Primary.Blue400,
+            //    Primary.Blue500,
+            //    Primary.Blue500,
+            //    Accent.LightBlue200,
+            //    TextShade.WHITE);
         }
 
         private void materialRaisedButton1_Click(object sender, EventArgs e)
