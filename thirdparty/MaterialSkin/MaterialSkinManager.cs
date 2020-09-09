@@ -159,7 +159,7 @@ namespace MaterialSkin
         {
             return Theme == Themes.LIGHT ? DIVIDERS_BLACK_BRUSH : DIVIDERS_WHITE_BRUSH;
         }
-
+         
         public Color GetCheckboxOffColor()
         {
             return Theme == Themes.LIGHT ? CHECKBOX_OFF_LIGHT : CHECKBOX_OFF_DARK;
@@ -230,6 +230,7 @@ namespace MaterialSkin
         public Font ROBOTO_REGULAR_11;
         public Font ROBOTO_MEDIUM_11;
         public Font ROBOTO_MEDIUM_10;
+        public Font ROBOTO_MEDIUM_24;
 
         //Other constants
         public int FORM_PADDING = 14;
@@ -243,6 +244,7 @@ namespace MaterialSkin
             ROBOTO_MEDIUM_10 = new Font(LoadFont(Resources.Roboto_Medium), 10f);
             ROBOTO_REGULAR_11 = new Font(LoadFont(Resources.Roboto_Regular), 11f);
             ROBOTO_MEDIUM_11 = new Font(LoadFont(Resources.Roboto_Medium), 11f);
+            ROBOTO_MEDIUM_24 = new Font(LoadFont(Resources.Fzjz_Medium), 24f);
             Theme = Themes.LIGHT;
             ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
         }

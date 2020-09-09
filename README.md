@@ -90,7 +90,7 @@ public static HelperPresenter HelperPresenter { set => _helperPresenter = value;
 ```
 如上， 我们可以使用单例来缓存P层, 当然, 如果不缓存P层，可以不这样做。但是，建议这样做。  
 
-2. **P层和View Logic绑定。P层主要处理2件事, 一是与ViewLogic绑定, 而是处理数据, 将数据转换成界面显示需要的格式。**  
+2. **P层和View Logic绑定。P层主要处理2件事, 一是与ViewLogic绑定, 二是处理数据, 将数据转换成界面显示需要的格式。**  
 ``` csharp
 [ViewLogicBinding(typeof(HelperViewLogic))]// 指定Presenter绑定的ViewLogic类型
 public class HelperPresenter:Presenter<IHelperView,HelperModel>
