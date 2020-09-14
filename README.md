@@ -127,7 +127,24 @@ public partial class HelperView:Form
 	}
 ```
 
+** TX3Installer 的效果图如下 **
+![](Images/编辑器界面一.png)
+![](Images/编辑器界面二.png)
+![](Images/编辑器界面三.png)
+![](Images/编辑器界面四.png)
+
 ## 进度(设计思考流程过程在此记录)
+### 2020.9.9.14
+桌面应用程序安装Demo完成, 主要包含2个功能:  
+1. 将压缩的应用程序的7Zip文件加压缩至对应目录
+2. 为可执行文件创建桌面快捷方式
+
+遇到的问题:  
+因为原来的项目工程包含了多个dll, 但是安装程序通常就只是一个EXE， 因此需要将所有引用的资源都内嵌到dll中.
+这里涉及到了2种情况:  
+ - 第一种是程序自带的dll, 使用ILMerge在后期生成事件中处理即可
+ - 第二种是程序引用的第三方资源, 我是采取的嵌入Resources.resx的方式. 不如7Zip.exe和7Zip.dll
+
 ### 2020.9.9.10
 新建MaterialTextButton类型, 支持自定义字体及大小, 效果如下:  
 ![](Images/修改按钮字体.png)

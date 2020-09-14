@@ -9,6 +9,10 @@ namespace TX3Installer.Views
 {
     public interface IMainInstallerView: IViewLogic
     {
-
+        /// <summary>
+        /// 设置解压数据进度
+        /// </summary>
+        /// <param name="value"></param>
+        void SetExtractProgress(int value);
     }
 }

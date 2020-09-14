@@ -84,5 +84,10 @@ namespace MaterialSkinExample
         {
 
         }
+
+        private void materialProgressBar1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

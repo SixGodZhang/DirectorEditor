@@ -21,5 +21,14 @@ namespace TX3Installer.Presenters
         {
             View.Close();
         }
+
+        /// <summary>
+        /// 设置解压进度条
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetExtractProgress(int value)
+        {
+            View.SetExtractProgress(value);
+        }
     }
 }

@@ -30,6 +30,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>MaterialSkin.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -113,6 +119,7 @@
     <EmbeddedResource Include="Resources\Roboto-Medium.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MaterialSkin.pfx" />
     <None Include="Resources\fzjz.ttf" />
   </ItemGroup>
   <ItemGroup />
