@@ -49,9 +49,14 @@ namespace TX3Installer.Common
                 sevenZip.StartInfo.CreateNoWindow = true;
                 sevenZip.StartInfo.RedirectStandardOutput = true;
                 sevenZip.StartInfo.RedirectStandardError = true;
-                if (!sevenZip.Start())
-                    throw new FileLoadException("7z could not start!");
-
+                try
+                {
+                    sevenZip.Start();
+                }catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    return;
+                }
                 sevenZip.BeginOutputReadLine();
                 sevenZip.BeginErrorReadLine();
 

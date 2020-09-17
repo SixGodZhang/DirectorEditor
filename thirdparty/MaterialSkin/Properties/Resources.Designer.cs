@@ -79,26 +79,13 @@ namespace MaterialSkin.Properties {
                 return ((byte[])(obj));
             }
         }
-
-        /// <summary>
-        ///   查找 System.Byte[] 类型的本地化资源。
-        /// </summary>
-        internal static byte[] Fzjz_Medium
-        {
-            get
-            {
-                object obj = ResourceManager.GetObject("fzjz", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-
+        
         /// <summary>
         ///   查找 System.Byte[] 类型的本地化资源。
         /// </summary>
         internal static byte[] Roboto_Regular {
             get {
-                // Roboto_Regular
-                object obj = ResourceManager.GetObject("fzjz", resourceCulture);
+                object obj = ResourceManager.GetObject("Roboto_Regular", resourceCulture);
                 return ((byte[])(obj));
             }
         }

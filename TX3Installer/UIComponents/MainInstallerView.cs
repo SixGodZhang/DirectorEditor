@@ -1,4 +1,5 @@
-﻿                using MaterialSkin;
+﻿//using IWshRuntimeLibrary;
+using MaterialSkin;
 using MaterialSkin.Controls;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TX3Installer.Common;
+using CSharpLib;
+using Shortcut = CSharpLib.Shortcut;
 
 namespace TX3Installer.UIComponents
 {
@@ -125,15 +128,118 @@ namespace TX3Installer.UIComponents
         public void OnCompleteInstall()
         {
             string exePath = Path.Combine(m_curInstallExePath, InstallerConfig.Config.ExeFile);
-            if(File.Exists(exePath))
+            if(System.IO.File.Exists(exePath))
             {
-                InstallOperation.CreateShortcuts(exePath);
+                CreateShortcutToDesktop(exePath);
                 this.materialTextButton5.Visible = true;
-          
             }
             else
             {
                 MessageBox.Show(string.Format("未能为{0}创建快捷方式",InstallerConfig.Config.ExeFile));
+            }
+        }
+
+        /// <summary>
+        /// 在桌面上创建一个快捷程序
+        /// </summary>
+        /// <param name="exePath"></param>
+        private void CreateShortcutToDesktop(string exePath)
+        {
+            string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            // 快捷方式文件名
+            var lnkPath = Path.Combine(deskDir, string.Format("{0}.lnk", InstallerConfig.Config.AppName));
+            Shortcut shortcutProgress = new Shortcut();
+            shortcutProgress.CreateShortcutToFile(exePath, lnkPath);
+        }
+
+
+
+        private void appShortcutToDesktop(string exePath)
+        {
+            exePath = Path.GetFileNameWithoutExtension(exePath);
+            string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
+            string tt = File.ReadAllText(deskDir + "\\Wox.lnk");
+            MessageBox.Show(tt);
+
+
+            //[InternetShortcut]
+            //URL=
+            //HotKey=
+            //IconFile=
+            //IconIndex=
+            //ShowCommand=
+            //Modified=
+            //Roamed=
+            //IDList=
+            //Author=
+            //WhatsNew=
+            //Comment=
+            //Desc=
+
+            //[DEFAULT] ; HTML frameset
+            //BASEURL=
+
+            //[DOC<NestedFramesetInfo>]
+            //        BASEURL=
+            //ORIGURL=
+
+            //[Bookmarklet] ; JavaScript bookmarklet
+            //ExtendedURL=
+
+            //[MonitoredItem]
+            //        FeedUrl=
+            //IsLivePreview=
+            //PreviewSize=
+
+            //[{000214A0-0000-0000-C000-000000000046}] ; FMTID_Intshcut property storage
+            //Prop<2..2147483647>=
+            using (StreamWriter writer = new StreamWriter(deskDir + "\\" + exePath + ".lnk"))
+            {
+                MessageBox.Show("come here ... 4");
+                string app = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                MessageBox.Show("come here ... 7");
+                writer.WriteLine("[InternetShortcut]");
+                writer.WriteLine("URL=file:///" + app);
+                writer.WriteLine("IconIndex=0");
+                string icon = app.Replace('\\', '/');
+                writer.WriteLine("IconFile=" + icon);
+                MessageBox.Show("come here ... 8");
+            }
+            MessageBox.Show("come here ... end");
+
+        }
+
+        public void CreateShortcuts(string path)
+        {
+            MessageBox.Show("come here ... 5");
+            //path + Path.DirectorySeparatorChar + "DirectorEditor-" + bitness + ".exe";
+            string exePath = path;
+            try
+            {
+                MessageBox.Show("come here ... 6");
+                // 创建桌面的快捷方式
+                //IWshShortcut shortcut = (IWshShortcut)new WshShell().CreateShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + Path.DirectorySeparatorChar + "DirectorEditor.lnk");
+                //MessageBox.Show("come here ... 7");
+                //shortcut.Description = "视频编辑器";
+                //shortcut.WorkingDirectory = path;
+                //shortcut.TargetPath = exePath;
+                //shortcut.Save();
+                MessageBox.Show("come here ... 8");
+
+                // 创建开始菜单的快捷方式
+                //string shortcutDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu), "Programs", "DirectorEditor");
+                //Directory.CreateDirectory(shortcutDirectory);
+                //WshShell shell = new WshShell();
+                //IWshShortcut shortcut = (IWshShortcut)shell.CreateShortcut(Path.Combine(shortcutDirectory, "DirectorEditor.lnk"));
+                //shortcut.Description = "DirectorEditor视频编辑器";
+                //shortcut.WorkingDirectory = path;
+                //shortcut.TargetPath = exePath;
+                //shortcut.Save();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
             }
         }
 

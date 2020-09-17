@@ -35,11 +35,17 @@
         /// </summary>
         public readonly string ExeFile;
 
+        /// <summary>
+        /// 应用程序名字
+        /// </summary>
+        public readonly string AppName;
+
         private static InstallerConfig m_config;
         private static ulong m_dataBytesSize = 5499043916;
         private static string m_defaultInstallPath = "D:\\Director";
         private static string m_install7ZFile = "DirectorEditor.7z";
         private static string m_exeFile = "DirectorEditor.exe";
+        private static string m_appName = "DirectorEditor";
 
         public InstallerConfig(ulong dataBytesSize)
         {
@@ -47,6 +53,7 @@
             DefaultInstallPath = m_defaultInstallPath;
             Install7ZFile = m_install7ZFile;
             ExeFile = m_exeFile;
+            AppName = m_appName;
         }
 
         public static InstallerConfig Config

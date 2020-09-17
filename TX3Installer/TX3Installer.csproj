@@ -77,9 +77,8 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Interop.IWshRuntimeLibrary">
-      <HintPath>other\Interop.IWshRuntimeLibrary.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+    <Reference Include="CSharpLib, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\CSharpLib.3.0.1\lib\CSharpLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -191,6 +190,12 @@
   <ItemGroup>
     <None Include="other\7z.exe" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="other\x86\7z.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="other\x86\7z.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -199,7 +204,7 @@
     <Error Condition="!Exists('..\packages\ILMerge.3.0.41\build\ILMerge.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\ILMerge.3.0.41\build\ILMerge.props'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>$(ILMergeConsolePath) /log:$(ProjectDir)ILMerge.log  /target:winexe /out:$(ProjectDir)publish/TX3Install_V1.0.exe  $(TargetDir)TX3Installer.exe  $(TargetDir)MVPFramework.dll $(TargetDir)HZH_Controls.dll  $(TargetDir)MaterialSkin.dll
+    <PostBuildEvent>$(ILMergeConsolePath) /log:$(ProjectDir)ILMerge.log  /target:winexe /out:$(ProjectDir)publish/TX3Install_V1.0.exe  $(TargetDir)TX3Installer.exe  $(TargetDir)MVPFramework.dll $(TargetDir)HZH_Controls.dll  $(TargetDir)MaterialSkin.dll $(TargetDir)CSharpLib.dll 
 xcopy /y /f $(ProjectDir)\other\DirectorEditor.7z $(ProjectDir)\publish\DirectorEditor.7z</PostBuildEvent>
   </PropertyGroup>
 </Project>
