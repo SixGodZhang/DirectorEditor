@@ -293,5 +293,21 @@ namespace TX3Installer.Common
                 return error;
             }
         }
+
+        /// <summary>
+        /// 监测X目录下Y文件是否创建
+        /// </summary>
+        public static void MonitorFileCreate(string file_full_name, FileSystemEventHandler OnCreatedFile, ref FileSystemWatcher watcher)
+        {
+            watcher.Path = Path.GetDirectoryName(file_full_name);
+            watcher.IncludeSubdirectories = true;
+            watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.FileName;
+
+            watcher.Filter = Path.GetFileName(file_full_name);
+            watcher.Created += OnCreatedFile;
+            watcher.Changed += OnCreatedFile;
+
+            watcher.EnableRaisingEvents = true;
+        }
     }
 }

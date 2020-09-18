@@ -24,6 +24,10 @@ namespace TX3Installer.UIComponents
         /// 当前安装路径
         /// </summary>
         private string m_curInstallExePath = InstallerConfig.Config.DefaultInstallPath;
+        /// <summary>
+        /// 文件监视器
+        /// </summary>
+        private FileSystemWatcher watcher;
 
         public MainInstallerView()
         {
@@ -33,6 +37,8 @@ namespace TX3Installer.UIComponents
             this.Sizable = false;
         }
 
+        
+
         /// <summary>
         /// 隐藏所有控件
         /// </summary>
@@ -41,6 +47,15 @@ namespace TX3Installer.UIComponents
             this.materialTextButton1.Visible = false;// 快速安装
             this.cMaterialLabel1.Visible = false;// 自定义安装
             this.materialCheckBox1.Visible = false;// 显示协议
+        }
+
+        protected override void OnFormClosed(FormClosedEventArgs e)
+        {
+            base.OnFormClosed(e);
+            if (watcher!=null)
+            {
+                watcher.Dispose();
+            }
         }
 
         /// <summary>
@@ -82,7 +97,7 @@ namespace TX3Installer.UIComponents
                 {
                     MessageBox.Show(ex.Message);
                 }
-                
+
             }
 
             var thread = new Thread(() => SevenZipHelper.Extract(sPath,tPath))
@@ -127,6 +142,10 @@ namespace TX3Installer.UIComponents
         /// </summary>
         public void OnCompleteInstall()
         {
+            // 这里会存在一个问题，解压程序是先解压到流中, 然后在写入文件
+            // 而回调函数正好发生在写入到流完成时, 此时可能还没有文件
+            //Thread checkExeFile = new Thread(CheckExeFileExist);
+
             string exePath = Path.Combine(m_curInstallExePath, InstallerConfig.Config.ExeFile);
             if(System.IO.File.Exists(exePath))
             {
@@ -135,9 +154,30 @@ namespace TX3Installer.UIComponents
             }
             else
             {
-                MessageBox.Show(string.Format("未能为{0}创建快捷方式",InstallerConfig.Config.ExeFile));
+                //MessageBox.Show(string.Format("未能为{0}创建快捷方式",InstallerConfig.Config.ExeFile));
+                watcher = new FileSystemWatcher();
+                FileOperationHelper.MonitorFileCreate(exePath, OnCheckExeFileCreated, ref watcher);
             }
         }
+
+        /// <summary>
+        /// 检测Exe文件是否已经创建
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnCheckExeFileCreated(object sender, FileSystemEventArgs e)
+        {
+            if(e.ChangeType == WatcherChangeTypes.Created)
+            {
+                if(e.Name == InstallerConfig.Config.ExeFile)
+                {
+                    MessageBox.Show("已经成功创建exe文件");
+                    watcher.Dispose();
+                }
+                
+            }
+        }
+
 
         /// <summary>
         /// 在桌面上创建一个快捷程序

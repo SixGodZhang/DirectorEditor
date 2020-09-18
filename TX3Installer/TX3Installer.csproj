@@ -184,18 +184,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="other\7z.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="other\7z.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="other\x86\7z.exe" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="other\x86\7z.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
