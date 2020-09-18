@@ -37,18 +37,20 @@ namespace TX3Installer.UIComponents
             this.Sizable = false;
         }
 
-        
-
         /// <summary>
         /// 隐藏所有控件
         /// </summary>
         private void hideAllControls()
         {
-            this.materialTextButton1.Visible = false;// 快速安装
-            this.cMaterialLabel1.Visible = false;// 自定义安装
-            this.materialCheckBox1.Visible = false;// 显示协议
+            this.btnNowInstall.Visible = false;// 快速安装
+            this.lbCustomInstallPath.Visible = false;// 自定义安装
+            this.checkboxAgreement.Visible = false;// 显示协议
         }
 
+        /// <summary>
+        /// 窗口关闭回调
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
@@ -63,9 +65,9 @@ namespace TX3Installer.UIComponents
         /// </summary>
         private void onCheckStateChanged(object sender, EventArgs e)
         {
-            var isChecked = this.materialCheckBox1.CheckState == CheckState.Checked;
-            this.materialTextButton1.Enabled = isChecked;
-            this.cMaterialLabel1.Enabled = isChecked;
+            var isChecked = this.checkboxAgreement.CheckState == CheckState.Checked;
+            this.btnNowInstall.Enabled = isChecked;
+            this.lbCustomInstallPath.Enabled = isChecked;
         }
 
         /// <summary>
@@ -150,11 +152,10 @@ namespace TX3Installer.UIComponents
             if(System.IO.File.Exists(exePath))
             {
                 CreateShortcutToDesktop(exePath);
-                this.materialTextButton5.Visible = true;
+                this.btnExperienceNow.Visible = true;
             }
             else
             {
-                //MessageBox.Show(string.Format("未能为{0}创建快捷方式",InstallerConfig.Config.ExeFile));
                 watcher = new FileSystemWatcher();
                 FileOperationHelper.MonitorFileCreate(exePath, OnCheckExeFileCreated, ref watcher);
             }
@@ -171,13 +172,12 @@ namespace TX3Installer.UIComponents
             {
                 if(e.Name == InstallerConfig.Config.ExeFile)
                 {
-                    MessageBox.Show("已经成功创建exe文件");
+                    CreateShortcutToDesktop(Path.Combine(m_curInstallExePath, InstallerConfig.Config.ExeFile));
+                    this.btnExperienceNow.Visible = true;
                     watcher.Dispose();
                 }
-                
             }
         }
-
 
         /// <summary>
         /// 在桌面上创建一个快捷程序
@@ -287,14 +287,14 @@ namespace TX3Installer.UIComponents
         private void cMaterialLabel1_Click(object sender, EventArgs e)
         {
             this.customInstallPanel.Visible = true;
-            this.materialTextButton1.Visible = false;
+            this.btnNowInstall.Visible = false;
         }
 
         // 返回
         private void materialTextButton4_Click(object sender, EventArgs e)
         {
             this.customInstallPanel.Visible = false;
-            this.materialTextButton1.Visible = true;
+            this.btnNowInstall.Visible = true;
         }
 
         // 浏览

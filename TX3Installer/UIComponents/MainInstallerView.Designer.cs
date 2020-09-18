@@ -28,83 +28,83 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.materialTextButton1 = new MaterialSkin.Controls.MaterialTextButton();
-            this.materialCheckBox1 = new MaterialSkin.Controls.MaterialCheckBoxWithTip();
-            this.cMaterialLabel1 = new MaterialSkin.Controls.CMaterialLabel();
+            this.btnNowInstall = new MaterialSkin.Controls.MaterialTextButton();
+            this.checkboxAgreement = new MaterialSkin.Controls.MaterialCheckBoxWithTip();
+            this.lbCustomInstallPath = new MaterialSkin.Controls.CMaterialLabel();
             this.extractProgress = new MaterialSkin.Controls.MaterialProgressBar();
             this.customInstallPanel = new System.Windows.Forms.Panel();
-            this.materialTextButton4 = new MaterialSkin.Controls.MaterialTextButton();
-            this.materialTextButton3 = new MaterialSkin.Controls.MaterialTextButton();
-            this.materialTextButton2 = new MaterialSkin.Controls.MaterialTextButton();
+            this.btnReturnMainView = new MaterialSkin.Controls.MaterialTextButton();
+            this.btnCustomInstall = new MaterialSkin.Controls.MaterialTextButton();
+            this.btnOpenWindowExploer = new MaterialSkin.Controls.MaterialTextButton();
             this.curInstallPath = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialTextButton5 = new MaterialSkin.Controls.MaterialTextButton();
+            this.btnExperienceNow = new MaterialSkin.Controls.MaterialTextButton();
             this.customInstallPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // materialTextButton1
             // 
-            this.materialTextButton1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.btnNowInstall.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.materialTextButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialTextButton1.CustomFontName = "fzjz";
-            this.materialTextButton1.CustomFontSize = 18F;
-            this.materialTextButton1.Depth = 0;
-            this.materialTextButton1.Font = new System.Drawing.Font("微软雅黑", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.materialTextButton1.Icon = null;
-            this.materialTextButton1.Location = new System.Drawing.Point(343, 270);
-            this.materialTextButton1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialTextButton1.Name = "materialTextButton1";
-            this.materialTextButton1.Primary = true;
-            this.materialTextButton1.Size = new System.Drawing.Size(245, 70);
-            this.materialTextButton1.TabIndex = 0;
-            this.materialTextButton1.Text = "快速安装";
-            this.materialTextButton1.UseFontType = MaterialSkin.Common.FontType.CustomFont;
-            this.materialTextButton1.UseVisualStyleBackColor = true;
-            this.materialTextButton1.Click += new System.EventHandler(this.materialTextButton1_Click);
+            this.btnNowInstall.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnNowInstall.CustomFontName = "fzjz";
+            this.btnNowInstall.CustomFontSize = 18F;
+            this.btnNowInstall.Depth = 0;
+            this.btnNowInstall.Font = new System.Drawing.Font("微软雅黑", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnNowInstall.Icon = null;
+            this.btnNowInstall.Location = new System.Drawing.Point(343, 270);
+            this.btnNowInstall.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnNowInstall.Name = "materialTextButton1";
+            this.btnNowInstall.Primary = true;
+            this.btnNowInstall.Size = new System.Drawing.Size(245, 70);
+            this.btnNowInstall.TabIndex = 0;
+            this.btnNowInstall.Text = "快速安装";
+            this.btnNowInstall.UseFontType = MaterialSkin.Common.FontType.CustomFont;
+            this.btnNowInstall.UseVisualStyleBackColor = true;
+            this.btnNowInstall.Click += new System.EventHandler(this.materialTextButton1_Click);
             // 
-            // materialCheckBox1
+            // checkboxAgreement
             // 
-            this.materialCheckBox1.BackColor = System.Drawing.Color.Transparent;
-            this.materialCheckBox1.Checked = true;
-            this.materialCheckBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.materialCheckBox1.CustomFontName = "fzjz";
-            this.materialCheckBox1.CustomFontSize = 12F;
-            this.materialCheckBox1.Depth = 0;
-            this.materialCheckBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.materialCheckBox1.Location = new System.Drawing.Point(10, 561);
-            this.materialCheckBox1.Margin = new System.Windows.Forms.Padding(0);
-            this.materialCheckBox1.MouseLocation = new System.Drawing.Point(-1, -1);
-            this.materialCheckBox1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCheckBox1.Name = "materialCheckBox1";
-            this.materialCheckBox1.Ripple = true;
-            this.materialCheckBox1.Size = new System.Drawing.Size(269, 30);
-            this.materialCheckBox1.TabIndex = 2;
-            this.materialCheckBox1.Text = "同意视频编辑器的用户许可协议";
-            this.materialCheckBox1.UseFontType = MaterialSkin.Common.FontType.CustomFont;
-            this.materialCheckBox1.UseVisualStyleBackColor = false;
-            this.materialCheckBox1.CheckStateChanged += new System.EventHandler(this.onCheckStateChanged);
+            this.checkboxAgreement.BackColor = System.Drawing.Color.Transparent;
+            this.checkboxAgreement.Checked = true;
+            this.checkboxAgreement.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkboxAgreement.CustomFontName = "fzjz";
+            this.checkboxAgreement.CustomFontSize = 12F;
+            this.checkboxAgreement.Depth = 0;
+            this.checkboxAgreement.Font = new System.Drawing.Font("微软雅黑", 10F);
+            this.checkboxAgreement.Location = new System.Drawing.Point(10, 561);
+            this.checkboxAgreement.Margin = new System.Windows.Forms.Padding(0);
+            this.checkboxAgreement.MouseLocation = new System.Drawing.Point(-1, -1);
+            this.checkboxAgreement.MouseState = MaterialSkin.MouseState.HOVER;
+            this.checkboxAgreement.Name = "checkboxAgreement";
+            this.checkboxAgreement.Ripple = true;
+            this.checkboxAgreement.Size = new System.Drawing.Size(269, 30);
+            this.checkboxAgreement.TabIndex = 2;
+            this.checkboxAgreement.Text = "同意视频编辑器的用户许可协议";
+            this.checkboxAgreement.UseFontType = MaterialSkin.Common.FontType.CustomFont;
+            this.checkboxAgreement.UseVisualStyleBackColor = false;
+            this.checkboxAgreement.CheckStateChanged += new System.EventHandler(this.onCheckStateChanged);
             // 
-            // cMaterialLabel1
+            // lbCustomInstallPath
             // 
-            this.cMaterialLabel1.BackColor = System.Drawing.Color.Transparent;
-            this.cMaterialLabel1.CustomFontName = "fzjz";
-            this.cMaterialLabel1.CustomLabelDWNColor = System.Drawing.Color.Lime;
-            this.cMaterialLabel1.CustomLabelNMLColor = System.Drawing.Color.Empty;
-            this.cMaterialLabel1.CustomLabelOVRColor = System.Drawing.Color.Blue;
-            this.cMaterialLabel1.Depth = 0;
-            this.cMaterialLabel1.Font = new System.Drawing.Font("方正剪纸_GBK", 15.75F);
-            this.cMaterialLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.cMaterialLabel1.Location = new System.Drawing.Point(785, 546);
-            this.cMaterialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.cMaterialLabel1.Name = "cMaterialLabel1";
-            this.cMaterialLabel1.Size = new System.Drawing.Size(136, 45);
-            this.cMaterialLabel1.TabIndex = 4;
-            this.cMaterialLabel1.Text = "自定义安装 >";
-            this.cMaterialLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cMaterialLabel1.UseFontType = MaterialSkin.Common.FontType.CustomFont;
-            this.cMaterialLabel1.Click += new System.EventHandler(this.cMaterialLabel1_Click);
+            this.lbCustomInstallPath.BackColor = System.Drawing.Color.Transparent;
+            this.lbCustomInstallPath.CustomFontName = "fzjz";
+            this.lbCustomInstallPath.CustomLabelDWNColor = System.Drawing.Color.Lime;
+            this.lbCustomInstallPath.CustomLabelNMLColor = System.Drawing.Color.Empty;
+            this.lbCustomInstallPath.CustomLabelOVRColor = System.Drawing.Color.Blue;
+            this.lbCustomInstallPath.Depth = 0;
+            this.lbCustomInstallPath.Font = new System.Drawing.Font("方正剪纸_GBK", 15.75F);
+            this.lbCustomInstallPath.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lbCustomInstallPath.Location = new System.Drawing.Point(785, 546);
+            this.lbCustomInstallPath.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lbCustomInstallPath.Name = "lbCustomInstallPath";
+            this.lbCustomInstallPath.Size = new System.Drawing.Size(136, 45);
+            this.lbCustomInstallPath.TabIndex = 4;
+            this.lbCustomInstallPath.Text = "自 定 义 安 装  >";
+            this.lbCustomInstallPath.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lbCustomInstallPath.UseFontType = MaterialSkin.Common.FontType.CustomFont;
+            this.lbCustomInstallPath.Click += new System.EventHandler(this.cMaterialLabel1_Click);
             // 
             // extractProgress
             // 
@@ -120,67 +120,66 @@
             // customInstallPanel
             // 
             this.customInstallPanel.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.customInstallPanel.Controls.Add(this.materialTextButton4);
-            this.customInstallPanel.Controls.Add(this.materialTextButton3);
-            this.customInstallPanel.Controls.Add(this.materialTextButton2);
+            this.customInstallPanel.Controls.Add(this.btnReturnMainView);
+            this.customInstallPanel.Controls.Add(this.btnCustomInstall);
+            this.customInstallPanel.Controls.Add(this.btnOpenWindowExploer);
             this.customInstallPanel.Controls.Add(this.curInstallPath);
             this.customInstallPanel.Controls.Add(this.materialLabel1);
             this.customInstallPanel.Location = new System.Drawing.Point(0, 437);
             this.customInstallPanel.Name = "customInstallPanel";
             this.customInstallPanel.Size = new System.Drawing.Size(934, 165);
             this.customInstallPanel.TabIndex = 6;
-            this.customInstallPanel.Visible = false;
             // 
-            // materialTextButton4
+            // btnReturnMainView
             // 
-            this.materialTextButton4.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialTextButton4.CustomFontName = null;
-            this.materialTextButton4.CustomFontSize = 0F;
-            this.materialTextButton4.Depth = 0;
-            this.materialTextButton4.Icon = null;
-            this.materialTextButton4.Location = new System.Drawing.Point(826, 131);
-            this.materialTextButton4.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialTextButton4.Name = "materialTextButton4";
-            this.materialTextButton4.Primary = true;
-            this.materialTextButton4.Size = new System.Drawing.Size(75, 23);
-            this.materialTextButton4.TabIndex = 4;
-            this.materialTextButton4.Text = "返回";
-            this.materialTextButton4.UseVisualStyleBackColor = true;
-            this.materialTextButton4.Click += new System.EventHandler(this.materialTextButton4_Click);
+            this.btnReturnMainView.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnReturnMainView.CustomFontName = null;
+            this.btnReturnMainView.CustomFontSize = 0F;
+            this.btnReturnMainView.Depth = 0;
+            this.btnReturnMainView.Icon = null;
+            this.btnReturnMainView.Location = new System.Drawing.Point(826, 131);
+            this.btnReturnMainView.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnReturnMainView.Name = "btnReturnMainView";
+            this.btnReturnMainView.Primary = true;
+            this.btnReturnMainView.Size = new System.Drawing.Size(75, 23);
+            this.btnReturnMainView.TabIndex = 4;
+            this.btnReturnMainView.Text = "返回";
+            this.btnReturnMainView.UseVisualStyleBackColor = true;
+            this.btnReturnMainView.Click += new System.EventHandler(this.materialTextButton4_Click);
             // 
-            // materialTextButton3
+            // btnCustomInstall
             // 
-            this.materialTextButton3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialTextButton3.CustomFontName = null;
-            this.materialTextButton3.CustomFontSize = 0F;
-            this.materialTextButton3.Depth = 0;
-            this.materialTextButton3.Icon = null;
-            this.materialTextButton3.Location = new System.Drawing.Point(716, 131);
-            this.materialTextButton3.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialTextButton3.Name = "materialTextButton3";
-            this.materialTextButton3.Primary = true;
-            this.materialTextButton3.Size = new System.Drawing.Size(75, 23);
-            this.materialTextButton3.TabIndex = 3;
-            this.materialTextButton3.Text = "立即安装";
-            this.materialTextButton3.UseVisualStyleBackColor = true;
-            this.materialTextButton3.Click += new System.EventHandler(this.materialTextButton3_Click);
+            this.btnCustomInstall.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnCustomInstall.CustomFontName = null;
+            this.btnCustomInstall.CustomFontSize = 0F;
+            this.btnCustomInstall.Depth = 0;
+            this.btnCustomInstall.Icon = null;
+            this.btnCustomInstall.Location = new System.Drawing.Point(716, 131);
+            this.btnCustomInstall.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnCustomInstall.Name = "btnCustomInstall";
+            this.btnCustomInstall.Primary = true;
+            this.btnCustomInstall.Size = new System.Drawing.Size(75, 23);
+            this.btnCustomInstall.TabIndex = 3;
+            this.btnCustomInstall.Text = "立即安装";
+            this.btnCustomInstall.UseVisualStyleBackColor = true;
+            this.btnCustomInstall.Click += new System.EventHandler(this.materialTextButton3_Click);
             // 
-            // materialTextButton2
+            // btnOpenWindowExploer
             // 
-            this.materialTextButton2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialTextButton2.CustomFontName = null;
-            this.materialTextButton2.CustomFontSize = 0F;
-            this.materialTextButton2.Depth = 0;
-            this.materialTextButton2.Icon = null;
-            this.materialTextButton2.Location = new System.Drawing.Point(843, 60);
-            this.materialTextButton2.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialTextButton2.Name = "materialTextButton2";
-            this.materialTextButton2.Primary = true;
-            this.materialTextButton2.Size = new System.Drawing.Size(75, 23);
-            this.materialTextButton2.TabIndex = 2;
-            this.materialTextButton2.Text = "浏览";
-            this.materialTextButton2.UseVisualStyleBackColor = true;
-            this.materialTextButton2.Click += new System.EventHandler(this.materialTextButton2_Click);
+            this.btnOpenWindowExploer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnOpenWindowExploer.CustomFontName = null;
+            this.btnOpenWindowExploer.CustomFontSize = 0F;
+            this.btnOpenWindowExploer.Depth = 0;
+            this.btnOpenWindowExploer.Icon = null;
+            this.btnOpenWindowExploer.Location = new System.Drawing.Point(843, 60);
+            this.btnOpenWindowExploer.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnOpenWindowExploer.Name = "btnOpenWindowExploer";
+            this.btnOpenWindowExploer.Primary = true;
+            this.btnOpenWindowExploer.Size = new System.Drawing.Size(75, 23);
+            this.btnOpenWindowExploer.TabIndex = 2;
+            this.btnOpenWindowExploer.Text = "浏览";
+            this.btnOpenWindowExploer.UseVisualStyleBackColor = true;
+            this.btnOpenWindowExploer.Click += new System.EventHandler(this.materialTextButton2_Click);
             // 
             // curInstallPath
             // 
@@ -216,39 +215,39 @@
             this.materialLabel1.TabIndex = 0;
             this.materialLabel1.Text = "安 装 位 置 ";
             // 
-            // materialTextButton5
+            // btnExperienceNow
             // 
-            this.materialTextButton5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.btnExperienceNow.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.materialTextButton5.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialTextButton5.CustomFontName = "fzjz";
-            this.materialTextButton5.CustomFontSize = 18F;
-            this.materialTextButton5.Depth = 0;
-            this.materialTextButton5.Font = new System.Drawing.Font("微软雅黑", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.materialTextButton5.Icon = null;
-            this.materialTextButton5.Location = new System.Drawing.Point(344, 265);
-            this.materialTextButton5.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialTextButton5.Name = "materialTextButton5";
-            this.materialTextButton5.Primary = true;
-            this.materialTextButton5.Size = new System.Drawing.Size(245, 75);
-            this.materialTextButton5.TabIndex = 7;
-            this.materialTextButton5.Text = "立即体验";
-            this.materialTextButton5.UseFontType = MaterialSkin.Common.FontType.CustomFont;
-            this.materialTextButton5.UseVisualStyleBackColor = true;
-            this.materialTextButton5.Visible = false;
-            this.materialTextButton5.Click += new System.EventHandler(this.materialTextButton5_Click);
+            this.btnExperienceNow.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnExperienceNow.CustomFontName = "fzjz";
+            this.btnExperienceNow.CustomFontSize = 18F;
+            this.btnExperienceNow.Depth = 0;
+            this.btnExperienceNow.Font = new System.Drawing.Font("微软雅黑", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExperienceNow.Icon = null;
+            this.btnExperienceNow.Location = new System.Drawing.Point(344, 265);
+            this.btnExperienceNow.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnExperienceNow.Name = "btnExperienceNow";
+            this.btnExperienceNow.Primary = true;
+            this.btnExperienceNow.Size = new System.Drawing.Size(245, 75);
+            this.btnExperienceNow.TabIndex = 7;
+            this.btnExperienceNow.Text = "立即体验";
+            this.btnExperienceNow.UseFontType = MaterialSkin.Common.FontType.CustomFont;
+            this.btnExperienceNow.UseVisualStyleBackColor = true;
+            this.btnExperienceNow.Visible = false;
+            this.btnExperienceNow.Click += new System.EventHandler(this.materialTextButton5_Click);
             // 
             // MainInstallerView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(933, 600);
-            this.Controls.Add(this.materialTextButton5);
+            this.Controls.Add(this.btnExperienceNow);
             this.Controls.Add(this.customInstallPanel);
-            this.Controls.Add(this.cMaterialLabel1);
-            this.Controls.Add(this.materialCheckBox1);
-            this.Controls.Add(this.materialTextButton1);
+            this.Controls.Add(this.lbCustomInstallPath);
+            this.Controls.Add(this.checkboxAgreement);
+            this.Controls.Add(this.btnNowInstall);
             this.Controls.Add(this.extractProgress);
             this.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.MaximizeBox = false;
@@ -262,16 +261,16 @@
 
         #endregion
 
-        private MaterialSkin.Controls.MaterialTextButton materialTextButton1;
-        private MaterialSkin.Controls.MaterialCheckBoxWithTip materialCheckBox1;
-        private MaterialSkin.Controls.CMaterialLabel cMaterialLabel1;
+        private MaterialSkin.Controls.MaterialTextButton btnNowInstall;
+        private MaterialSkin.Controls.MaterialCheckBoxWithTip checkboxAgreement;
+        private MaterialSkin.Controls.CMaterialLabel lbCustomInstallPath;
         public MaterialSkin.Controls.MaterialProgressBar extractProgress;
         private System.Windows.Forms.Panel customInstallPanel;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
-        private MaterialSkin.Controls.MaterialTextButton materialTextButton4;
-        private MaterialSkin.Controls.MaterialTextButton materialTextButton3;
-        private MaterialSkin.Controls.MaterialTextButton materialTextButton2;
+        private MaterialSkin.Controls.MaterialTextButton btnReturnMainView;
+        private MaterialSkin.Controls.MaterialTextButton btnCustomInstall;
+        private MaterialSkin.Controls.MaterialTextButton btnOpenWindowExploer;
         private MaterialSkin.Controls.MaterialSingleLineTextField curInstallPath;
-        private MaterialSkin.Controls.MaterialTextButton materialTextButton5;
+        private MaterialSkin.Controls.MaterialTextButton btnExperienceNow;
     }
 }
